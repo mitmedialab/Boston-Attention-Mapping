@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="fgdc.xml"?>
+<metadata>
+	<idinfo>
+		<citation>
+			<citeinfo>
+				<pubdate>20030501</pubdate>
+				<pubinfo>
+					<publish>Massachusetts Office of Geographic and Environmental Information (MassGIS)</publish>
+				</pubinfo>
+				<title Sync="FALSE">Massachusetts (Town Boundaries for Census, 2003)</title>
+				<geoform Sync="TRUE">vector digital data</geoform>
+				<onlink>Server=arrowsmith.mit.edu; Service=5150; Database=oracle</onlink>
+				<onlink>http://www.mass.gov/mgis/census2000.htm</onlink>
+				<origin>MASSGIS</origin><ftname Sync="TRUE">SDE_DATA.US_MA_E25TOWNSCT_2003</ftname></citeinfo>
+		</citation>
+		<descript>
+			<abstract>This layer was produced by MassGIS for display purposes when mapping any of the other Census 2000 layers. The town boundary and coastline features developed by the Census Bureau do not match those in MassGIS' own Towns layer, and these spatial discrepancies become more apparent at larger scales. MassGIS recommends the use of this layer when plotting municipal boundaries with the other Census 2000 layers.  </abstract>
+			<langdata Sync="TRUE">en</langdata></descript>
+		<timeperd>
+			<timeinfo>
+				<sngdate>
+					<caldate>20030501</caldate>
+				</sngdate>
+			</timeinfo>
+			<current>publication date</current>
+		</timeperd>
+		<status>
+			<progress>Complete</progress>
+			<update>None planned</update>
+		</status>
+		<spdom>
+			<bounding>
+				<westbc Sync="TRUE">-73.533245</westbc>
+				<eastbc Sync="TRUE">-69.898476</eastbc>
+				<northbc Sync="TRUE">42.888313</northbc>
+				<southbc Sync="TRUE">41.230345</southbc>
+			</bounding>
+			<lboundng><leftbc Sync="TRUE">33869.686429</leftbc><rightbc Sync="TRUE">330846.226495</rightbc><bottombc Sync="TRUE">777514.570550</bottombc><topbc Sync="TRUE">959743.120571</topbc></lboundng></spdom>
+		<keywords>
+			<theme>
+				<themekey>polygon</themekey>
+				<themekey>Towns</themekey>
+				<themekey>demographics</themekey>
+				<themekey>population</themekey>
+				<themekey>census</themekey>
+				<themekey>boundaries</themekey>
+				<themekey>town boundaries</themekey></theme>
+			<place>
+				<placekey>Massachusetts</placekey>
+				<placekey>MA</placekey>
+				<placekey>USA</placekey>
+			</place>
+			<temporal>
+				<tempkey>20030501</tempkey>
+			</temporal>
+		</keywords>
+		<natvform Sync="TRUE">SDE Feature Class</natvform><native Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 3; ESRI ArcCatalog 9.3.1.1850</native><useconst>
+		</useconst></idinfo>
+	<spdoinfo>
+		<direct Sync="TRUE">Vector</direct>
+		<ptvctinf>
+			<sdtsterm Name="SDE_DATA.US_MA_E25TOWNSCT_2003">
+				<sdtstype Sync="TRUE">G-polygon</sdtstype>
+				<ptvctcnt Sync="TRUE">351</ptvctcnt>
+			</sdtsterm>
+			<esriterm Name="SDE_DATA.US_MA_E25TOWNSCT_2003"><efeatyp Sync="TRUE">Simple</efeatyp><efeageom Sync="TRUE">Polygon</efeageom><esritopo Sync="TRUE">FALSE</esritopo><efeacnt Sync="TRUE">351</efeacnt><spindex Sync="TRUE">TRUE</spindex><linrefer Sync="TRUE">FALSE</linrefer></esriterm></ptvctinf>
+	</spdoinfo>
+	<spref>
+		<horizsys>
+			<planar>
+				<planci>
+					<plance Sync="TRUE">coordinate pair</plance>
+					<coordrep>
+						<absres Sync="TRUE">0.000143</absres>
+						<ordres Sync="TRUE">0.000143</ordres>
+					</coordrep>
+					<plandu Sync="TRUE">meters</plandu>
+				</planci>
+				<gridsys><gridsysn Sync="TRUE">State Plane Coordinate System 1983</gridsysn><spcs><spcszone Sync="TRUE">2001</spcszone><lambertc><stdparll Sync="TRUE">41.716667</stdparll><stdparll Sync="TRUE">42.683333</stdparll><longcm Sync="TRUE">-71.500000</longcm><latprjo Sync="TRUE">41.000000</latprjo><feast Sync="TRUE">200000.000000</feast><fnorth Sync="TRUE">750000.000000</fnorth></lambertc></spcs></gridsys></planar>
+			<geodetic>
+				<horizdn Sync="TRUE">North American Datum of 1983</horizdn>
+				<ellips Sync="TRUE">Geodetic Reference System 80</ellips>
+				<semiaxis Sync="TRUE">6378137.000000</semiaxis>
+				<denflat Sync="TRUE">298.257222</denflat>
+			</geodetic>
+			<cordsysn><geogcsn Sync="TRUE">GCS_North_American_1983</geogcsn><projcsn Sync="TRUE">NAD_1983_StatePlane_Massachusetts_Mainland_FIPS_2001</projcsn></cordsysn></horizsys>
+		<vertdef><altsys><altenc Sync="TRUE">Explicit elevation coordinate included with horizontal coordinates</altenc><altres Sync="TRUE">1.000000</altres></altsys></vertdef></spref>
+	<eainfo>
+		<detailed Name="SDE_DATA.US_MA_E25TOWNSCT_2003">
+			<enttyp>
+				<enttypl Sync="TRUE">SDE_DATA.US_MA_E25TOWNSCT_2003</enttypl>
+				<enttypt Sync="TRUE">Feature Class</enttypt><enttypc Sync="TRUE">351</enttypc></enttyp>
+			<attr><attrlabl Sync="TRUE">TOWN_ID</attrlabl><attalias Sync="TRUE">TOWN_ID</attalias><attrtype Sync="TRUE">SmallInteger</attrtype><attwidth Sync="TRUE">2</attwidth><attrdef>MassGIS Town ID</attrdef><atprecis Sync="TRUE">4</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">TOWN</attrlabl><attalias Sync="TRUE">TOWN</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">21</attwidth><attrdef>Town Name</attrdef><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">POP1980</attrlabl><attalias Sync="TRUE">POP1980</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">4</attwidth><attrdef>1980 Population</attrdef><atprecis Sync="TRUE">6</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">POP1990</attrlabl><attalias Sync="TRUE">POP1990</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">4</attwidth><attrdef>1990 Population</attrdef><atprecis Sync="TRUE">6</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">POP2000</attrlabl><attalias Sync="TRUE">POP2000</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">4</attwidth><attrdef>2000 Population</attrdef><atprecis Sync="TRUE">6</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">POPCH80_90</attrlabl><attalias Sync="TRUE">POPCH80_90</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">4</attwidth><attrdef>Population Change, 1980-1990</attrdef><atprecis Sync="TRUE">5</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">POPCH90_00</attrlabl><attalias Sync="TRUE">POPCH90_00</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">4</attwidth><attrdef>Population Change, 1990-2000</attrdef><atprecis Sync="TRUE">5</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">ACRES</attrlabl><attalias Sync="TRUE">ACRES</attalias><attrtype Sync="TRUE">Double</attrtype><attwidth Sync="TRUE">8</attwidth><attrdef>Area of polygon(s) in acres</attrdef><atprecis Sync="TRUE">30</atprecis><attscale Sync="TRUE">11</attscale></attr><attr><attrlabl Sync="TRUE">SQ_MI</attrlabl><attalias Sync="TRUE">SQ_MI</attalias><attrtype Sync="TRUE">Double</attrtype><attwidth Sync="TRUE">8</attwidth><attrdef>Area of polygon(s) in square miles</attrdef><atprecis Sync="TRUE">23</atprecis><attscale Sync="TRUE">4</attscale></attr><attr><attrlabl Sync="TRUE">GEOMETRY</attrlabl><attalias Sync="TRUE">GEOMETRY</attalias><attrtype Sync="TRUE">Geometry</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">OBJECTID</attrlabl><attalias Sync="TRUE">OBJECTID</attalias><attrtype Sync="TRUE">OID</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">10</atprecis><attscale Sync="TRUE">0</attscale><attrdef Sync="TRUE">Internal feature number.</attrdef><attrdefs Sync="TRUE">ESRI</attrdefs><attrdomv><udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom></attrdomv></attr><attr><attrlabl Sync="TRUE">GEOMETRY.AREA</attrlabl><attalias Sync="TRUE">GEOMETRY.AREA</attalias><attrtype Sync="TRUE">Double</attrtype><attwidth Sync="TRUE">0</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">GEOMETRY.LEN</attrlabl><attalias Sync="TRUE">GEOMETRY.LEN</attalias><attrtype Sync="TRUE">Double</attrtype><attwidth Sync="TRUE">0</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr></detailed>
+	</eainfo>
+	<distinfo>
+		<distrib>
+			<cntinfo>
+				<cntperp>
+					<cntper>GIS Lab, MIT Libraries</cntper>
+					<cntorg>GIS Specialist</cntorg>
+				</cntperp>
+				<cntpos>GIS Specialist</cntpos>
+				<cntaddr>
+					<addrtype>mailing and physical address</addrtype>
+					<address>77 Massachusetts Avenue, Rotch Library 7-238</address>
+					<city>Cambridge</city>
+					<state>MA</state>
+					<postal>02139-4307</postal>
+				</cntaddr>
+				<cntvoice>617-258-5598</cntvoice>
+				<cntemail>gishelp@mit.edu</cntemail>
+			</cntinfo>
+		</distrib>
+		<resdesc>Downloadable Data</resdesc>
+		<stdorder>
+			<digform>
+				<digtinfo>
+					<transize>6.081</transize>
+					<dssize Sync="TRUE">1.766</dssize></digtinfo>
+			</digform>
+		</stdorder>
+	</distinfo>
+	<metainfo>
+		<metd Sync="TRUE">20090223</metd>
+		<metc>
+			<cntinfo>
+				<cntorgp>
+					<cntorg>GIS Lab, MIT Libraries</cntorg>
+					<cntper>GIS Specialist</cntper>
+				</cntorgp>
+				<cntpos>GIS Specialist</cntpos>
+				<cntaddr>
+					<addrtype>mailing and physical address</addrtype>
+					<address>77 Massachusetts Avenue, Rotch Library 7-238</address>
+					<city>Cambridge</city>
+					<state>MA</state>
+					<postal>02139-4307</postal>
+				</cntaddr>
+				<cntvoice>617-258-5598</cntvoice>
+				<cntemail>gishelp@mit.edu</cntemail>
+			</cntinfo>
+		</metc>
+		<metstdn Sync="TRUE">FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+		<metstdv Sync="TRUE">FGDC-STD-001-1998</metstdv>
+		<mettc Sync="TRUE">local time</mettc>
+		<langmeta Sync="TRUE">en</langmeta><idinfo><citation><citeinfo><onlink>Server=arrowsmith.mit.edu; Service=5150;</onlink></citeinfo></citation></idinfo><distInfo><distributor><distorTran><onLineSrc><orDesc><linkage>Server=arrowsmith.mit.edu; Service=5150;</linkage></orDesc></onLineSrc></distorTran></distributor></distInfo><metextns><onlink Sync="TRUE">http://www.esri.com/metadata/esriprof80.html</onlink><metprof Sync="TRUE">ESRI Metadata Profile</metprof></metextns></metainfo>
+	<Esri><CreaDate>20090223</CreaDate><CreaTime>16452500</CreaTime><SyncOnce>FALSE</SyncOnce><SyncDate>20090223</SyncDate><SyncTime>16452900</SyncTime><ModDate>20090223</ModDate><ModTime>16452900</ModTime><Sync>FALSE</Sync><MetaID>{3513F102-B485-46A2-BF31-EE9C6DD0C6E0}</MetaID></Esri><dataqual><lineage><procstep><procdesc>The polygon layer was produced by dissolving the Census 2000 Blocks layer (without offshore zero-population polygons) on the TOWN_ID field. Population fields were added by joining to the polygon attribute table in the MassGIS Towns layer. </procdesc><date Sync="TRUE">20060612</date><time Sync="TRUE">22403000</time><srcused>http://www.mass.gov/mgis/cen2000_towns.htm</srcused></procstep><procstep><procdesc Sync="TRUE">Metadata imported.</procdesc><srcused Sync="TRUE">T:\workspace\censusbounds\us_ma_e25townsct_2003.shp.xml</srcused><date Sync="TRUE">20061214</date><time Sync="TRUE">13535900</time></procstep><procstep><procdesc Sync="TRUE">Metadata imported.</procdesc><srcused Sync="TRUE">O:\workspace\csbarnet\updated_metadata\problems\us_ma_e25townsct_2003.xml</srcused><procdate Sync="TRUE">20090223</procdate><proctime Sync="TRUE">16452500</proctime></procstep></lineage></dataqual><dataIdInfo><envirDesc Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 3; ESRI ArcCatalog 9.3.1.1850</envirDesc><dataLang><languageCode Sync="TRUE" value="en"></languageCode></dataLang><idCitation><resTitle Sync="TRUE">SDE_DATA.US_MA_E25TOWNSCT_2003</resTitle><presForm><PresFormCd Sync="TRUE" value="005"></PresFormCd></presForm></idCitation><spatRpType><SpatRepTypCd Sync="TRUE" value="001"></SpatRepTypCd></spatRpType><dataExt><geoEle><GeoBndBox esriExtentType="native"><westBL Sync="TRUE">33869.686429</westBL><eastBL Sync="TRUE">330846.226495</eastBL><northBL Sync="TRUE">959743.120571</northBL><southBL Sync="TRUE">777514.57055</southBL><exTypeCode Sync="TRUE">1</exTypeCode></GeoBndBox></geoEle></dataExt><geoBox esriExtentType="decdegrees"><westBL Sync="TRUE">-73.533245</westBL><eastBL Sync="TRUE">-69.898476</eastBL><northBL Sync="TRUE">42.888313</northBL><southBL Sync="TRUE">41.230345</southBL><exTypeCode Sync="TRUE">1</exTypeCode></geoBox></dataIdInfo><mdLang><languageCode Sync="TRUE" value="en"></languageCode></mdLang><mdStanName Sync="TRUE">ISO 19115 Geographic Information - Metadata</mdStanName><mdStanVer Sync="TRUE">DIS_ESRI1.0</mdStanVer><mdChar><CharSetCd Sync="TRUE" value="004"></CharSetCd></mdChar><mdHrLv><ScopeCd Sync="TRUE" value="005"></ScopeCd></mdHrLv><mdHrLvName Sync="TRUE">dataset</mdHrLvName><distInfo><distributor><distorTran><onLineSrc><orDesc Sync="TRUE">002</orDesc><linkage Sync="TRUE">Server=arrowsmith.mit.edu; Service=5150; Database=oracle; User=sde_data; Version=SDE.DEFAULT</linkage><protocol Sync="TRUE">ArcSDE Connection</protocol></onLineSrc><transSize Sync="TRUE">1.766</transSize></distorTran><distorFormat><formatName Sync="TRUE">SDE Feature Class</formatName></distorFormat></distributor></distInfo><refSysInfo><RefSystem><refSysID><identCode Sync="TRUE">NAD_1983_StatePlane_Massachusetts_Mainland_FIPS_2001</identCode></refSysID></RefSystem></refSysInfo><spatRepInfo><VectSpatRep><topLvl><TopoLevCd Sync="TRUE" value="001"></TopoLevCd></topLvl><geometObjs Name="SDE_DATA.US_MA_E25TOWNSCT_2003"><geoObjTyp><GeoObjTypCd Sync="TRUE" value="001"></GeoObjTypCd></geoObjTyp><geoObjCnt Sync="TRUE">351</geoObjCnt></geometObjs></VectSpatRep></spatRepInfo><mdDateSt Sync="TRUE">20090223</mdDateSt></metadata>

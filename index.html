@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Boston Globe Attention Mapping: A project from the MIT Center for Civic Media</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta charset="utf-8">
+            
+            
+        <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+        
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?jey=AIzaSyBXG5WcJWdi4vGLGSso0zS2qtCep7NoutE&sensor=false"></script>
+        
+         <script type="text/javascript" charset="utf-8" src="ui/markerclusterer/markerclusterer.js"></script>
+        <!-- <script type="text/javascript" src="maplabel.js"></script>-->
+        <script src="ui/bootstrap/js/bootstrap.min.js"></script>
+        <link href="ui/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <style type="text/css">
+       /* html { 
+            background: url(http://www.themapdatabase.com/wp-content/uploads/2009/10/boston_1630_1675.jpg) no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        
+        }*/
+            h1,h4{
+                 position:absolute;z-index:1;margin-left:100px;background:rgba(100,100,100,0.8);padding:10px;
+            }
+            h1{
+                color:yellow;
+            }
+            h4{
+                margin-top:80px;
+                color:#eee;
+            }
+            form{
+                position:absolute;
+                right: 5px;
+                top:35px;
+                z-index: 1;
+            }
+          html { height: 100% }
+          body { height: 100%; margin: 0; padding: 0; }
+          #map_canvas { height: 100% }
+
+    </style>
+
+    </head>
+    <body>
+        <h1>Boston Globe Attention Map</h1>
+        <h4>Loading...</h4>
+         <form class="form-inline">
+            <select>
+                <option value="printpublicationdate:20111001..20130100">All (SLOW!)</option>
+                
+                <option value="printpublicationdate:20120901..20121000">September 2012</option>
+                <option value="printpublicationdate:20120801..20120900">August 2012</option>
+                <option value="printpublicationdate:20120701..20120800">July 2012</option>
+                <option value="printpublicationdate:20120601..20120700">June 2012</option>
+                <option value="printpublicationdate:20120501..20120600">May 2012</option>
+                 <option value="printpublicationdate:20100409..20100409">-------------</option>
+                <option value="printpublicationdate:20120411..20120411">April 11, 2012</option>
+                <option value="printpublicationdate:20120410..20120410">April 10, 2012</option>
+                <option value="printpublicationdate:20120409..20120409">April 9, 2012</option>
+                <option value="printpublicationdate:20100409..20100409">-------------</option>
+                <option value="printpublicationdate:20120401..20120500" selected>April 2012</option>
+                <option value="printpublicationdate:20120301..20120400">March 2012</option>
+                <option value="printpublicationdate:20120201..20120300">February 2012</option>
+                <option value="printpublicationdate:20120101..20120200">January 2012</option>
+                <option value="printpublicationdate:20111201..20130100">December 2011</option>
+                <option value="printpublicationdate:20111101..20111200">November 2011</option>
+                <option value="printpublicationdate:20111001..20111100">October 2011</option>
+                
+
+            </select>
+        </form>
+        <div id="map_canvas" style="width:100%; height:100%"></div>
+       
+    </body>
+    <script type="text/javascript"> 
+            $(document).ready(function() {
+                window.markers = [];
+                var stylesArray = [
+                                      {
+                                        "featureType": "road",
+                                        "stylers": [
+                                          { "visibility": "off" }
+                                        ]
+                                      },{
+                                        "featureType": "poi",
+                                        "stylers": [
+                                          { "visibility": "off" }
+                                        ]
+                                      },{
+                                        "featureType": "water",
+                                        "stylers": [
+                                          { "visibility": "simplified" }
+                                        ]
+                                      },{
+                                        "featureType": "landscape",
+                                        "stylers": [
+                                          { "visibility": "on" },
+                                          { "color": "#fdfdfd" }
+                                        ]
+                                      },{
+                                        "featureType": "transit",
+                                        "stylers": [
+                                          { "visibility": "off" }
+                                        ]
+                                      },{
+                                      },{
+                                        "featureType": "landscape",
+                                        "stylers": [
+                                          { "visibility": "on" },
+                                          { "color": "#faf9fb" }
+                                        ]
+                                      },{
+                                        "featureType": "water",
+                                        "stylers": [
+                                          { "visibility": "simplified" },
+                                          { "color": "#9eedec" }
+                                        ]
+                                      },
+                                    ];
+               
+                drawMap();
+
+                /*
+
+                  LOAD TOWNS SHAPES VIA GEOJSON DATA
+                */
+                var jqxhr =  $.getJSON('../data/shapefiles/townsShapeFiles/MATowns.json', function() {
+                  
+                })
+                .success(function(data) {   
+                  
+                  var polywindow = new google.maps.InfoWindow();
+                  for (var i = 0; i < data.features.length; i++) {
+                    var town = data.features[i];
+                    var townName = town.properties.TOWN;
+                    var townBoundaryArray = [];
+                    for (var j=0; j<town.geometry.coordinates[0].length;j++){
+                      var longitude = town.geometry.coordinates[0][j][0];
+                      var latitude = town.geometry.coordinates[0][j][1];
+                      var latlong = new google.maps.LatLng(latitude, longitude);
+                      townBoundaryArray[j] = latlong;
+                      
+                    }
+                    
+                    // Construct the polygon
+                    // Note that we don't specify an array or arrays, but instead just
+                    // a simple array of LatLngs in the paths property
+                    var townPolygon = new google.maps.Polygon({
+                      paths: townBoundaryArray,
+                      strokeColor: "#000000",
+                      strokeOpacity: 0.8,
+                      strokeWeight: 2,
+                      fillColor: "#CCCCCC",
+                      fillOpacity: 0.35
+                    });
+                    
+                    townPolygon.setMap(window.map);
+                    townPolygon.set("townName",townName)
+                   /*console.log(townPolygon.getBounds().getCenter() + 'is the poly');
+                    var mapLabel = new MapLabel({
+                      text: townName,
+                      position: townPolygon.getBounds().getCenter(),
+                      map: window.map,
+                      fontSize: 35,
+                      align: 'center'
+                    });
+                    mapLabel.set('position', townPolygon.getBounds().getCenter());
+                    */
+
+                    google.maps.event.addListener(townPolygon, 'click', function(event) {
+                          
+                            polywindow.setContent(this.get('townName'));
+                            polywindow.setPosition(event.latLng);
+
+                            polywindow.open(window.map);
+                        });
+                  }
+                })
+                .error(function(data) { console.log(data) })
+                .complete(function() { console.log("Loaded MA Towns from GEOJSON...") });
+                
+                
+                $('select').change(function() {
+                    $('h4').text("Loading...");
+                      drawMap();
+                });
+                 var image = 'news_icon_transparent.png';
+
+
+                
+
+                function drawMap(){
+                    var mapOptions = {
+                      center: new google.maps.LatLng(42.358056, -71.063611),
+                      zoom: 11,
+                      mapTypeId: google.maps.MapTypeId.ROADMAP,
+                      styles:stylesArray,
+                    };
+                    var articlesWithGeoData = 0;
+
+                    window.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+                   
+                   
+                   
+                   var jqxhr =  $.getJSON('http://127.0.0.1:5984/boston-globe-articles/_design/allArticles/_view/allArticles', function() {
+                  
+                  })
+                   .success(function(data) { 
+                      window.mapMe(data);
+                    })
+                .error(function(data) { console.log(data) })
+                .complete(function() { console.log("Loaded MA Towns from GEOJSON...") });
+                    /*var timeRange = $('select option:selected').val(); 
+                    $.ajax({
+                        dataType: "jsonp",
+                        url: "http://50.17.92.83/s?key=catherine&bq="+ timeRange +"&return-fields=id,headline,printpublicationdate,latitude,longitude,latitude_1k,longitude_1k,summary&start=0&size=5000&rank=-printpublicationdate,&callback=mapMe",
+                        jsonp : false,
+                        cache : true,
+                        //jsonpCallback: "window.mapMe"
+                      
+                    });*/
+                }
+                
+                window.mapMe = function (jsonp){
+                    var json ="";
+                    try{
+                      //json = jsonp.replace("★","STAR");
+                        json = $.parseJSON(jsonp);
+                    } catch(e){
+                       $('h4').text(String.fromCharCode(145)+'Sorry! Parse error for this time period');
+                       console.log(e.toString())
+                    }
+                    var articlesWithGeoData = 0;
+                    //var articlesWithExcludedGeoData = 0;
+                   if (json.rows.length > 0) {
+                        for (i=0; i<json.rows.length; i++) {
+                            var article = json.rows.value;
+                           
+                                //make info window
+                                
+                                var contentString = '<div id="content">'+
+                
+                                    '<h3 id="firstHeading" class="firstHeading">'+
+                                        article["headline"] 
+                                    +'</h3>'+
+                                    '<div id="bodyContent">'+
+                                    '<p>'+ article["summary"] +'</p>'+
+                                    '</div>'+
+                                    '</div>';
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: $(contentString).html()
+                                });
+                                addMarker(article,infowindow); 
+                                
+                            
+                        }
+                        var markerCluster = new MarkerClusterer(window.map, window.markers,{gridSize: 50,maxZoom:11});
+                        $('h4').text(json.rows.length + " total articles retrieved.");
+                    }
+                    else{
+                        $('h4').text('No data for that time period');
+                    }
+
+                }
+                function addMarker(article,infowindow) {
+                    
+                    var point = new google.maps.LatLng(article["latitude"], article["longitude"]); 
+                    var marker = new google.maps.Marker({
+                        position:point,
+                        map: window.map,
+                        title: article["headline"],
+                        icon:image
+                    }); 
+                    window.markers.push(marker);
+                    google.maps.event.addListener(marker, 'mouseover', function() {
+                      infowindow.open(window.map,marker);
+                    });
+                     google.maps.event.addListener(marker, 'mouseout', function() {
+                      infowindow.close();
+                    });
+                };
+
+
+            });
+        </script>
+        <script type="text/javascript">
+        /* 
+            Extension to Google Maps to get center of polygon 
+            From here: http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.js
+        
+          if (!google.maps.Polygon.prototype.getBounds) {
+
+                  google.maps.Polygon.prototype.getBounds = function(latLng) {
+
+                          var bounds = new google.maps.LatLngBounds();
+                          var paths = this.getPaths();
+                          var path;
+                          
+                          for (var p = 0; p < paths.getLength(); p++) {
+                                  path = paths.getAt(p);
+                                  for (var i = 0; i < path.getLength(); i++) {
+                                          bounds.extend(path.getAt(i));
+                                  }
+                          }
+
+                          return bounds;
+                  }
+
+          }*/
+        </script>
+</html>

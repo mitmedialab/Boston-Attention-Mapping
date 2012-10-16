@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Boston Globe Attention Mapping: A project from the MIT Center for Civic Media</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta charset="utf-8">
+            
+            
+        <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+        
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.css" />
+		<!--[if lte IE 8]>
+		    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.ie.css" />
+		<![endif]-->
+
+		<script src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
+ 		<script src="bootstrap/js/bootstrap.min.js"></script>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+         <style type="text/css">
+       /* html { 
+            background: url(http://www.themapdatabase.com/wp-content/uploads/2009/10/boston_1630_1675.jpg) no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        
+        }*/
+            h1,h4{
+                 position:absolute;z-index:1;margin-left:100px;background:rgba(100,100,100,0.8);padding:10px;
+            }
+            h1{
+                color:yellow;
+            }
+            h4{
+                margin-top:80px;
+                color:#eee;
+            }
+            form{
+                position:absolute;
+                right: 5px;
+                top:35px;
+                z-index: 1;
+            }
+          html { height: 100% }
+          body { height: 100%; margin: 0; padding: 0; }
+          #map { height: 100% }
+
+    </style>
+        </head>
+    <body>
+
+        <h1>Boston Globe Attention Map</h1>
+        <h4>Loading...</h4>
+        <div id="map" style="width: 100%; height: 100%"></div>
+     </body>
+      <script>
+
+		var map = L.map('map').setView([42.3583, -71.0603], 13);
+
+		L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+		}).addTo(map);
+
+		L.tileLayer('http://{s}.tile.cloudmade.com/f93d21036d84475ebcde3e1a4b9c8225/997/256/{z}/{x}/{y}.png', {
+		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+		    maxZoom: 18
+		}).addTo(map);
+
+		/*L.marker([51.5, -0.09]).addTo(map)
+			.bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+		L.circle([51.508, -0.11], 500, {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.5
+		}).addTo(map).bindPopup("I am a circle.");
+
+		L.polygon([
+			[51.509, -0.08],
+			[51.503, -0.06],
+			[51.51, -0.047]
+		]).addTo(map).bindPopup("I am a polygon.");
+*/
+
+		var popup = L.popup();
+
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent("You clicked the map at " + e.latlng.toString())
+				.openOn(map);
+		}
+
+		map.on('click', onMapClick);
+
+	</script>
+</html>
