@@ -28,3 +28,16 @@ function(doc) {
 	wordcount:doc['data']['wordcount']});
 }
 }
+
+//ALL ARTICLES
+function(doc) {
+  emit(doc.id,{neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],
+printbook:doc['data']['printbook'],
+summary:['data']['summary'],
+city:doc['data']['city'],
+latitude:doc['data']['latitude'],
+longitude:doc['data']['longitude'],
+	printsection:doc['data']['printsection'],
+	printpagenumber:doc['data']['printpagenumber'],
+	wordcount:doc['data']['wordcount']});
+}

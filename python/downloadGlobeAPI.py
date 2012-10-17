@@ -10,7 +10,7 @@ import simplejson as json
 import urllib2
 import osgeo.gdal as gdal, osgeo.ogr as ogr,osgeo.osr as osr
 import os
-import csv
+import csv,sys
 from titlecase import titlecase
 import ConfigParser
 
@@ -353,8 +353,15 @@ townTransformObject=osr.CoordinateTransformation( spatialRef3,spatialRef4)
 ################################################################################
 serverURL = config.get('db','host') + ':' + config.get('db','port')
 print serverURL
-couch = couchdb.Server(url=serverURL) 
-couch.resource.credentials = (config.get('db','username'), config.get('db','password'))
+
+try:
+	couch = couchdb.Server(url=serverURL) 
+	couch.resource.credentials = (config.get('db','username'), config.get('db','password'))
+except:
+	print "error connecting to the couch server at " + serverURL
+	print "exiting now"
+	sys.exit()
+
 
 #delete DB if it exists
 try:
