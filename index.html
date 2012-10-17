@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Boston Globe Attention Mapping: A project from the MIT Center for Civic Media</title>
+        <title>Mapping the (Boston) Globe: A project from the MIT Center for Civic Media</title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta charset="utf-8">
@@ -12,7 +12,7 @@
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?jey=AIzaSyBXG5WcJWdi4vGLGSso0zS2qtCep7NoutE&sensor=false"></script>
         
          <script type="text/javascript" charset="utf-8" src="ui/markerclusterer/markerclusterer.js"></script>
-        <!-- <script type="text/javascript" src="maplabel.js"></script>-->
+         <!--<script type="text/javascript" src="maplabel.js"></script>-->
         <script src="ui/bootstrap/js/bootstrap.min.js"></script>
         <link href="ui/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <style type="text/css">
@@ -28,7 +28,7 @@
                  position:absolute;z-index:1;margin-left:100px;background:rgba(100,100,100,0.8);padding:10px;
             }
             h1{
-                color:yellow;
+                color:#eee;
             }
             h4{
                 margin-top:80px;
@@ -48,7 +48,7 @@
 
     </head>
     <body>
-        <h1>Boston Globe Attention Map</h1>
+        <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe</h1>
         <h4>Loading...</h4>
          <form class="form-inline">
             <select>
@@ -80,6 +80,9 @@
     </body>
     <script type="text/javascript"> 
             $(document).ready(function() {
+                var popoverImage = '<img src="ui/globe-image.jpeg" />';
+                $('#globe-image').popover({ trigger: 'hover', placement : 'bottom', title: '<b>What is the Boston Globe?</b>', content: popoverImage + '<br/><br/>An American daily newspaper based in Boston, MA, USA. The Boston Globe was founded in 1872, has won 21 Pulitzer Prizes, and has a circulation between 220,000 - 370,000. (Wikipedia)' });
+               
                 window.markers = [];
                 var stylesArray = [
                                       {
@@ -113,13 +116,14 @@
                                         "featureType": "landscape",
                                         "stylers": [
                                           { "visibility": "on" },
-                                          { "color": "#faf9fb" }
+                                          { "color": "#faf9fb"}
+                                          //"color": "#666666" }
                                         ]
                                       },{
                                         "featureType": "water",
                                         "stylers": [
                                           { "visibility": "simplified" },
-                                          { "color": "#9eedec" }
+                                          { "color": "#9cf0f4" }
                                         ]
                                       },
                                     ];
@@ -130,7 +134,7 @@
 
                   LOAD TOWNS SHAPES VIA GEOJSON DATA
                 */
-                var jqxhr =  $.getJSON('../data/shapefiles/townsShapeFiles/MATowns.json', function() {
+                var jqxhr =  $.getJSON('data/shapefiles/townsShapeFiles/MATowns.json', function() {
                   
                 })
                 .success(function(data) {   
@@ -151,27 +155,19 @@
                     // Construct the polygon
                     // Note that we don't specify an array or arrays, but instead just
                     // a simple array of LatLngs in the paths property
+                   var valuesArray =[0,0.2,0.4,0.6,0.8];
                     var townPolygon = new google.maps.Polygon({
                       paths: townBoundaryArray,
-                      strokeColor: "#000000",
+                      strokeColor: "#a65c1c",
                       strokeOpacity: 0.8,
-                      strokeWeight: 2,
-                      fillColor: "#CCCCCC",
-                      fillOpacity: 0.35
+                      strokeWeight: 1,
+                      fillColor: '#ffba2b',
+                      //fillColor: '#FFFFFF',
+                      fillOpacity: valuesArray[ Math.round(Math.random()*5) ]
                     });
                     
                     townPolygon.setMap(window.map);
-                    townPolygon.set("townName",townName)
-                   /*console.log(townPolygon.getBounds().getCenter() + 'is the poly');
-                    var mapLabel = new MapLabel({
-                      text: townName,
-                      position: townPolygon.getBounds().getCenter(),
-                      map: window.map,
-                      fontSize: 35,
-                      align: 'center'
-                    });
-                    mapLabel.set('position', townPolygon.getBounds().getCenter());
-                    */
+                    townPolygon.set("townName",townName);
 
                     google.maps.event.addListener(townPolygon, 'click', function(event) {
                           
