@@ -351,7 +351,9 @@ townTransformObject=osr.CoordinateTransformation( spatialRef3,spatialRef4)
 ################################################################################
 # CONNECT TO COUCHDB 
 ################################################################################
-couch = couchdb.Server(url=config.get('db','host') + ':' + config.get('db','port')) 
+serverURL = config.get('db','host') + ':' + config.get('db','port')
+print serverURL
+couch = couchdb.Server(url=serverURL) 
 couch.resource.credentials = (config.get('db','username'), config.get('db','password'))
 
 #delete DB if it exists
