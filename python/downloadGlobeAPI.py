@@ -11,29 +11,21 @@ import urllib2
 import gdal,ogr,osr
 import os
 import csv
-from titlecase import titlecase
-import ConfigParser
-
-
-config = ConfigParser.ConfigParser()
-config.read('mc-client.config')
 
 #db_metadata stores info about the whole DB, including # articles, filtered articles, reasons for filtering,etc
 db_metadata = {}
 db_metadata["type"] = "metadata"
 db_metadata["point_in_boston_but_no_census_tract_available"]=0
-db_metadata["number_of_updated_MA_city_names"]=0
 
 def getNeighborhoodFromLatLong(latitude, longitude):
 	
 	#iterate through features
-	for x in range(0,neighborhoodLayer.GetFeatureCount()):
-		feature=neighborhoodLayer.GetFeature(x)
+	for x in range(0,layer.GetFeatureCount()):
+		feature=layer.GetFeature(x)
 		poly=feature.GetGeometryRef()
 		tractNumber=feature.GetFieldAsString(2)
-		
-		poly.Transform(neighborhoodTransformObject)
-		
+		poly.Transform(transformObject)
+
 		WGSPoint =ogr.Geometry(ogr.wkbPoint)
 		WGSPoint.SetPoint(0,longitude,latitude)
 		if poly.Contains(WGSPoint):
@@ -48,37 +40,12 @@ def getNeighborhoodFromLatLong(latitude, longitude):
 			return neighborhood
    	return ""
 
-def getCityFromLatLong(latitude, longitude):
-	
-	
-	#iterate through features
-	for x in range(0,townsLayer.GetFeatureCount()):
-		feature=townsLayer.GetFeature(x)
-		poly=feature.GetGeometryRef()
-		city=feature.GetFieldAsString(1)
-		poly.Transform(townTransformObject)
-
-		WGSPoint =ogr.Geometry(ogr.wkbPoint)
-		WGSPoint.SetPoint(0,longitude,latitude)
-		if poly.Contains(WGSPoint):
-		
-			city = titlecase(city)
-			print "Point is in " + city
-			return city
-   	return ""
-
 DATABASE_NAME = "boston-globe-articles"
-MAX_NUM_ARTICLES = 1500
+MAX_NUM_ARTICLES = 45000
 ARTICLES_AT_A_TIME = 500
-
-#CENSUS FILE PATHS
 PATH_TO_CENSUS_TRACTS_DIR="../data/Boston_Census_Tracts_2010"
 CENSUS_SHAPE_NAME="tl_2010_25025_tract10.shp"
-
-#TOWNS FILE PATHS
-PATH_TO_TOWNS_DIR="../shapefiles/townsShapeFiles"
-TOWNS_SHAPE_NAME="1349122928_us_ma_e25townsct_2003.shp"
-TOWNS_PRJ_NAME="1349122928_us_ma_e25townsct_2003.prj"
+CENSUS_PRJ_NAME="tl_2010_25025_tract10.shp"
 
 #these lat-longs are filtered because bad data or else from people typing "boston,ma"
 EXCLUDED_LAT1K_LONG1K={
@@ -290,27 +257,12 @@ for row in neighborhoodMetaData_list:
 				}
 	neighborhoods[row[0]] = metadata
 
-#Read in City metadatafile to memory
-cityMetaData = csv.reader(open("../data/MATowns.csv", "rU"))
-cityMetaData_list = []
-cityMetaData_list.extend(cityMetaData)
-cities ={}
-for row in cityMetaData_list:
-	metadata = {	
-					'city_population_2010': row[2],
-					
-
-				}
-	cities[row[0]] = metadata
-################################################################################
-#LOAD CENSUS FILE
-################################################################################
+#Set up some of the geo stuff
 os.chdir(PATH_TO_CENSUS_TRACTS_DIR)
-
-# load the shapes files 
+# load the shape file as a layer
 drv = ogr.GetDriverByName('ESRI Shapefile')
-neighborhoodShape = drv.Open(CENSUS_SHAPE_NAME)
-neighborhoodLayer = neighborhoodShape.GetLayer(0)
+shape = drv.Open(CENSUS_SHAPE_NAME)
+layer = shape.GetLayer(0)
 
 spatialRef = osr.SpatialReference()
 #set projection & geo coord system - this comes from metadata in neighborhood files
@@ -321,38 +273,12 @@ spatialRef.SetWellKnownGeogCS("NAD83")
 #translate to WGS84 which is lat/long
 spatialRef2=osr.SpatialReference()
 spatialRef2.SetWellKnownGeogCS("WGS84")
-neighborhoodTransformObject=osr.CoordinateTransformation( spatialRef,spatialRef2)
-
-################################################################################
-#LOAD TOWNS FILE
-################################################################################
-
-#Set up some of the geo stuff
-os.chdir(PATH_TO_TOWNS_DIR)
-
-# load the shapes files 
-drv = ogr.GetDriverByName('ESRI Shapefile')
-townShape = drv.Open(TOWNS_SHAPE_NAME)
-townsLayer = townShape.GetLayer(0)
-
-spatialRef3 = osr.SpatialReference()
-#set projection & geo coord system - this comes from metadata in neighborhood files
-spatialRef3.SetLCC(41.716667,42.683333,41.000000,-71.500000,200000.000000,750000.000000)
-spatialRef3.SetWellKnownGeogCS("NAD83")
-#wktFromPrj = open(TOWNS_PRJ_NAME, 'r').read()
-#spatialRef3.ImportFromWkt(wktFromPrj);
-
-#translate to WGS84 which is lat/long
-spatialRef4=osr.SpatialReference()
-spatialRef4.SetWellKnownGeogCS("WGS84")
-townTransformObject=osr.CoordinateTransformation( spatialRef3,spatialRef4)
+transformObject=osr.CoordinateTransformation( spatialRef,spatialRef2)
 
 
-################################################################################
-# CONNECT TO COUCHDB 
-################################################################################
-couch = couchdb.Server(url=config.get('db','host') + ':' + config.get('db','port')) 
-couch.resource.credentials = (config.get('db','username'), config.get('db','password'))
+
+#get couchDB
+couch = couchdb.Server() # Assuming localhost:5984
 
 #delete DB if it exists
 try:
@@ -441,43 +367,22 @@ while size<MAX_NUM_ARTICLES:
 				print "Filtering the point " + str(article["data"]["latitude"][0]) + ", "+ str(article["data"]["longitude"][0]) 
 				continue
 			else : 
-
 				#Now apply various processing to data, add metadata for neighborhoods to record and save to DB
 				#GET NEIGHBORHOOD
 				neighborhood = getNeighborhoodFromLatLong(float(article["data"]["latitude"][0]), float(article["data"]["longitude"][0]))
 				article["data"]["neighborhood"]=neighborhood
 
-				#GET CITY & change it if it's entered improperly from Globe
-
-				cityFromLatLong = getCityFromLatLong(float(article["data"]["latitude"][0]), float(article["data"]["longitude"][0]))	
-				if 	article["data"]["city"] != None and len(article["data"]["city"]) > 0 and cityFromLatLong.lower() != article["data"]["city"][0].lower() and len(cityFromLatLong) > 0 :
-						#(article["data"]["city"] is None AND len(cityFromLatLong) > 0) 
-						#or 	(article["data"]["city"] != None and cityFromLatLong != article["data"]["city"][0] and len(cityFromLatLong) > 0)
-					 
-					print "Changing Globe entered city " + article["data"]["city"][0] + " to verified city " + cityFromLatLong
-					db_metadata["number_of_updated_MA_city_names"]+=1
-					#save the city data as entered by the Globe
-					article["data"]["city_OLD"]=article["data"]["city"][0]
-
-					article["data"]["city"][0]=cityFromLatLong
-					
-				if (len(article["data"]["city"]) > 0):
-					city = str(article["data"]["city"][0])
-				else :
-					city = ""
-
-
-
-				
 				#ADD FULL TEXT AND WORD COUNT
 				fullText = str(article["data"]["catherine_dignazio"])
 				article["data"]["fulltext"]=article["data"]["catherine_dignazio"]
 				article["data"]["catherine_dignazio"]=None
 				
+				#FIX HERE
 				
 				fullTextSplit = fullText.split(None)
 				article["data"]["wordcount"] = len(fullTextSplit)
-				
+				print fullText
+				print  len(fullTextSplit)	
 
 				#ADD NEIGHBORHOOD METADATA
 				if (len(neighborhood) > 0):
@@ -489,15 +394,6 @@ while size<MAX_NUM_ARTICLES:
 					article["data"]['neighborhood_per_capita_income'] = metadata['neighborhood_per_capita_income']
 					article["data"]['neighborhood_percent_unemployed'] = metadata['neighborhood_percent_unemployed']
 					article["data"]['neighborhood_percent_below_poverty_line'] = metadata['neighborhood_percent_below_poverty_line']
-
-				#ADD CITY METADATA
-				if (len(city) > 0):
-					try :
-						metadata = cities[city]
-						article["data"]['city_population_2010'] = metadata['city_population_2010']
-					except KeyError:				
-						print "No meta data for " + city
-					
 
 				db_metadata["first_article_date"]= article["data"]["printpublicationdate"]
 				article["type"] = "article"
