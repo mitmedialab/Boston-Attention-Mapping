@@ -8,7 +8,7 @@
 import couchdb
 import simplejson as json
 import urllib2
-import osgeo.gdal as gdal,ogr,osr
+import osgeo.gdal as gdal, osgeo.ogr as ogr,osgeo.osr as osr
 import os
 import csv
 from titlecase import titlecase
