@@ -8,7 +8,7 @@
 import couchdb
 import simplejson as json
 import urllib2
-import gdal,ogr,osr
+import osgeo.gdal as gdal,ogr,osr
 import os
 import csv
 from titlecase import titlecase
@@ -16,7 +16,7 @@ import ConfigParser
 
 
 config = ConfigParser.ConfigParser()
-config.read('mc-client.config')
+config.read('globe.config')
 
 #db_metadata stores info about the whole DB, including # articles, filtered articles, reasons for filtering,etc
 db_metadata = {}
