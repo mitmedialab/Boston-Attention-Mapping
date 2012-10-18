@@ -223,15 +223,8 @@
                     });*/
                 }
                 
-                window.mapMe = function (jsonp){
-                    var json ="";
-                    try{
-                      //json = jsonp.replace("★","STAR");
-                        json = $.parseJSON(jsonp);
-                    } catch(e){
-                       $('h4').text(String.fromCharCode(145)+'Sorry! Parse error for this time period');
-                       console.log(e.toString())
-                    }
+                window.mapMe = function (json){
+                   
                     var articlesWithGeoData = 0;
                     //var articlesWithExcludedGeoData = 0;
                    if (json.rows.length > 0) {
