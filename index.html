@@ -40,6 +40,9 @@
                 top:35px;
                 z-index: 1;
             }
+          #navigation{
+            width:200px;
+          }
           html { height: 100% }
           body { height: 100%; margin: 0; padding: 0; }
           #map_canvas { height: 100% }
@@ -51,7 +54,32 @@
         <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe</h1>
         <h4>Loading...</h4>
         <div id="navigation">
-            <button class="btn btn-large btn-info" type="button">Article Distribution</button>
+            <div class="accordion" id="accordion2">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                    Article Distribution
+                  </a>
+                </div>
+                <div id="collapseOne" class="accordion-body collapse in">
+                  <div class="accordion-inner">
+                    This shows all articles distributed geographically in Greater Boston and the world.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                    Articles per Capita
+                  </a>
+                </div>
+                <div id="collapseTwo" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    This is a heatmap of articles per capita. 
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
          <!--<form class="form-inline">
             <select>
