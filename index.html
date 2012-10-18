@@ -236,10 +236,10 @@
                                 var contentString = '<div id="content">'+
                 
                                     '<h3 id="firstHeading" class="firstHeading">'+
-                                        article.headline
+                                        article.headline[0]
                                     +'</h3>'+
                                     '<div id="bodyContent">'+
-                                    '<p>'+ article.summary +'</p>'+
+                                    '<p>'+ article.summary[0] +'</p>'+
                                     '</div>'+
                                     '</div>';
                                 var infowindow = new google.maps.InfoWindow({
@@ -259,11 +259,11 @@
                 }
                 function addMarker(article,infowindow) {
                     
-                    var point = new google.maps.LatLng(article.latitude, article.longitude); 
+                    var point = new google.maps.LatLng(article.latitude[0], article.longitude[0]); 
                     var marker = new google.maps.Marker({
                         position:point,
                         map: window.map,
-                        title: article.headline,
+                        title: article.headline[0],
                         icon:image
                     }); 
                     window.markers.push(marker);
