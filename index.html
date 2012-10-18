@@ -50,7 +50,7 @@
     <body>
         <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe</h1>
         <h4>Loading...</h4>
-         <form class="form-inline">
+         <!--<form class="form-inline">
             <select>
                 <option value="printpublicationdate:20111001..20130100">All (SLOW!)</option>
                 
@@ -74,7 +74,7 @@
                 
 
             </select>
-        </form>
+        </form>-->
         <div id="map_canvas" style="width:100%; height:100%"></div>
        
     </body>
@@ -186,7 +186,7 @@
                     $('h4').text("Loading...");
                       drawMap();
                 });
-                 var image = 'news_icon_transparent.png';
+                 var image = 'ui/news_icon_transparent.png';
 
 
                 
@@ -250,7 +250,7 @@
                             
                         }
                         var markerCluster = new MarkerClusterer(window.map, window.markers,{gridSize: 50,maxZoom:11});
-                        $('h4').text(json.rows.length + " total articles retrieved.");
+                        $('h4').text(json.rows.length + " total articles retrieved");
                     }
                     else{
                         $('h4').text('No data for that time period');

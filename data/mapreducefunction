@@ -9,6 +9,16 @@ function(keys,values,rereduce){
 	return sum(values);
 }
 
+//ARTICLES BY CITY
+function(doc) {
+if(doc['data']['city'] != null && doc['data']['city'].length > 0){
+  emit(doc['data']['city'],1);
+}}
+
+//REDUCE
+function(keys,values,rereduce){
+	return sum(values);
+}
 
 
 
