@@ -25,7 +25,7 @@
         
         }*/
             h1,h4{
-                 position:absolute;z-index:1;margin-left:37px;background:rgba(100,100,100,0.8);padding:10px;
+                 position:absolute;z-index:1;margin-left:0;background:rgba(100,100,100,0.8);padding:10px;
             }
             h1{
                 color:#eee;
@@ -36,8 +36,8 @@
             }
             form,#navigation{
                 position:absolute;
-                right: 5px;
-                top:35px;
+                right: 0;
+                top:50px;
                 z-index: 1;
             }
           #navigation{
@@ -50,9 +50,14 @@
           }
           .accordion-heading,.collapse{
             background-color:rgba(100,100,100,0.8);
+            
           }
           .accordion-heading{
             font-size: 1.4em;
+            
+          }
+          .accordion-group{
+            border:0;
           }
           html { height: 100% }
           body { height: 100%; margin: 0; padding: 0; }
@@ -303,7 +308,7 @@
                                 contentString = contentString+'<div id="bodyContent">'+
                                     '<p>'+ article.summary[0] +'</p>';
                                 if (article.printsection[0]){
-                                  contentString =  contentString +'<p><b>'+article.printsection[0]+" " +'section '+  +'</b></p>';
+                                  contentString =  contentString +'<p><b>'+article.printsection[0] +' section '  +'</b></p>';
                                 }
                                 if (article.printpagenumber[0]){
                                   contentString  = contentString + '<p><b>Page '+ article.printpagenumber[0] +'</b></p>';
