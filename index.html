@@ -90,6 +90,18 @@
                   </div>
                 </div>
               </div>
+               <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                    Words per Capita
+                  </a>
+                </div>
+                <div id="collapseThree" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    This is a heatmap of words per capita. 
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
          <!--<form class="form-inline">
@@ -239,6 +251,8 @@
                       zoom: 11,
                       mapTypeId: google.maps.MapTypeId.ROADMAP,
                       styles:stylesArray,
+                      disableDefaultUI: true,
+                      zoomControl: boolean
                     };
                     var articlesWithGeoData = 0;
 
