@@ -230,13 +230,13 @@
                    if (json.rows.length > 0) {
                         for (i=0; i<json.rows.length; i++) {
                             var article = json.rows[i].value;
-                           
+                              console.log(article.headline[0])
                                 //make info window
                                 
                                 var contentString = '<div id="content">'+
                 
                                     '<h3 id="firstHeading" class="firstHeading">'+
-                                        article.headline[0]
+                                        article.headline[0] 
                                     +'</h3>'+
                                     '<div id="bodyContent">'+
                                     '<p>'+ article.summary[0] +'</p>';
