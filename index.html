@@ -34,7 +34,7 @@
                 margin-top:80px;
                 color:#eee;
             }
-            form{
+            form,#navigation{
                 position:absolute;
                 right: 5px;
                 top:35px;
@@ -50,6 +50,9 @@
     <body>
         <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe</h1>
         <h4>Loading...</h4>
+        <div id="navigation">
+            <button class="btn btn-large btn-info" type="button">Article Distribution</button>
+        </div>
          <!--<form class="form-inline">
             <select>
                 <option value="printpublicationdate:20111001..20130100">All (SLOW!)</option>
@@ -233,18 +236,19 @@
                               console.log(article.headline[0])
                                 //make info window
                                 
-                                var contentString = '<div id="content">'+
-                
-                                    '<h3 id="firstHeading" class="firstHeading">'+
+                                var contentString = '<div id="content">';
+                               if (article.headline[0]){
+                                    contentString=contentString+'<h3 id="firstHeading" class="firstHeading">'+
                                         article.headline[0] 
-                                    +'</h3>'+
-                                    '<div id="bodyContent">'+
+                                    +'</h3>';
+                                }
+                                contentString = contentString+'<div id="bodyContent">'+
                                     '<p>'+ article.summary[0] +'</p>';
                                 if (article.printsection[0]){
-                                  contentString =  contentString +'<p>Section: '+ article.printsection[0] +'</p>';
+                                  contentString =  contentString +'<p><b>'+article.printsection[0]+" " +'section '+  +'</b></p>';
                                 }
                                 if (article.printpagenumber[0]){
-                                  contentString  = contentString + '<p>Page number: '+ article.printpagenumber[0] +'</p>';
+                                  contentString  = contentString + '<p><b>Page '+ article.printpagenumber[0] +'</b></p>';
                                 }
                                 
                                     '</div>'+
