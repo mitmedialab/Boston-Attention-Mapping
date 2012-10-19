@@ -68,7 +68,7 @@ def getCityFromLatLong(latitude, longitude):
    	return ""
 
 DATABASE_NAME = "boston-globe-articles"
-MAX_NUM_ARTICLES = 1500
+MAX_NUM_ARTICLES = 50000
 ARTICLES_AT_A_TIME = 500
 
 #CENSUS FILE PATHS

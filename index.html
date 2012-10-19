@@ -25,7 +25,7 @@
         
         }*/
             h1,h4{
-                 position:absolute;z-index:1;margin-left:0;background:rgba(100,100,100,0.8);padding:10px;
+                 position:absolute;top:-4px;z-index:1;margin-left:0;background:rgba(100,100,100,0.8);padding:10px;
             }
             h1{
                 color:#eee;
@@ -36,12 +36,12 @@
             }
             form,#navigation{
                 position:absolute;
-                right: 0;
-                top:50px;
+                right: 36px;
+                top:7px;
                 z-index: 1;
             }
           #navigation{
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #EEE;
             width: 250px;
           }
@@ -62,6 +62,10 @@
           html { height: 100% }
           body { height: 100%; margin: 0; padding: 0; }
           #map_canvas { height: 100% }
+          button{
+            width:250px;
+            margin-bottom:4px;
+          }
 
     </style>
 
@@ -70,44 +74,21 @@
         <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe</h1>
         <h4>Loading...</h4>
         <div id="navigation">
-            <div class="accordion" id="accordion2">
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                    Article Distribution
-                  </a>
-                </div>
-                <div id="collapseOne" class="accordion-body collapse in">
-                  <div class="accordion-inner">
-                    This shows all articles distributed geographically in Greater Boston and the world.
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                    Articles per Capita
-                  </a>
-                </div>
-                <div id="collapseTwo" class="accordion-body collapse">
-                  <div class="accordion-inner">
-                    This is a heatmap of articles per capita. 
-                  </div>
-                </div>
-              </div>
-               <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                    Words per Capita
-                  </a>
-                </div>
-                <div id="collapseThree" class="accordion-body collapse">
-                  <div class="accordion-inner">
-                    This is a heatmap of words per capita. 
-                  </div>
-                </div>
-              </div>
-            </div>
+           <button type="button" id="article-distribution" class="btn btn-danger btn-large" data-toggle="collapse" data-target="#demo">
+              Article Distribution
+            </button>
+ 
+            <div id="demo" class="collapse out"> hi </div>
+            <button type="button" id="articles-per-capita" class="btn btn-danger btn-large" data-toggle="collapse2" data-target="#demo">
+              Articles per Capita
+            </button>
+ 
+            <div id="demo" class="collapse2 in"> hi </div>
+            <button type="button" id="page1-articles-per-capita" class="btn btn-danger btn-large" data-toggle="collapse3" data-target="#demo">
+              Page 1 Articles per Capita
+            </button>
+ 
+            <div id="demo" class="collapse3 in"> hi </div>
         </div>
          <!--<form class="form-inline">
             <select>
@@ -139,6 +120,20 @@
     </body>
     <script type="text/javascript"> 
             $(document).ready(function() {
+                $('#article-distribution').click(function(){
+                    showArticleDistribution();
+                    hidePolygons();
+
+                });
+                $('#articles-per-capita').click(function(){
+
+                    clearMarkers();
+                    showArticlesPerCapita();
+                    
+                });
+
+
+
                 var popoverImage = '<img src="ui/globe-image.jpeg" />';
                 $('#globe-image').popover({ trigger: 'hover', placement : 'bottom', title: '<b>What is the Boston Globe?</b>', content: popoverImage + '<br/><br/>An American daily newspaper based in Boston, MA, USA. The Boston Globe was founded in 1872, has won 21 Pulitzer Prizes, and has a circulation between 220,000 - 370,000. (Wikipedia)' });
                
@@ -188,63 +183,12 @@
                                     ];
                
                 drawMap();
-
-                /*
-
-                  LOAD TOWNS SHAPES VIA GEOJSON DATA
-                */
-                var jqxhr =  $.getJSON('data/shapefiles/townsShapeFiles/MATowns.json', function() {
-                  
-                })
-                .success(function(data) {   
-                  
-                  var polywindow = new google.maps.InfoWindow();
-                  for (var i = 0; i < data.features.length; i++) {
-                    var town = data.features[i];
-                    var townName = town.properties.TOWN;
-                    var townBoundaryArray = [];
-                    for (var j=0; j<town.geometry.coordinates[0].length;j++){
-                      var longitude = town.geometry.coordinates[0][j][0];
-                      var latitude = town.geometry.coordinates[0][j][1];
-                      var latlong = new google.maps.LatLng(latitude, longitude);
-                      townBoundaryArray[j] = latlong;
-                      
-                    }
-                    
-                    // Construct the polygon
-                    // Note that we don't specify an array or arrays, but instead just
-                    // a simple array of LatLngs in the paths property
-                   var valuesArray =[0,0.2,0.4,0.6,0.8];
-                    var townPolygon = new google.maps.Polygon({
-                      paths: townBoundaryArray,
-                      strokeColor: "#a65c1c",
-                      strokeOpacity: 0.8,
-                      strokeWeight: 1,
-                      fillColor: '#ffba2b',
-                      //fillColor: '#FFFFFF',
-                      fillOpacity: valuesArray[ Math.round(Math.random()*5) ]
-                    });
-                    
-                    townPolygon.setMap(window.map);
-                    townPolygon.set("townName",townName);
-
-                    google.maps.event.addListener(townPolygon, 'click', function(event) {
-                          
-                            polywindow.setContent(this.get('townName'));
-                            polywindow.setPosition(event.latLng);
-
-                            polywindow.open(window.map);
-                        });
-                  }
-                })
-                .error(function(data) { console.log(data) })
-                .complete(function() { console.log("Loaded MA Towns from GEOJSON...") });
                 
+               showArticleDistribution();
+
+                //this loads town polygons in background
+                loadPolygons();
                 
-                $('select').change(function() {
-                    $('h4').text("Loading...");
-                      drawMap();
-                });
                  var image = 'ui/news_icon_transparent.png';
 
 
@@ -259,8 +203,8 @@
                       disableDefaultUI: true,
                       zoomControl: true,
                       zoomControlOptions: {
-                        style: google.maps.ZoomControlStyle.SMALL,
-                        position: google.maps.ControlPosition.TOP_RIGHT
+                        style: google.maps.ZoomControlStyle.LARGE,
+                        position: google.maps.ControlPosition.RIGHT_TOP
                       }
                      
                     };
@@ -270,71 +214,16 @@
                    
                    
                    
-                   var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/allArticles/_view/allArticles', function() {
-                  
-                  })
-                   .success(function(data) { 
-                      window.mapMe(data);
-                    })
-                .error(function(data) { console.log(data) })
-                .complete(function() { console.log("Loaded MA Towns from GEOJSON...") });
-                    /*var timeRange = $('select option:selected').val(); 
-                    $.ajax({
-                        dataType: "jsonp",
-                        url: "http://50.17.92.83/s?key=catherine&bq="+ timeRange +"&return-fields=id,headline,printpublicationdate,latitude,longitude,latitude_1k,longitude_1k,summary&start=0&size=5000&rank=-printpublicationdate,&callback=mapMe",
-                        jsonp : false,
-                        cache : true,
-                        //jsonpCallback: "window.mapMe"
-                      
-                    });*/
+                   
+                   
                 }
-                
-                window.mapMe = function (json){
-                    
-                    var articlesWithGeoData = 0;
-                    //var articlesWithExcludedGeoData = 0;
-                   if (json.rows.length > 0) {
-                        for (i=0; i<json.rows.length; i++) {
-                            var article = json.rows[i].value;
-                              console.log(article.headline[0])
-                                //make info window
-                                
-                                var contentString = '<div id="content">';
-                               if (article.headline[0]){
-                                    contentString=contentString+'<h3 id="firstHeading" class="firstHeading">'+
-                                        article.headline[0] 
-                                    +'</h3>';
-                                }
-                                contentString = contentString+'<div id="bodyContent">'+
-                                    '<p>'+ article.summary[0] +'</p>';
-                                if (article.printsection[0]){
-                                  contentString =  contentString +'<p><b>'+article.printsection[0] +' section '  +'</b></p>';
-                                }
-                                if (article.printpagenumber[0]){
-                                  contentString  = contentString + '<p><b>Page '+ article.printpagenumber[0] +'</b></p>';
-                                }
-                                
-                                    '</div>'+
-                                    '</div>';
-                                    
-                                   
-                                  
-                                   
-                                var infowindow = new google.maps.InfoWindow({
-                                    content: $(contentString).html()
-                                });
-                                addMarker(article,infowindow); 
-                                
-                            
-                        }
-                        var markerCluster = new MarkerClusterer(window.map, window.markers,{gridSize: 50,maxZoom:11});
-                        $('h4').text(json.rows.length + " total articles retrieved");
-                    }
-                    else{
-                        $('h4').text('No data for that time period');
-                    }
+                function clearMarkers() {
+                  for (var i = 0; i < window.markers.length; i++ ) {
+                    window.markers[i].setMap(null);
+                  }
+                  window.markerCluster.clearMarkers();
+                }
 
-                }
                 function addMarker(article,infowindow) {
                     
                     var point = new google.maps.LatLng(article.latitude[0], article.longitude[0]); 
@@ -352,7 +241,208 @@
                       infowindow.close();
                     });
                 };
+                function showArticleDistribution(){
+                    var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/allArticles/_view/allArticles', function() {
+                  
+                      })
+                       .success(function(json) { 
+                          var articlesWithGeoData = 0;
+                        
+                           if (json.rows.length > 0) {
+                                for (i=0; i<json.rows.length; i++) {
+                                    var article = json.rows[i].value;
+                                      
+                                        var contentString = '<div id="content">';
+                                       if (article.headline[0]){
+                                            contentString=contentString+'<h3 id="firstHeading" class="firstHeading">'+
+                                                article.headline[0] 
+                                            +'</h3>';
+                                        }
+                                        contentString = contentString+'<div id="bodyContent">'+
+                                            '<p>'+ article.summary[0] +'</p>';
+                                        if (article.printsection[0]){
+                                          contentString =  contentString +'<p><b>'+article.printsection[0] +' section '  +'</b></p>';
+                                        }
+                                        if (article.printpagenumber[0]){
+                                          contentString  = contentString + '<p><b>Page '+ article.printpagenumber[0] +'</b></p>';
+                                        }
+                                        
+                                            '</div>'+
+                                            '</div>';
+                                            
+                                           
+                                          
+                                           
+                                        var infowindow = new google.maps.InfoWindow({
+                                            content: $(contentString).html()
+                                        });
+                                        addMarker(article,infowindow); 
+                                        
+                                    
+                                }
+                                window.markerCluster = new MarkerClusterer(window.map, window.markers,{gridSize: 50,maxZoom:11});
+                                $('h4').text(json.rows.length + " total articles retrieved");
+                            }
+                            else{
+                                $('h4').text('No data for that time period');
+                            }
+                        })
+                    .error(function(data) { console.log(data) })
+                    .complete(function() { console.log("Loaded all articles") }); 
+                }
+                function showArticlesPerCapita(){
 
+                    var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/cities/_view/cityCount?group=true', function() {
+                  
+                      })
+                       .success(function(json) { 
+                          
+                        
+                           if (json.rows.length > 0) 
+                           {
+                                var maxValue = 0;
+                                var minValue = 0;
+                                for (i=0; i<json.rows.length; i++) {
+                                    var town = json.rows[i].key[0];
+                                    
+                                    if (town != null && town.length > 0 && town != "Boston" && town != "Washington" && window.townPolygons[town.toUpperCase()] != null){
+                                      var articleCount = json.rows[i].value;
+                                      
+                                      if (maxValue == 0 && minValue == 0){
+                                        maxValue =articleCount;
+                                        minValue =articleCount;
+                                      }
+                                      if (articleCount>maxValue){
+                                        maxValue =articleCount;
+                                       
+                                      } else if(articleCount<minValue){
+                                        minValue=articleCount;
+                                      }
+                                    }
+                                }
+                                var diff = maxValue - minValue;
+                                var step = diff/4;
+                                for (i=0; i<json.rows.length; i++) {
+                                    var town = json.rows[i].key[0];
+                                    if (town != null && town.length > 0){
+                                      var articleCount = json.rows[i].value;
+                                      
+                                      var townPolygon = window.townPolygons[town.toUpperCase()];
+                                      //handle case where multipolys
+                                      if (townPolygon instanceof Array){
+                                          
+                                          for (var j=0;j<townPolygon.length;j++){
+                                            var poly = townPolygon[j];
+                                            if (poly != null) {
+                                              setPolygonOpacity(articleCount,minValue,maxValue,step,poly);
+                                            }
+                                          }
+                                      }
+                                      else if (townPolygon != null) {
+                                        setPolygonOpacity(articleCount,minValue,maxValue,step,townPolygon);
+                                      }
+                                    }   
+                                }
+                                
+                                $('h4').text("Articles per capita - Heat Map");
+                            }
+                           
+                        })
+                    .error(function(data) { console.log(data) })
+                    .complete(function() { console.log("Loaded all city counts") }); 
+                    
+
+                }
+                function setPolygonOpacity(articleCount,minValue,maxValue,step,townPolygon){
+                  var opacity = 0;
+                  if (articleCount >= minValue && articleCount <= minValue + step)
+                    opacity=0.2;
+                  else if (articleCount > minValue + step && articleCount <= minValue + step * 2)
+                    opacity=0.4;
+                  else if (articleCount > minValue + step * 2 && articleCount <= minValue + step * 3)
+                    opacity=0.6;
+                  else if (articleCount > minValue + step * 3)
+                    opacity=0.8;
+                 
+                  townPolygon.setOptions({fillOpacity: opacity,strokeWeight:1,strokeOpacity:0.8, strokeColor: "#a65c1c"});
+                  console.log("max is " + maxValue + " min is  "+ minValue)
+                  console.log("town is " + townPolygon.townName +  " has articles " + articleCount)
+                  console.log("opacity is " + opacity)
+                }
+                function hidePolygons(){
+                    for (var town in window.townPolygons) {
+                      var townPolygon = window.townPolygons[town];
+                  
+                      townPolygon.setOptions({fillOpacity: 0,strokeWeight:1,strokeOpacity:0.8,strokeColor: "#CCCCCC"});
+                    }
+                }
+                function loadPolygon(townCoordinates,townName){
+                  var townBoundaryArray = [];
+                  for (var j=0; j<townCoordinates.length;j++){
+                    var longitude = townCoordinates[j][0];
+                    var latitude = townCoordinates[j][1];
+                    var latlong = new google.maps.LatLng(latitude, longitude);
+                    townBoundaryArray[j] = latlong;
+                    
+                  }
+                  
+
+                  var townPolygon = new google.maps.Polygon({
+                    paths: townBoundaryArray,
+                    strokeColor: "#CCCCCC",
+                    //strokeColor: "#a65c1c",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 1,
+                    fillColor: '#ffba2b',
+                    //fillColor: '#FFFFFF',
+                    fillOpacity: 0 
+                  });
+                  
+                  townPolygon.setMap(window.map);
+                  townPolygon.set("townName",townName);
+                 
+                  
+                  google.maps.event.addListener(townPolygon, 'click', function(event) {
+                        
+                          polywindow.setContent(this.get('townName'));
+                          polywindow.setPosition(event.latLng);
+
+                          polywindow.open(window.map);
+                  });
+                  return townPolygon;
+
+                }
+                function loadPolygons(){
+                  var jqxhr =  $.getJSON('data/shapefiles/townsShapeFiles/MATowns.json', function() {
+                      
+                    })
+                    .success(function(data) {   
+                      window.townPolygons = {};
+                      var polywindow = new google.maps.InfoWindow();
+                      for (var i = 0; i < data.features.length; i++) {
+                        var town = data.features[i];
+                        var townName = town.properties.TOWN;
+                        
+                        var townPolygon = null;
+                         //Handle multipolygons - what a pain!
+                        if (town.geometry.type == "MultiPolygon"){
+                           
+                            var townPolygonArray = [];
+                           
+                           for (var j=0;j<town.geometry.coordinates.length;j++){
+                              townPolygon = loadPolygon(town.geometry.coordinates[j][0], townName);
+                              townPolygonArray[j] =townPolygon;
+                           }
+                            window.townPolygons[townName]=townPolygonArray;
+                        } else {
+                            townPolygon =loadPolygon(town.geometry.coordinates[0], townName);
+                            window.townPolygons[townName]=townPolygon;
+                        }
+                      }
+                    })
+                    .error(function(data) { console.log(data) })
+                    .complete(function() { console.log("Loaded MA Towns from GEOJSON...") });
+                }
 
             });
         </script>
