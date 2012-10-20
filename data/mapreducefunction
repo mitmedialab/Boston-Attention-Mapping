@@ -11,7 +11,7 @@ function(keys,values,rereduce){
 
 //ARTICLES BY CITY
 function(doc) {
-if(doc['data']['city'] != null && doc['data']['city'].length > 0){
+if(doc['data']['city'] != null && doc['data']['city'].length > 0 && doc['data']['state'].length > 0 && doc['data']['state'] =="MA"){
   emit(doc['data']['city'],1);
 }}
 
@@ -39,15 +39,24 @@ function(doc) {
 }
 }
 
+//HEADLINES BY CITY
+function(doc) {
+  emit(doc['data']['city'][0],{headline:doc['data']['headline'][0],printpagenumber:doc['data']['printpagenumber'][0]});
+}
+
 //ALL ARTICLES
 function(doc) {
   emit(doc.id,{neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],
 printbook:doc['data']['printbook'],
-summary:['data']['summary'],
+summary:doc['data']['summary'],
 city:doc['data']['city'],
 latitude:doc['data']['latitude'],
 longitude:doc['data']['longitude'],
 	printsection:doc['data']['printsection'],
 	printpagenumber:doc['data']['printpagenumber'],
-	wordcount:doc['data']['wordcount']});
+	wordcount:doc['data']['wordcount'],
+printpublicationdate:doc['data']['printpublicationdate']});
 }
+
+//DATES
+http://127.0.0.1:5984/boston-globe-articles/_design/bydate/_view/bydate?startkey=%20121012&endkey=%20121012

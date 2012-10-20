@@ -24,16 +24,20 @@
             background-size: cover;
         
         }*/
-            h1,h4{
+            h1,#about{
                  position:absolute;top:-4px;z-index:1;margin-left:0;background:rgba(100,100,100,0.8);padding:10px;
             }
             h1{
                 color:#eee;
+                width:535px;
             }
-            h4{
-                margin-top:80px;
-                color:#eee;
+            #about{
+              width: 535px;
+              top: 62px;
+              color: #EEE;
+              display:none;
             }
+            
             form,#navigation{
                 position:absolute;
                 right: 36px;
@@ -66,29 +70,58 @@
             width:250px;
             margin-bottom:4px;
           }
+          #headlines{
+           position: absolute;
+            width: 230px;
+            background-color: rgba(100, 100, 100, 0.8);
+            border-radius: 4px;
+            top: 200px;
+            right: 35px;
+            color: white;
+            padding: 10px;
+            max-height:500px;
+            overflow:scroll;
+            -webkit-box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+
+          }
+          .stripe{
+            background-color: rgba(255, 255, 255, 0.1);
+            padding-left: 3px;
+          }
+          #headlines p{
+            border-top:1px solid #eee;
+            margin:0;
+            font-size:0.9em;
+          }
+          #headlines .page1{
+            font-size:1.2em;
+            font-weight:bold;
+          }
 
     </style>
 
     </head>
     <body>
-        <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe</h1>
-        <h4>Loading...</h4>
+        <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe </i></h1>
+        <h4 id="about">Mapping the Globe is a set of interactive visualizations and maps that help us understand where the Boston Globe directs its attention. Media attention matters – in quantity and quality. It helps determine what we talk about as a public and how we talk about it. Mapping the Globe tracks where the paper's attention goes and what that attention looks like across different regional geographies in combination with diverse data sets like population, crime and income. <br/><br/>By Catherine D'Ignazio and Ethan Zuckerman for the Center for Civic Media at MIT.</h4>
+        
         <div id="navigation">
-           <button type="button" id="article-distribution" class="btn btn-danger btn-large" data-toggle="collapse" data-target="#demo">
+           <button type="button" id="article-distribution" class="btn btn-danger btn-large active">
               Article Distribution
             </button>
  
-            <div id="demo" class="collapse out"> hi </div>
-            <button type="button" id="articles-per-capita" class="btn btn-danger btn-large" data-toggle="collapse2" data-target="#demo">
+            
+            <button type="button" id="articles-per-capita" class="btn btn-danger btn-large">
               Articles per Capita
             </button>
  
-            <div id="demo" class="collapse2 in"> hi </div>
-            <button type="button" id="page1-articles-per-capita" class="btn btn-danger btn-large" data-toggle="collapse3" data-target="#demo">
+           
+            <button type="button" id="page1-articles-per-capita" class="btn btn-danger btn-large">
               Page 1 Articles per Capita
             </button>
  
-            <div id="demo" class="collapse3 in"> hi </div>
+            
         </div>
          <!--<form class="form-inline">
             <select>
@@ -116,26 +149,32 @@
             </select>
         </form>-->
         <div id="map_canvas" style="width:100%; height:100%"></div>
-       
+        <div id="headlines" class="results"><h4 style="text-align: center"><img src="ui/loading.gif">Loading...</h4></div>
     </body>
     <script type="text/javascript"> 
             $(document).ready(function() {
+                $("h1").mouseover(function(){$('#about').show()});
+                $("h1").mouseout(function(){$('#about').hide()});
                 $('#article-distribution').click(function(){
                     showArticleDistribution();
                     hidePolygons();
-
+                    $('#page-one-articles-per-capita').removeClass('active');
+                    $('#articles-per-capita').removeClass('active');
+                    $('#article-distribution').addClass('active');
                 });
                 $('#articles-per-capita').click(function(){
 
                     clearMarkers();
                     showArticlesPerCapita();
-                    
+                    $('#page-one-articles-per-capita').removeClass('active');
+                    $('#articles-per-capita').addClass('active');
+                    $('#article-distribution').removeClass('active');
                 });
 
 
 
-                var popoverImage = '<img src="ui/globe-image.jpeg" />';
-                $('#globe-image').popover({ trigger: 'hover', placement : 'bottom', title: '<b>What is the Boston Globe?</b>', content: popoverImage + '<br/><br/>An American daily newspaper based in Boston, MA, USA. The Boston Globe was founded in 1872, has won 21 Pulitzer Prizes, and has a circulation between 220,000 - 370,000. (Wikipedia)' });
+               /* var popoverImage = '<img src="ui/globe-image.jpeg" />';
+                $('h1').popover({ trigger: 'hover', placement : 'bottom', title: '<b>What is the Boston Globe?</b>', content: popoverImage + '<br/><br/>An American daily newspaper based in Boston, MA, USA. The Boston Globe was founded in 1872, has won 21 Pulitzer Prizes, and has a circulation between 220,000 - 370,000. (Wikipedia)' });*/
                
                 window.markers = [];
                 var stylesArray = [
@@ -190,10 +229,10 @@
                 loadPolygons();
                 
                  var image = 'ui/news_icon_transparent.png';
-
-
-                
-
+                 
+                 function log10(num){
+                    return Math.log(num) / Math.LN10;
+                 }
                 function drawMap(){
                     var mapOptions = {
                       center: new google.maps.LatLng(42.358056, -71.063611),
@@ -225,7 +264,7 @@
                 }
 
                 function addMarker(article,infowindow) {
-                    
+
                     var point = new google.maps.LatLng(article.latitude[0], article.longitude[0]); 
                     var marker = new google.maps.Marker({
                         position:point,
@@ -247,25 +286,32 @@
                       })
                        .success(function(json) { 
                           var articlesWithGeoData = 0;
-                        
+                          
                            if (json.rows.length > 0) {
                                 for (i=0; i<json.rows.length; i++) {
                                     var article = json.rows[i].value;
                                       
+                                        var metaDataString = "<b>";
+                                        if (article.printpublicationdate[0])
+                                            
+                                            metaDataString+=  article.printpublicationdate[0].substring(4,6) +"/"+ article.printpublicationdate[0].substring(6,8) + "/"+ article.printpublicationdate[0].substring(0,4) +". ";
+
+                                        if (article.printsection[0]){
+                                           metaDataString+=article.printsection[0] +' Section. ';
+                                        }
+                                        if (article.printpagenumber[0]){
+                                          metaDataString+= 'Page '+article.printpagenumber[0] +'. ';
+                                        }
+                                        metaDataString +="</b>";
                                         var contentString = '<div id="content">';
                                        if (article.headline[0]){
-                                            contentString=contentString+'<h3 id="firstHeading" class="firstHeading">'+
+                                            contentString+='<h3 id="firstHeading" class="firstHeading">'+
                                                 article.headline[0] 
                                             +'</h3>';
                                         }
-                                        contentString = contentString+'<div id="bodyContent">'+
-                                            '<p>'+ article.summary[0] +'</p>';
-                                        if (article.printsection[0]){
-                                          contentString =  contentString +'<p><b>'+article.printsection[0] +' section '  +'</b></p>';
-                                        }
-                                        if (article.printpagenumber[0]){
-                                          contentString  = contentString + '<p><b>Page '+ article.printpagenumber[0] +'</b></p>';
-                                        }
+                                        contentString += '<div id="bodyContent">'+'<p>'+ metaDataString + article.summary[0] +'</p>';
+                                       
+                                       
                                         
                                             '</div>'+
                                             '</div>';
@@ -281,10 +327,10 @@
                                     
                                 }
                                 window.markerCluster = new MarkerClusterer(window.map, window.markers,{gridSize: 50,maxZoom:11});
-                                $('h4').text(json.rows.length + " total articles retrieved");
+                                $('.results').text(json.rows.length + " total articles retrieved");
                             }
                             else{
-                                $('h4').text('No data for that time period');
+                                $('.results').text('No data for that time period');
                             }
                         })
                     .error(function(data) { console.log(data) })
@@ -305,9 +351,12 @@
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
                                     
-                                    if (town != null && town.length > 0 && town != "Boston" && town != "Washington" && window.townPolygons[town.toUpperCase()] != null){
-                                      var articleCount = json.rows[i].value;
-                                      
+                                    if (town != null && town.length > 0 && town != "Boston" && town != "Washington" && 
+                                      window.townPolygons[town.toUpperCase()] != null){
+                                      //Store # articles for later display  
+                                      window.townPolygons[town.toUpperCase()].articleCount =json.rows[i].value;
+                                      var articleCount = log10(json.rows[i].value);
+                                      console.log(articleCount)
                                       if (maxValue == 0 && minValue == 0){
                                         maxValue =articleCount;
                                         minValue =articleCount;
@@ -325,7 +374,7 @@
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
                                     if (town != null && town.length > 0){
-                                      var articleCount = json.rows[i].value;
+                                      var articleCount = log10(json.rows[i].value);
                                       
                                       var townPolygon = window.townPolygons[town.toUpperCase()];
                                       //handle case where multipolys
@@ -344,7 +393,7 @@
                                     }   
                                 }
                                 
-                                $('h4').text("Articles per capita - Heat Map");
+                                $('.results').text("Articles per capita - Heat Map");
                             }
                            
                         })
@@ -365,9 +414,7 @@
                     opacity=0.8;
                  
                   townPolygon.setOptions({fillOpacity: opacity,strokeWeight:1,strokeOpacity:0.8, strokeColor: "#a65c1c"});
-                  console.log("max is " + maxValue + " min is  "+ minValue)
-                  console.log("town is " + townPolygon.townName +  " has articles " + articleCount)
-                  console.log("opacity is " + opacity)
+                 
                 }
                 function hidePolygons(){
                     for (var town in window.townPolygons) {
@@ -401,13 +448,46 @@
                   townPolygon.setMap(window.map);
                   townPolygon.set("townName",townName);
                  
-                  
+                  var polywindow = new google.maps.InfoWindow();
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
+                        $('#headlines').empty();
+                        var town = this.get('townName');
                         
-                          polywindow.setContent(this.get('townName'));
-                          polywindow.setPosition(event.latLng);
+                        $('#headlines').append("<h4>"+town.toProperCase() + " Headlines" + "</h4>");
+                        polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+town.toProperCase()+ "</h4>" + "<br/>"
+                                                                  +window.townPolygons[town.toUpperCase()].articleCount + " stories");
+                        polywindow.setPosition(event.latLng);
 
-                          polywindow.open(window.map);
+                        polywindow.open(window.map);
+                            
+                          var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/headlines/_view/headlineByCity?key="'+town.toProperCase()+'"', function() {
+                
+                      })
+                       .success(function(json) {  
+                             for (i=0; i<json.rows.length; i++) {
+                                var headline = json.rows[i].value;
+
+                                if (headline.headline != null)
+                                {
+                                  if (i%2==0)
+                                  {
+                                    if (headline.printpagenumber == "1")
+                                      $('#headlines').append("<p class='stripe page1'>" + headline.headline +"</p>");
+                                    else
+                                      $('#headlines').append("<p class='stripe'>" + headline.headline +"</p>");
+                                  }
+                                  else{
+                                      if (headline.printpagenumber == "1")
+                                        $('#headlines').append("<p class='page1'>" + headline.headline +"</p>"); 
+                                      else 
+                                        $('#headlines').append("<p>" + headline.headline +"</p>");
+                                  }
+                                }
+                             }
+                          })
+                      .error(function(data) { console.log(data) })
+                      .complete(function() { console.log("Loaded city headlines") }); 
+                          
                   });
                   return townPolygon;
 
@@ -447,6 +527,9 @@
             });
         </script>
         <script type="text/javascript">
+        String.prototype.toProperCase = function () {
+            return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        };
         /* 
             Extension to Google Maps to get center of polygon 
             From here: http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.js

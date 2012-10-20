@@ -459,7 +459,21 @@ while size<MAX_NUM_ARTICLES:
 				#GET CITY & change it if it's entered improperly from Globe
 
 				cityFromLatLong = getCityFromLatLong(float(article["data"]["latitude"][0]), float(article["data"]["longitude"][0]))	
-				if 	article["data"]["city"] != None and len(article["data"]["city"]) > 0 and cityFromLatLong.lower() != article["data"]["city"][0].lower() and len(cityFromLatLong) > 0 :
+				if article["data"]["city"] == None or len(article["data"]["city"]) ==0:
+					article["data"]["city"] = [""];
+				
+				#Fix up state declarations to MA instead of Mass, Massachusetts and all manner of whatnot
+				if len(cityFromLatLong) > 0:
+					if article["data"]["state"] == None or len(article["data"]["state"]) ==0:
+						article["data"]["state"] = [""];
+					
+					oldState = article["data"]["state"][0]
+
+					if "MA" != article["data"]["state"][0]:
+						article["data"]["state"][0]="MA"
+						print "Changed state to MA from Globe entered state " + oldState + " for city " + cityFromLatLong
+ 
+				if cityFromLatLong.lower() != article["data"]["city"][0].lower() and len(cityFromLatLong) > 0 :
 						#(article["data"]["city"] is None AND len(cityFromLatLong) > 0) 
 						#or 	(article["data"]["city"] != None and cityFromLatLong != article["data"]["city"][0] and len(cityFromLatLong) > 0)
 					 
