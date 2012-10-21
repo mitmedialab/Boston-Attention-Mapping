@@ -98,7 +98,9 @@
             font-size:1.2em;
             font-weight:bold;
           }
-
+          .active{
+            font-weight: bold;
+          }
     </style>
 
     </head>
@@ -310,15 +312,9 @@
                                             +'</h3>';
                                         }
                                         contentString += '<div id="bodyContent">'+'<p>'+ metaDataString + article.summary[0] +'</p>';
-                                       
-                                       
-                                        
                                             '</div>'+
                                             '</div>';
-                                            
-                                           
-                                          
-                                           
+          
                                         var infowindow = new google.maps.InfoWindow({
                                             content: $(contentString).html()
                                         });
@@ -392,8 +388,6 @@
                                       }
                                     }   
                                 }
-                                
-                                $('.results').text("Articles per capita - Heat Map");
                             }
                            
                         })

@@ -68,7 +68,7 @@ def getCityFromLatLong(latitude, longitude):
    	return ""
 
 DATABASE_NAME = "boston-globe-articles"
-MAX_NUM_ARTICLES = 50000
+MAX_NUM_ARTICLES = 1500
 ARTICLES_AT_A_TIME = 500
 
 #CENSUS FILE PATHS
@@ -290,6 +290,8 @@ for row in neighborhoodMetaData_list:
 				}
 	neighborhoods[row[0]] = metadata
 
+db_metadata["neighborhoodmetadata"] = neighborhoods
+#print '\n'.join([l.rstrip() for l in  db_metadata["neighborhoodmetadata"].splitlines()]) 
 #Read in City metadatafile to memory
 cityMetaData = csv.reader(open("../data/MATowns.csv", "rU"))
 cityMetaData_list = []
@@ -297,11 +299,14 @@ cityMetaData_list.extend(cityMetaData)
 cities ={}
 for row in cityMetaData_list:
 	metadata = {	
-					'city_population_2010': row[2],
+					'city_population_2010': row[2]
 					
 
 				}
+	
 	cities[row[0]] = metadata
+db_metadata["citymetadata"] = cities
+
 ################################################################################
 #LOAD CENSUS FILE
 ################################################################################
@@ -502,8 +507,8 @@ while size<MAX_NUM_ARTICLES:
 				article["data"]["wordcount"] = len(fullTextSplit)
 				
 
-				#ADD NEIGHBORHOOD METADATA
-				if (len(neighborhood) > 0):
+				#NO LONGER STORING STATS ON THE INDIVIDUAL ROWS, THEY ARE STORED IN METADATA DOCUMENT
+				'''if (len(neighborhood) > 0):
 					metadata = neighborhoods[neighborhood]
 
 					article["data"]['neighborhood_population_2010'] = metadata['neighborhood_population_2010']
@@ -521,7 +526,7 @@ while size<MAX_NUM_ARTICLES:
 					except KeyError:				
 						print "No meta data for " + city
 					
-
+				'''
 				db_metadata["first_article_date"]= article["data"]["printpublicationdate"]
 				article["type"] = "article"
 				db.save(article)
