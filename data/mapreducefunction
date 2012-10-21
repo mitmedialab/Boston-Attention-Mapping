@@ -2,8 +2,18 @@ USE IN PRODUCTION
 
 headlines/headlineByCity
 function(doc) {
-  emit(doc['data']['city'][0],{headline:doc['data']['headline'][0],printpagenumber:doc['data']['printpagenumber'][0]});
-}
+if(doc['data']['city'] != null && doc['data']['city'].length > 0 && doc['data']['state'].length > 0 && doc['data']['state'][0] =="MA"){
+  emit(doc['data']['city'][0],{headline:doc['data']['headline'][0],printpagenumber:doc['data']['printpagenumber'][0],state:doc['data']['state'][0]});
+}}
+
+headlines/headlineByNeighborhood
+function(doc) {
+if(doc['data']['neighborhood'] != null && doc['data']['neighborhood'].length > 0){
+  emit(doc['data']['neighborhood'],
+  { headline:doc['data']['headline'][0],
+    printpagenumber:doc['data']['printpagenumber'][0]
+  });
+}}
 
 cities/cityCount
 function(doc) {
@@ -11,6 +21,16 @@ if(doc['data']['city'] != null && doc['data']['city'].length > 0 && doc['data'][
   emit(doc['data']['city'],1);
 }}
 
+
+function(keys,values,rereduce){
+	return sum(values);
+}
+
+neighborhoods/neighborhoodCount
+function(doc) {
+if(doc['data']['neighborhood'] != null && doc['data']['neighborhood'].length > 0 ){
+  emit(doc['data']['neighborhood'],1);
+}}
 function(keys,values,rereduce){
 	return sum(values);
 }
@@ -31,6 +51,12 @@ printpublicationdate:doc['data']['printpublicationdate']});
 
 
 
+metadata/metadata
+function(doc) {
+	if (doc['type']=="metadata"){
+  		emit(doc,1);	
+	}
+}
 
 
 
@@ -67,12 +93,6 @@ function(keys,values,rereduce){
 
 
 
-//METADATA
-function(doc) {
-	if (doc['type']=="metadata"){
-  		emit(doc,1);	
-	}
-}
 
 //HEADLINES
 function(doc) {

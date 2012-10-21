@@ -151,7 +151,7 @@
             </select>
         </form>-->
         <div id="map_canvas" style="width:100%; height:100%"></div>
-        <div id="headlines" class="results"><h4 style="text-align: center"><img src="ui/loading.gif">Loading...</h4></div>
+        <div id="headlines" class="results"><h4 style="text-align: center"><img src="ui/loading.gif" style="padding-right:5px">Loading...</h4></div>
     </body>
     <script type="text/javascript"> 
             $(document).ready(function() {
@@ -172,11 +172,6 @@
                     $('#articles-per-capita').addClass('active');
                     $('#article-distribution').removeClass('active');
                 });
-
-
-
-               /* var popoverImage = '<img src="ui/globe-image.jpeg" />';
-                $('h1').popover({ trigger: 'hover', placement : 'bottom', title: '<b>What is the Boston Globe?</b>', content: popoverImage + '<br/><br/>An American daily newspaper based in Boston, MA, USA. The Boston Globe was founded in 1872, has won 21 Pulitzer Prizes, and has a circulation between 220,000 - 370,000. (Wikipedia)' });*/
                
                 window.markers = [];
                 var stylesArray = [
@@ -224,10 +219,8 @@
                                     ];
                
                 drawMap();
-                
-               showArticleDistribution();
-
-                //this loads town polygons in background
+                loadMetadata();
+                showArticleDistribution();
                 loadPolygons();
                 
                  var image = 'ui/news_icon_transparent.png';
@@ -235,6 +228,17 @@
                  function log10(num){
                     return Math.log(num) / Math.LN10;
                  }
+                function loadMetadata(){
+                    var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/metadata/_view/metadata', function() {
+                            console.log('Loading metadata document...')
+                        })
+                       .success(function(json) {  
+                             window.metadata = json.rows[0].key;
+                             
+                          })
+                      .error(function(data) { console.log(data) })
+                      .complete(function() { console.log("Loaded metadata") });
+                }
                 function drawMap(){
                     var mapOptions = {
                       center: new google.maps.LatLng(42.358056, -71.063611),
@@ -252,11 +256,7 @@
                     var articlesWithGeoData = 0;
 
                     window.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-                   
-                   
-                   
-                   
-                   
+       
                 }
                 function clearMarkers() {
                   for (var i = 0; i < window.markers.length; i++ ) {
@@ -347,21 +347,29 @@
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
                                     
-                                    if (town != null && town.length > 0 && town != "Boston" && town != "Washington" && 
+                                    //Todo - Globe has bad geodata for towns with names like Georgetown & Berlin, filter for now
+                                    if (town != null && town.length > 0 && town != "Boston" && town != "Berlin" && town != "Georgetown" &&
                                       window.townPolygons[town.toUpperCase()] != null){
                                       //Store # articles for later display  
                                       window.townPolygons[town.toUpperCase()].articleCount =json.rows[i].value;
-                                      var articleCount = log10(json.rows[i].value);
-                                      console.log(articleCount)
-                                      if (maxValue == 0 && minValue == 0){
-                                        maxValue =articleCount;
-                                        minValue =articleCount;
-                                      }
-                                      if (articleCount>maxValue){
-                                        maxValue =articleCount;
-                                       
-                                      } else if(articleCount<minValue){
-                                        minValue=articleCount;
+
+                                      var articleCount = json.rows[i].value;
+                                      var metadata = window.metadata.citymetadata[town];
+                                      //TODO - this means town names are not standardized - go back and do this later
+                                      if(metadata != null){
+                                        var population = metadata['city_population_2010'];
+                                        var perCapita = articleCount/population;
+
+                                        if (maxValue == 0 && minValue == 0){
+                                          maxValue =perCapita;
+                                          minValue =perCapita;
+                                        }
+                                        if (perCapita>maxValue){
+                                          maxValue =perCapita;
+                                         
+                                        } else if(perCapita<minValue){
+                                          minValue=perCapita;
+                                        }
                                       }
                                     }
                                 }
@@ -369,22 +377,29 @@
                                 var step = diff/4;
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
-                                    if (town != null && town.length > 0){
-                                      var articleCount = log10(json.rows[i].value);
+                                    if (town != null && town.length > 0 && town != "Boston" && town != "Berlin" && town != "Georgetown"){
+                                      var articleCount = json.rows[i].value;
+                                      var metadata = window.metadata.citymetadata[town];
                                       
-                                      var townPolygon = window.townPolygons[town.toUpperCase()];
-                                      //handle case where multipolys
-                                      if (townPolygon instanceof Array){
-                                          
-                                          for (var j=0;j<townPolygon.length;j++){
-                                            var poly = townPolygon[j];
-                                            if (poly != null) {
-                                              setPolygonOpacity(articleCount,minValue,maxValue,step,poly);
+                                      //TODO - this means town names are not standardized - go back and do this later
+                                      if (metadata !=null){
+                                        var population = metadata['city_population_2010'];
+                                        var perCapita = articleCount/population;
+                                        
+                                        var townPolygon = window.townPolygons[town.toUpperCase()];
+                                        //handle case where multipolys
+                                        if (townPolygon instanceof Array){
+                                            
+                                            for (var j=0;j<townPolygon.length;j++){
+                                              var poly = townPolygon[j];
+                                              if (poly != null) {
+                                                setPolygonOpacity(perCapita,minValue,maxValue,step,poly);
+                                              }
                                             }
-                                          }
-                                      }
-                                      else if (townPolygon != null) {
-                                        setPolygonOpacity(articleCount,minValue,maxValue,step,townPolygon);
+                                        }
+                                        else if (townPolygon != null) {
+                                          setPolygonOpacity(perCapita,minValue,maxValue,step,townPolygon);
+                                        }
                                       }
                                     }   
                                 }
@@ -445,18 +460,29 @@
                   var polywindow = new google.maps.InfoWindow();
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
                         $('#headlines').empty();
-                        var town = this.get('townName');
+                        var town = this.get('townName').toProperCase();
+                        var metadata = window.metadata.citymetadata[town];
+                        var population = metadata['city_population_2010'];
+                        var articleCount = window.townPolygons[town.toUpperCase()].articleCount;
+                        if (!articleCount >= 0)
+                            articleCount = 0;
+                        var perCapita = articleCount / population;
+
+
                         
-                        $('#headlines').append("<h4>"+town.toProperCase() + " Headlines" + "</h4>");
-                        polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+town.toProperCase()+ "</h4>" + "<br/>"
-                                                                  +window.townPolygons[town.toUpperCase()].articleCount + " stories");
+                        $('#headlines').append("<h4>"+town + " Headlines" + "</h4>");
+                        polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+town+ "</h3>" + "<br/>"+
+                                                                  
+                                                                  addCommas(articleCount) + " stories" + "<br/>"+
+                                                                  addCommas(population) + " Residents"+
+                                                                  "Articles per capita for this time period: " + perCapita.toFixed(5));
                         polywindow.setPosition(event.latLng);
 
                         polywindow.open(window.map);
                             
-                          var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/headlines/_view/headlineByCity?key="'+town.toProperCase()+'"', function() {
+                        var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/headlines/_view/headlineByCity?key="'+town+'"', function() {
                 
-                      })
+                        })
                        .success(function(json) {  
                              for (i=0; i<json.rows.length; i++) {
                                 var headline = json.rows[i].value;
@@ -523,6 +549,18 @@
         <script type="text/javascript">
         String.prototype.toProperCase = function () {
             return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        };
+        function addCommas(nStr)
+        {
+          nStr += '';
+          x = nStr.split('.');
+          x1 = x[0];
+          x2 = x.length > 1 ? '.' + x[1] : '';
+          var rgx = /(\d+)(\d{3})/;
+          while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+          }
+          return x1 + x2;
         };
         /* 
             Extension to Google Maps to get center of polygon 
