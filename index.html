@@ -461,10 +461,11 @@
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
                         $('#headlines').empty();
                         var town = this.get('townName').toProperCase();
+
                         var metadata = window.metadata.citymetadata[town];
                         var population = metadata['city_population_2010'];
                         var articleCount = window.townPolygons[town.toUpperCase()].articleCount;
-                        if (!articleCount >= 0)
+                        if (articleCount == null)
                             articleCount = 0;
                         var perCapita = articleCount / population;
 
@@ -474,7 +475,7 @@
                         polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+town+ "</h3>" + "<br/>"+
                                                                   
                                                                   addCommas(articleCount) + " stories" + "<br/>"+
-                                                                  addCommas(population) + " Residents"+
+                                                                  addCommas(population) + " Residents"+"<br/>"+
                                                                   "Articles per capita for this time period: " + perCapita.toFixed(5));
                         polywindow.setPosition(event.latLng);
 
