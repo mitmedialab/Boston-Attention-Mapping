@@ -478,10 +478,7 @@ while size<MAX_NUM_ARTICLES:
 						article["data"]["state"][0]="MA"
 						print "Changed state to MA from Globe entered state " + oldState + " for city " + cityFromLatLong
  
-				if cityFromLatLong.lower() != article["data"]["city"][0].lower() and len(cityFromLatLong) > 0 :
-						#(article["data"]["city"] is None AND len(cityFromLatLong) > 0) 
-						#or 	(article["data"]["city"] != None and cityFromLatLong != article["data"]["city"][0] and len(cityFromLatLong) > 0)
-					 
+				if cityFromLatLong != article["data"]["city"][0] and len(cityFromLatLong) > 0 :						
 					print "Changing Globe entered city " + article["data"]["city"][0] + " to verified city " + cityFromLatLong
 					db_metadata["number_of_updated_MA_city_names"]+=1
 					#save the city data as entered by the Globe

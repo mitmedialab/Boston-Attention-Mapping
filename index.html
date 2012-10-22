@@ -110,17 +110,17 @@
         
         <div id="navigation">
            <button type="button" id="article-distribution" class="btn btn-danger btn-large active">
-              Article Distribution
+              Story Distribution
             </button>
  
             
             <button type="button" id="articles-per-capita" class="btn btn-danger btn-large">
-              Articles per Capita
+              Stories per Capita
             </button>
  
            
             <button type="button" id="page1-articles-per-capita" class="btn btn-danger btn-large">
-              Page 1 Articles per Capita
+              Page 1 Stories per Capita
             </button>
  
             
@@ -221,10 +221,11 @@
                 drawMap();
                 loadMetadata();
                 showArticleDistribution();
-                loadPolygons();
+                loadTownPolygons();
+                loadNeighborhoodPolygons();
                 
                  var image = 'ui/news_icon_transparent.png';
-                 
+                
                  function log10(num){
                     return Math.log(num) / Math.LN10;
                  }
@@ -323,14 +324,14 @@
                                     
                                 }
                                 window.markerCluster = new MarkerClusterer(window.map, window.markers,{gridSize: 50,maxZoom:11});
-                                $('.results').text(json.rows.length + " total articles retrieved");
+                                $('.results').text(json.rows.length + " total stories retrieved");
                             }
                             else{
                                 $('.results').text('No data for that time period');
                             }
                         })
                     .error(function(data) { console.log(data) })
-                    .complete(function() { console.log("Loaded all articles") }); 
+                    .complete(function() { console.log("Loaded all stories") }); 
                 }
                 function showArticlesPerCapita(){
 
@@ -344,20 +345,36 @@
                            {
                                 var maxValue = 0;
                                 var minValue = 0;
+                                
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
-                                    
+                                    var neighborhood = json.rows[i].key[1];
+                                    var isNeighborhood = false;
                                     //Todo - Globe has bad geodata for towns with names like Georgetown & Berlin, filter for now
-                                    if (town != null && town.length > 0 && town != "Boston" && town != "Berlin" && town != "Georgetown" &&
-                                      window.townPolygons[town.toUpperCase()] != null){
-                                      //Store # articles for later display  
-                                      window.townPolygons[town.toUpperCase()].articleCount =json.rows[i].value;
+                                    if (town != null && town.length > 0 && town != "Berlin" && town != "Georgetown")
+                                    {
+                                      
+                                      //Store # articles for later display
+                                      if (town != "Boston" && window.townPolygons[town.toUpperCase()] != null)  
+                                      {  window.townPolygons[town.toUpperCase()].articleCount =json.rows[i].value;
+                                        console.log("town is " + town + " and has articles " + json.rows[i].value)
+                                      }
+                                      else if (town == "Boston" && neighborhood.length > 0){
+                                          
+                                            window.neighborhoodPolygons[neighborhood].articleCount =json.rows[i].value;
+                                            isNeighborhood = true;
+                                            console.log("neighborhood is " + neighborhood + " and has articles " + json.rows[i].value)
+                                      }
+                                      else{
+                                        continue;
+                                      }
 
                                       var articleCount = json.rows[i].value;
-                                      var metadata = window.metadata.citymetadata[town];
+                                      var metadata = isNeighborhood? window.metadata.neighborhoodmetadata[neighborhood] : window.metadata.citymetadata[town];
                                       //TODO - this means town names are not standardized - go back and do this later
-                                      if(metadata != null){
-                                        var population = metadata['city_population_2010'];
+                                      //Filtering out crazy neighborhoods that throw off max & mins
+                                      if(metadata != null && neighborhood != "Leather District" && neighborhood != "South Boston Waterfront" && neighborhood != "Bay Village"){
+                                        var population = isNeighborhood ? metadata['neighborhood_population_2010'] : metadata['city_population_2010'];
                                         var perCapita = articleCount/population;
 
                                         if (maxValue == 0 && minValue == 0){
@@ -377,28 +394,32 @@
                                 var step = diff/4;
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
-                                    if (town != null && town.length > 0 && town != "Boston" && town != "Berlin" && town != "Georgetown"){
+                                    var neighborhood = json.rows[i].key[1];
+
+                                    var isNeighborhood = (town == "Boston" && neighborhood.length > 0);
+
+                                    if ((town != null && town.length > 0 && town != "Berlin" && town != "Georgetown") || (isNeighborhood)){
                                       var articleCount = json.rows[i].value;
-                                      var metadata = window.metadata.citymetadata[town];
+                                      var metadata = isNeighborhood? window.metadata.neighborhoodmetadata[neighborhood] : window.metadata.citymetadata[town];
                                       
                                       //TODO - this means town names are not standardized - go back and do this later
                                       if (metadata !=null){
-                                        var population = metadata['city_population_2010'];
+                                        var population = isNeighborhood ? metadata['neighborhood_population_2010'] : metadata['city_population_2010'];
                                         var perCapita = articleCount/population;
                                         
-                                        var townPolygon = window.townPolygons[town.toUpperCase()];
+                                        var geoPolygon = isNeighborhood ? window.neighborhoodPolygons[neighborhood] : window.townPolygons[town.toUpperCase()];
                                         //handle case where multipolys
-                                        if (townPolygon instanceof Array){
+                                        if (geoPolygon instanceof Array){
                                             
-                                            for (var j=0;j<townPolygon.length;j++){
-                                              var poly = townPolygon[j];
+                                            for (var j=0;j<geoPolygon.length;j++){
+                                              var poly = geoPolygon[j];
                                               if (poly != null) {
                                                 setPolygonOpacity(perCapita,minValue,maxValue,step,poly);
                                               }
                                             }
                                         }
-                                        else if (townPolygon != null) {
-                                          setPolygonOpacity(perCapita,minValue,maxValue,step,townPolygon);
+                                        else if (geoPolygon != null) {
+                                          setPolygonOpacity(perCapita,minValue,maxValue,step,geoPolygon);
                                         }
                                       }
                                     }   
@@ -407,7 +428,7 @@
                            
                         })
                     .error(function(data) { console.log(data) })
-                    .complete(function() { console.log("Loaded all city counts") }); 
+                    .complete(function() { console.log("Loaded all city & neighborhood counts") }); 
                     
 
                 }
@@ -427,12 +448,38 @@
                 }
                 function hidePolygons(){
                     for (var town in window.townPolygons) {
-                      var townPolygon = window.townPolygons[town];
-                  
-                      townPolygon.setOptions({fillOpacity: 0,strokeWeight:1,strokeOpacity:0.8,strokeColor: "#CCCCCC"});
+                      var geoPolygon = window.townPolygons[town];
+                      if (geoPolygon instanceof Array){
+                                            
+                          for (var j=0;j<geoPolygon.length;j++){
+                            var poly = geoPolygon[j];
+                            if (poly != null) {
+                              poly.setOptions({fillOpacity: 0,strokeWeight:1,strokeOpacity:0.8,strokeColor: "#CCCCCC"});
+                            }
+                          }
+                      }
+                      else{
+                        geoPolygon.setOptions({fillOpacity: 0,strokeWeight:1,strokeOpacity:0.8,strokeColor: "#CCCCCC"});
+                      }
+                    }
+                    for (var neighborhood in window.neighborhoodPolygons) {
+                      var geoPolygon = window.neighborhoodPolygons[neighborhood];
+                      if (geoPolygon instanceof Array){
+                                            
+                          for (var j=0;j<geoPolygon.length;j++){
+                            var poly = geoPolygon[j];
+                            if (poly != null) {
+                              poly.setOptions({fillOpacity: 0,strokeWeight:1,strokeOpacity:0.8,strokeColor: "#CCCCCC"});
+                            }
+                          }
+                      }
+                      else{
+                        geoPolygon.setOptions({fillOpacity: 0,strokeWeight:1,strokeOpacity:0.8,strokeColor: "#CCCCCC"});
+                      }
                     }
                 }
-                function loadPolygon(townCoordinates,townName){
+                function loadPolygon(townCoordinates,townName,isNeighborhood){
+
                   var townBoundaryArray = [];
                   for (var j=0; j<townCoordinates.length;j++){
                     var longitude = townCoordinates[j][0];
@@ -460,28 +507,34 @@
                   var polywindow = new google.maps.InfoWindow();
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
                         $('#headlines').empty();
-                        var town = this.get('townName').toProperCase();
+                        
+                        var name = this.get('townName');
+                        
+                        name = name.toProperCase();
+                        var metadata = isNeighborhood ? window.metadata.neighborhoodmetadata[name] : window.metadata.citymetadata[name];
 
-                        var metadata = window.metadata.citymetadata[town];
-                        var population = metadata['city_population_2010'];
-                        var articleCount = window.townPolygons[town.toUpperCase()].articleCount;
+                        var population = isNeighborhood ? metadata['neighborhood_population_2010'] : metadata['city_population_2010'];
+                        var articleCount = isNeighborhood ? window.neighborhoodPolygons[name].articleCount : window.townPolygons[name.toUpperCase()].articleCount;
                         if (articleCount == null)
                             articleCount = 0;
                         var perCapita = articleCount / population;
 
 
                         
-                        $('#headlines').append("<h4>"+town + " Headlines" + "</h4>");
-                        polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+town+ "</h3>" + "<br/>"+
+                        $('#headlines').append("<h4>"+name + " Headlines" + "</h4>");
+                        polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+name+ "</h3>" + "<br/>"+
                                                                   
                                                                   addCommas(articleCount) + " stories" + "<br/>"+
                                                                   addCommas(population) + " Residents"+"<br/>"+
-                                                                  "Articles per capita for this time period: " + perCapita.toFixed(5));
+                                                                  "Stories per capita for this time period: " + perCapita.toFixed(5));
                         polywindow.setPosition(event.latLng);
 
                         polywindow.open(window.map);
-                            
-                        var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/headlines/_view/headlineByCity?key="'+town+'"', function() {
+                        if (isNeighborhood)
+                            view = "headlineByNeighborhood";
+                        else 
+                            view = "headlineByCity";
+                        var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/headlines/_view/'+view+'?key="'+name+'"', function() {
                 
                         })
                        .success(function(json) {  
@@ -507,13 +560,15 @@
                              }
                           })
                       .error(function(data) { console.log(data) })
-                      .complete(function() { console.log("Loaded city headlines") }); 
+                      .complete(function() { console.log("Loaded city & neighborhood headlines") }); 
                           
                   });
                   return townPolygon;
 
                 }
-                function loadPolygons(){
+                
+                function loadTownPolygons(){
+                  
                   var jqxhr =  $.getJSON('data/shapefiles/townsShapeFiles/MATowns.json', function() {
                       
                     })
@@ -525,24 +580,58 @@
                         var townName = town.properties.TOWN;
                         
                         var townPolygon = null;
-                         //Handle multipolygons - what a pain!
-                        if (town.geometry.type == "MultiPolygon"){
-                           
-                            var townPolygonArray = [];
-                           
-                           for (var j=0;j<town.geometry.coordinates.length;j++){
-                              townPolygon = loadPolygon(town.geometry.coordinates[j][0], townName);
-                              townPolygonArray[j] =townPolygon;
-                           }
-                            window.townPolygons[townName]=townPolygonArray;
-                        } else {
-                            townPolygon =loadPolygon(town.geometry.coordinates[0], townName);
-                            window.townPolygons[townName]=townPolygon;
+                        if (townName != "Boston" && townName != "boston"){
+                           //Handle multipolygons - what a pain!
+                          if (town.geometry.type == "MultiPolygon"){
+                             
+                              var townPolygonArray = [];
+                             
+                             for (var j=0;j<town.geometry.coordinates.length;j++){
+                                townPolygon = loadPolygon(town.geometry.coordinates[j][0], townName,false);
+                                townPolygonArray[j] =townPolygon;
+                             }
+                              window.townPolygons[townName]=townPolygonArray;
+                          } else {
+                              townPolygon =loadPolygon(town.geometry.coordinates[0], townName,false);
+                              window.townPolygons[townName]=townPolygon;
+                          }
                         }
                       }
                     })
                     .error(function(data) { console.log(data) })
                     .complete(function() { console.log("Loaded MA Towns from GEOJSON...") });
+                }
+                function loadNeighborhoodPolygons(){
+                  
+                  var jqxhr =  $.getJSON('data/shapefiles/neighborhoodsShapeFiles/neighborhoods.json', function() {
+                      
+                    })
+                    .success(function(data) {   
+                      window.neighborhoodPolygons = {};
+                      var polywindow = new google.maps.InfoWindow();
+                      for (var i = 0; i < data.features.length; i++) {
+                        var neighborhood = data.features[i];
+                        var neighborhoodName = neighborhood.properties.name;
+                        
+                        var neighborhoodPolygon = null;
+                         //Handle multipolygons - what a pain!
+                        if (neighborhood.geometry.type == "MultiPolygon"){
+                           
+                            var neighborhoodPolygonArray = [];
+                           
+                           for (var j=0;j<neighborhood.geometry.coordinates.length;j++){
+                              neighborhoodPolygon = loadPolygon(neighborhood.geometry.coordinates[j][0], neighborhoodName,true);
+                              neighborhoodPolygonArray[j] =neighborhoodPolygon;
+                           }
+                            window.neighborhoodPolygons[neighborhoodName]=neighborhoodPolygonArray;
+                        } else {
+                            neighborhoodPolygon =loadPolygon(neighborhood.geometry.coordinates[0], neighborhoodName,true);
+                            window.neighborhoodPolygons[neighborhoodName]=neighborhoodPolygon;
+                        }
+                      }
+                    })
+                    .error(function(data) { console.log(data) })
+                    .complete(function() { console.log("Loaded Boston Neighborhoods from GEOJSON...") });
                 }
 
             });
@@ -566,7 +655,9 @@
         /* 
             Extension to Google Maps to get center of polygon 
             From here: http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.js
-        
+            May need this for drawing labels on the shapes
+
+
           if (!google.maps.Polygon.prototype.getBounds) {
 
                   google.maps.Polygon.prototype.getBounds = function(latLng) {
