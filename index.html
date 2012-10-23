@@ -24,18 +24,22 @@
             background-size: cover;
         
         }*/
-            h1,#about{
+            #h1-title,#about{
                  position:absolute;top:-4px;z-index:1;margin-left:0;background:rgba(100,100,100,0.8);padding:10px;
             }
-            h1{
+            #h1-title{
                 color:#eee;
                 width:535px;
+                display:none;
             }
             #about{
               width: 535px;
               top: 62px;
               color: #EEE;
               display:none;
+            }
+            #about a{
+              color:#fff;
             }
             
             form,#navigation{
@@ -96,6 +100,9 @@
             background-color: rgba(255, 255, 255, 0.1);
             padding-left: 3px;
           }
+          #headlines a{
+            color:#fff;
+          }
           #headlines p{
             border-top:1px solid #eee;
             margin:0;
@@ -112,12 +119,33 @@
           .active{
             font-weight: bold;
           }
+          #loading-screen{
+            z-index: 2;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+          }
+          #loading-screen-description{
+            border: 1px solid black;
+            text-align: center;
+            padding: 20px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            background-color: white;
+            -webkit-box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+            width: 40%;
+            position: relative;
+            margin: 5% auto;
+          }
     </style>
 
     </head>
     <body>
-        <h1><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the (Boston) Globe </i></h1>
-        <h4 id="about">Mapping the Globe is a set of interactive visualizations and maps that help us understand where the Boston Globe directs its attention. Media attention matters – in quantity and quality. It helps determine what we talk about as a public and how we talk about it. Mapping the Globe tracks where the paper's attention goes and what that attention looks like across different regional geographies in combination with diverse data sets like population, crime and income. <br/><br/>By Catherine D'Ignazio and Ethan Zuckerman for the Center for Civic Media at MIT.</h4>
+        <h1 id="h1-title"><img id="globe-image" src="ui/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the Globe </i></h1>
+        <h4 id="about">Mapping the Globe uses geocoded data from the Boston Globe API, geographic data from MassGIS and the Boston Redevelopment Authority, and census data from the US census and the American Community Survey. The story data is from the time period between November 2011 to the present. <br/><br/>Please refer questions to <a href="mailto:dignazio@mit.edu">Catherine D'Ignazio</a> and <a href="mailto:ethanz@media.mit.edu">Ethan Zuckerman</a> at <a href="http://civic.mit.edu">the Center for Civic Media at MIT</a>.</h4>
         
         <div id="navigation">
            <button type="button" id="article-distribution" class="btn btn-danger btn-large active">
@@ -146,11 +174,27 @@
         </div>
         
         <div id="map_canvas" style="width:100%; height:100%"></div>
-        <div id="loadingScreen" style="width:100%; height:100%"></div>
+        <div id="loading-screen">
+            <div id="loading-screen-description">
+                <h1>Mapping the Globe</h1>
+                <h4 style="text-align:justify">Mapping the Globe is a set of interactive visualizations and maps that help us understand where the Boston Globe directs its attention. Media attention matters – in quantity and quality. It helps determine what we talk about as a public and how we talk about it. Mapping the Globe tracks where the paper's attention goes and what that attention looks like across different regional geographies in combination with diverse data sets like population, crime and income. <br/><br/>By <a href="mailto:dignazio@mit.edu">Catherine D'Ignazio</a> and <a href="mailto:ethanz@media.mit.edu">Ethan Zuckerman</a> at <a href="http://civic.mit.edu">the Center for Civic Media at MIT</a>.</h4>
+                <p><img src="http://civic.mit.edu/sites/civic.mit.edu/themes/c4cmtheme/logo.png" style="margin-right: 50px;
+height: 100px;"><img src="http://c.o0bg.com/rw/SysConfig/WebPortal/BostonGlobe/Framework/images/logo-
+bg.png" style="padding-top: 58px;height: 35px;"></p>
+                <button type="button" id="enter-button" class="btn btn-danger btn-large active">
+                  Enter
+                </button>
+            </div>
+        </div>
         <div id="headlines" class="results"><h4 style="text-align: center"><img src="ui/loading.gif" style="padding-right:5px">Loading...</h4></div>
     </body>
     <script type="text/javascript"> 
             $(document).ready(function() {
+
+                $("#enter-button").click(function(){
+                    $("#loading-screen").fadeOut('slow');
+                    $("#h1-title").fadeIn('slow');
+                });
                 $("h1").mouseover(function(){$('#about').show()});
                 $("h1").mouseout(function(){$('#about').hide()});
                 $('#article-distribution').click(function(){
@@ -396,7 +440,7 @@
                                   }
                                   
                                   
-                                  $('.results').html('<h4>'+addCommas(json.rows.length) + " total stories retrieved</h4>");
+                                  $('.results').html('<h4>'+addCommas(json.rows.length) + " total stories retrieved from November 2011 to the present.</h4>");
                               }
                               else{
                                   $('.results').html('<h4>No data for that time period</h4>');
@@ -437,7 +481,7 @@
                                     var neighborhood = json.rows[i].key[1];
                                     var isNeighborhood = false;
                                     //Todo - Globe has bad geodata for towns with names like Georgetown & Berlin, filter for now
-                                    if (town != null && town.length > 0 && town != "Berlin" && town != "Georgetown")
+                                    if (town != null && town.length > 0 )
                                     {
                                       
                                       //Store # articles for later display
@@ -459,7 +503,7 @@
                                       var metadata = isNeighborhood? window.metadata.neighborhoodmetadata[neighborhood] : window.metadata.citymetadata[town];
                                       //TODO - this means town names are not standardized - go back and do this later
                                       //Filtering out crazy neighborhoods that throw off max & mins
-                                      if(metadata != null && neighborhood != "Leather District" && neighborhood != "South Boston Waterfront" && neighborhood != "Bay Village"){
+                                      if(metadata != null && neighborhood != "Leather District" && neighborhood != "South Boston Waterfront" && neighborhood != "Bay Village" && town != "Berlin" && town != "Georgetown" && town != "Rochester"){
                                         var population = isNeighborhood ? metadata['neighborhood_population_2010'] : metadata['city_population_2010'];
                                         var perCapita = articleCount/population;
 
@@ -477,14 +521,16 @@
                                     }
                                 }
                                 var diff = maxValue - minValue;
-                                var step = diff/4;
+                                var step = diff/8;
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
                                     var neighborhood = json.rows[i].key[1];
 
                                     var isNeighborhood = (town == "Boston" && neighborhood.length > 0);
 
-                                    if ((town != null && town.length > 0 && town != "Berlin" && town != "Georgetown") || (isNeighborhood)){
+                                    if ((town != null && town.length > 0 && town != "Berlin" && town != "Georgetown" && town != "Rochester") || (isNeighborhood))
+                                    {
+
                                       var articleCount = json.rows[i].value;
                                       var metadata = isNeighborhood? window.metadata.neighborhoodmetadata[neighborhood] : window.metadata.citymetadata[town];
                                       
@@ -508,7 +554,14 @@
                                           setPolygonOpacity(perCapita,minValue,maxValue,step,geoPolygon);
                                         }
                                       }
-                                    }   
+                                      
+                                    }  
+                                    if (town == "Berlin" || town == "Georgetown" || town == "Rochester"){
+                                        var geoPolygon = isNeighborhood ? window.neighborhoodPolygons[neighborhood] : window.townPolygons[town.toUpperCase()];
+                                        setPolygonGrey(geoPolygon);
+
+                                    } 
+                                    
                                 }
                             }
                            
@@ -521,18 +574,46 @@
                     
 
                 }
+                function setPolygonGrey(townPolygon){
+                  townPolygon.setOptions({fillOpacity: 0.7,strokeWeight:1,strokeOpacity:0.8, strokeColor: "#a65c1c", fillColor:'#CCCCCC'});
+                }
                 function setPolygonOpacity(articleCount,minValue,maxValue,step,townPolygon){
                   var opacity = 0;
-                  if (articleCount >= minValue && articleCount <= minValue + step)
+                  if (articleCount >= minValue && articleCount <= minValue + step){
                     opacity=0.2;
-                  else if (articleCount > minValue + step && articleCount <= minValue + step * 2)
-                    opacity=0.4;
-                  else if (articleCount > minValue + step * 2 && articleCount <= minValue + step * 3)
-                    opacity=0.6;
-                  else if (articleCount > minValue + step * 3)
+                    fillColor = "#ffba2b";
+                  }
+                  else if (articleCount > minValue + step && articleCount <= minValue + step * 2){
+                    opacity=0.5;
+                    fillColor = "#ffba2b";
+                  }
+                  else if (articleCount > minValue + step * 2 && articleCount <= minValue + step * 3){
                     opacity=0.8;
+                    fillColor = "#ffba2b";
+                  }
+                  else if (articleCount > minValue + step * 3 && articleCount <= minValue + step * 4){
+                    opacity=1.0;
+                    fillColor = "#ffba2b";
+                  }
+                  else if (articleCount > minValue + step * 4 && articleCount <= minValue + step * 5){
+                    opacity=0.8;
+                    fillColor = "#a63d03";
+                  }
+                  else if (articleCount > minValue + step * 5 && articleCount <= minValue + step * 6){
+                    opacity=1.0;
+                    fillColor = "#a63d03";
+                  }
+                  else if (articleCount > minValue + step * 6 && articleCount <= minValue + step * 7){
+                    opacity=0.8;
+                    fillColor = "#FF502B";
+                  }
+                  else {
+                    opacity = 1.0;
+                    fillColor = "#FF502B";
+                  }
                  
-                  townPolygon.setOptions({fillOpacity: opacity,strokeWeight:1,strokeOpacity:0.8, strokeColor: "#a65c1c"});
+                 
+                  townPolygon.setOptions({fillOpacity: opacity,strokeWeight:1,strokeOpacity:0.8, strokeColor: "#a65c1c", fillColor:fillColor});
                  
                 }
                 function hidePolygons(){
@@ -619,10 +700,11 @@
                         polywindow.setPosition(event.latLng);
 
                         polywindow.open(window.map);
+                        
+                        var view = "headlineByCity";
                         if (isNeighborhood)
                             view = "headlineByNeighborhood";
-                        else 
-                            view = "headlineByCity";
+                        
                         if (window.currentView =="page1")
                             view += "Page1";
                         else if (window.currentView == "today")
@@ -638,18 +720,22 @@
                                 if (headline.headline != null)
                                 {
                                   printed++;
+                                  var text = headline.headline;
+                                  if (headline.canonicalurl)
+                                    text = '<a target="_blank" href="'+headline.canonicalurl+'">' + text + '</a>';
                                   if (i%2==0)
                                   {
+                                    
                                     if (headline.printpagenumber == "1")
-                                      $('#headlines').append("<p class='stripe page1'>" + headline.headline +"</p>");
+                                      $('#headlines').append("<p class='stripe page1'>" + text+"</p>");
                                     else
-                                      $('#headlines').append("<p class='stripe'>" + headline.headline +"</p>");
+                                      $('#headlines').append("<p class='stripe'>" + text +"</p>");
                                   }
                                   else{
                                       if (headline.printpagenumber == "1")
-                                        $('#headlines').append("<p class='page1'>" + headline.headline +"</p>"); 
+                                        $('#headlines').append("<p class='page1'>" + text +"</p>"); 
                                       else 
-                                        $('#headlines').append("<p>" + headline.headline +"</p>");
+                                        $('#headlines').append("<p>" + text +"</p>");
                                   }
                                 }
                              }
