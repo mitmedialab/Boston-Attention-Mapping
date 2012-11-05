@@ -1,5 +1,60 @@
 USE IN PRODUCTION
 
+allArticles
+function(doc) {
+if (doc['data']['printsection'][0] != "Sports"){
+  emit(doc['data']['printpagenumber'][0],{neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],
+printbook:doc['data']['printbook'],
+summary:doc['data']['summary'],
+city:doc['data']['city'],
+latitude:doc['data']['latitude'],
+longitude:doc['data']['longitude'],
+	printsection:doc['data']['printsection'],
+	printpagenumber:doc['data']['printpagenumber'],
+	wordcount:doc['data']['wordcount'],
+printpublicationdate:doc['data']['printpublicationdate']});
+}
+}
+
+allArticlesByDate
+function(doc) {
+if (doc['data']['printsection'][0] != "Sports"){
+  emit(doc['data']['printpublicationdate'][0],{neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],
+printbook:doc['data']['printbook'],
+summary:doc['data']['summary'],
+city:doc['data']['city'],
+latitude:doc['data']['latitude'],
+longitude:doc['data']['longitude'],
+	printsection:doc['data']['printsection'],
+	printpagenumber:doc['data']['printpagenumber'],
+	wordcount:doc['data']['wordcount'],
+printpublicationdate:doc['data']['printpublicationdate']});
+}
+}
+
+cityCount
+function(doc) {
+if(doc['data']['city'] != null && doc['data']['city'].length > 0 && doc['data']['state'].length > 0 && doc['data']['state'] =="MA" && doc['data']['printsection'][0] != "Sports"){
+  emit([doc['data']['city'][0], doc['data']['neighborhood']] ,1);
+}}
+
+
+function(keys,values,rereduce){
+	return sum(values);
+}
+cityCountPage1
+function(doc) {
+if(doc['data']['city'] != null && doc['data']['city'].length > 0 && doc['data']['state'].length > 0 && doc['data']['state'] =="MA" && doc['data']['printpagenumber'] =="1" && doc['data']['printsection'][0] != "Sports"){
+  emit([doc['data']['city'][0], doc['data']['neighborhood']] ,1);
+}}
+
+function(keys,values,rereduce){
+	return sum(values);
+}
+
+
+USE IN PRODUCTION -- OLD DO NOT USE BELOW THIS LINE
+
 headlines/headlineByCity
 function(doc) {
 if(doc['data']['city'] != null && doc['data']['city'].length > 0 && doc['data']['state'].length > 0 && doc['data']['state'][0] =="MA"){
