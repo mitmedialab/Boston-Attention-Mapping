@@ -359,21 +359,21 @@ townTransformObject=osr.CoordinateTransformation( spatialRef3,spatialRef4)
 ################################################################################
 serverURL = config.get('db','host') + ':' + config.get('db','port')
 print serverURL
-couch = couchdb.Server() 
-'''try:
-	
-	if (len(config.get('db','username')) > 0):
-		print "whass"
-		couch = couchdb.Server(url=serverURL) 
-		couch.resource.credentials = (config.get('db','username'), config.get('db','password'))
-	else:
-		print "yo"
-		couch = couchdb.Server() 
-except:
-	print "error connecting to the couch server at " + serverURL
-	print "exiting now"
-	sys.exit()
-'''
+
+if ((config.get('db','host') == 'localhost' or config.get('db','host') == '127.0.0.1') and config.get('db','port') == '5984' and len(config.get('db','user')) == 0 ):
+	couch = couchdb.Server() 
+else:
+	try:	
+		if (len(config.get('db','user')) > 0):
+			couch = couchdb.Server(url=serverURL) 
+			couch.resource.credentials = (config.get('db','user'), config.get('db','password'))
+		else:
+			couch = couchdb.Server(url=serverURL) 
+	except:
+		print "error connecting to the couch server at " + serverURL + ' with credentials user = ' + config.get('db','user')
+		print "exiting now"
+		sys.exit()
+
 
 #delete DB if it exists
 try:
