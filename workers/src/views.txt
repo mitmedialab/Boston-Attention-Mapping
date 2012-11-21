@@ -1,0 +1,29 @@
+
+//globe/fulltext_by_city
+//map
+function(doc) {
+  if(doc.type=="article"){
+    emit(doc.data.city[0], doc.data.fulltext);
+  }
+}
+
+
+//globe/cities
+//map
+function(doc) {
+  if(doc.type=="article" && doc.data.city!=""){
+    emit(doc.data.city[0], 1);
+  }
+}
+//reduce
+function(keys, values) {
+  return sum(values);
+}
+
+
+//city frequency
+function(doc) {
+  if(doc.type=="city_frequency"){
+    emit([doc.city, doc.date], doc);
+  }
+}
