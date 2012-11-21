@@ -317,7 +317,7 @@ bg.png" style="padding-top: 58px;height: 35px;"></p>
                     return Math.log(num) / Math.LN10;
                  }
                 function loadMetadata(){
-                    var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/metadata/_view/metadata', function() {
+                    var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/globe/_view/metadata', function() {
                             console.log('Loading metadata document...')
                         })
                        .success(function(json) {  
@@ -392,15 +392,15 @@ bg.png" style="padding-top: 58px;height: 35px;"></p>
                 function showArticleDistribution(whichArticles){
 
                   
-                  var view = "allArticles";
+                  var view = "all_articles";
                   if (whichArticles == "page1")
-                    view = 'allArticles?key="1"';
+                    view = 'all_articles_page1?key="1"';
                   else if (whichArticles == "today")
-                    view = 'allArticlesByDate?key="20121021"';
+                    view = 'all_articles_by_date?key="20121021"';
                   console.log(view)
                   if (whichArticles != window.currentView) {
                       window.currentView= whichArticles;
-                      var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/allArticles/_view/' + view, function() {
+                      var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/globe/_view/' + view, function() {
                     
                         })
                          .success(function(json) { 
@@ -459,16 +459,16 @@ bg.png" style="padding-top: 58px;height: 35px;"></p>
                   }
                 }
                 function showArticlesPerCapita(whichArticles){
-                  var view = "cityCount";
+                  var view = "city_count";
                   if (whichArticles == "page1")
-                    view = "cityCountPage1";
+                    view = "city_count_page_1";
                   else if (whichArticles == "today")
-                    view = "cityCountToday";
+                    view = "city_count_today";
 
                   
 
                     window.currentView= whichArticles;
-                    var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/cities/_view/'+view+'?group=true', function() {
+                    var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/globe/_view/'+view+'?group=true', function() {
                   
                       })
                        .success(function(json) { 
@@ -704,15 +704,15 @@ bg.png" style="padding-top: 58px;height: 35px;"></p>
 
                         polywindow.open(window.map);
                         
-                        var view = "headlineByCity";
+                        var view = "headline_by_city";
                         if (isNeighborhood)
-                            view = "headlineByNeighborhood";
+                            view = "headline_by_neighborhood";
                         
                         if (window.currentView =="page1")
-                            view += "Page1";
+                            view += "_page_1";
                         else if (window.currentView == "today")
-                            view += "Today"
-                        var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/headlines/_view/'+view+'?key="'+name+'"', function() {
+                            view += "_today"
+                        var jqxhr =  $.getJSON('couchdb/boston-globe-articles/_design/globe/_view/'+view+'?key="'+name+'"', function() {
                 
                         })
                        .success(function(json) {  
