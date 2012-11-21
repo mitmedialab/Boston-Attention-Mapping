@@ -13,7 +13,7 @@ import os
 import csv,sys
 from titlecase import titlecase
 import ConfigParser
-
+import GlobeViews
 
 config = ConfigParser.ConfigParser()
 config.read('globe.config')
@@ -23,6 +23,7 @@ db_metadata = {}
 db_metadata["type"] = "metadata"
 db_metadata["point_in_boston_but_no_census_tract_available"]=0
 db_metadata["number_of_updated_MA_city_names"]=0
+
 
 def getNeighborhoodFromLatLong(latitude, longitude):
 	
@@ -68,7 +69,7 @@ def getCityFromLatLong(latitude, longitude):
    	return ""
 
 DATABASE_NAME = "boston-globe-articles"
-MAX_NUM_ARTICLES = 45000
+MAX_NUM_ARTICLES = 50000
 ARTICLES_AT_A_TIME = 500
 
 #CENSUS FILE PATHS
@@ -358,15 +359,21 @@ townTransformObject=osr.CoordinateTransformation( spatialRef3,spatialRef4)
 ################################################################################
 serverURL = config.get('db','host') + ':' + config.get('db','port')
 print serverURL
-
-try:
-	couch = couchdb.Server(url=serverURL) 
-	couch.resource.credentials = (config.get('db','username'), config.get('db','password'))
+couch = couchdb.Server() 
+'''try:
+	
+	if (len(config.get('db','username')) > 0):
+		print "whass"
+		couch = couchdb.Server(url=serverURL) 
+		couch.resource.credentials = (config.get('db','username'), config.get('db','password'))
+	else:
+		print "yo"
+		couch = couchdb.Server() 
 except:
 	print "error connecting to the couch server at " + serverURL
 	print "exiting now"
 	sys.exit()
-
+'''
 
 #delete DB if it exists
 try:
@@ -376,6 +383,10 @@ except couchdb.http.ResourceNotFound:
 
 # create & select DB
 db = couch.create(DATABASE_NAME)
+
+# create the views
+db.save(GlobeViews.getAllGlobeViews())
+print "Created the views" 
 
 #Make a number of http requests to download all the data. Too many at one time leads to 500 error
 size = 0
@@ -444,6 +455,7 @@ while size<MAX_NUM_ARTICLES:
 	for article in allArticles:
 		if size == 0 and allArticles[0] == article :
 			db_metadata["last_article_date"]=article["data"]["printpublicationdate"]
+			db_metadata["last_article_id"]=article["id"]
 		
 		#create a document and insert it into the db:
 		article["_id"] = article["id"]
@@ -490,10 +502,7 @@ while size<MAX_NUM_ARTICLES:
 					city = str(article["data"]["city"][0])
 				else :
 					city = ""
-
-
-
-				
+	
 				#ADD FULL TEXT AND WORD COUNT
 				fullText = str(article["data"]["catherine_dignazio"])
 				article["data"]["fulltext"]=article["data"]["catherine_dignazio"]
@@ -541,6 +550,7 @@ while size<MAX_NUM_ARTICLES:
 
 
 db.save(db_metadata)
+
 
 print "All done, master\n"
 
