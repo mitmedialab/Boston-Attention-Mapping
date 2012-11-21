@@ -18,7 +18,7 @@ class ArticleProcessingJob:
   # fetch cities which have more than one article
   def fetch_article_keys(self):
     city_tuples = [(a.key, a.value) for a in self.db.view("globe/cities", group=True)]
-    cities = [city[0] for city in sorted(city_tuples, key=lambda city:city[1], reverse=True) if city[1] > 1 ]
+    cities = [city for city in sorted(city_tuples, key=lambda city:city[1], reverse=True) if city[1] > 1 ]
     return cities
 
   def process_articles(self):
@@ -28,11 +28,12 @@ class ArticleProcessingJob:
                                                       for token in self.tokenizer.tokenize(a.value[0]) 
                                                       if(token.lower() not in stopwords and
                                                          token not in string.punctuation)]) 
-                                            for a in self.db.view("globe/fulltext_by_city", key=city) 
+                                            for a in self.db.view("globe/fulltext_by_city", key=city[0]) 
                                             if len(a.value) > 0 ])
       freq = self.articles.vocab()
       city_frequency = {"type": "city_frequency",
-                        "city": city,
+                        "city": city[0],
+                        "articles": city[1],
                         "date": time.ctime(),
                         "words": freq.items()[0:50]}
       self.db.save(city_frequency)
