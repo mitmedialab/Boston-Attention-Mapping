@@ -19,7 +19,8 @@ import GlobeViews
 #SET UP CONSTANTS
 ################################################################################
 
-APP_ROOT_DIR=os.path.dirname(os.getcwd()) + "/"
+APP_ROOT_DIR=os.path.dirname(os.path.dirname( os.path.abspath(__file__) ) )+ "/"
+print APP_ROOT_DIR
 DATABASE_NAME = "boston-globe-articles"
 MAX_NUM_ARTICLES = 1500
 ARTICLES_AT_A_TIME = 500

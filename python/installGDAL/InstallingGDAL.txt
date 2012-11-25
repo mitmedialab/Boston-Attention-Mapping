@@ -16,3 +16,8 @@ FOR UBUNTU
 - easy_install simplejson
 
 FOR FIXING WEIRD BUG WITH PROJ4 LIBRARY MISSING --> sudo ln -s /usr/lib/libproj.so.0 /usr/lib/libproj.so
+
+
+For resetting git working dir
+git fetch --all
+git reset --hard origin/master
