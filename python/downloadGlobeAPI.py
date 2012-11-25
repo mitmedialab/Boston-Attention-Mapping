@@ -15,73 +15,24 @@ from titlecase import titlecase
 import ConfigParser
 import GlobeViews
 
-config = ConfigParser.ConfigParser()
-config.read('globe.config')
+################################################################################
+#SET UP CONSTANTS
+################################################################################
 
-#db_metadata stores info about the whole DB, including # articles, filtered articles, reasons for filtering,etc
-db_metadata = {}
-db_metadata["type"] = "metadata"
-db_metadata["point_in_boston_but_no_census_tract_available"]=0
-db_metadata["number_of_updated_MA_city_names"]=0
-
-
-def getNeighborhoodFromLatLong(latitude, longitude):
-	
-	#iterate through features
-	for x in range(0,neighborhoodLayer.GetFeatureCount()):
-		feature=neighborhoodLayer.GetFeature(x)
-		poly=feature.GetGeometryRef()
-		tractNumber=feature.GetFieldAsString(2)
-		
-		poly.Transform(neighborhoodTransformObject)
-		
-		WGSPoint =ogr.Geometry(ogr.wkbPoint)
-		WGSPoint.SetPoint(0,longitude,latitude)
-		if poly.Contains(WGSPoint):
-			try:
-				neighborhood = CENSUS_TRACTS_TO_NEIGHBORHOOD[tractNumber]
-			except KeyError:
-				print "censusTract # "+tractNumber + " doesn't exist in the mapping file"
-				db_metadata["point_in_boston_but_no_census_tract_available"]+=1
-				return ""
-			print "Point is in " + neighborhood
-
-			return neighborhood
-   	return ""
-
-def getCityFromLatLong(latitude, longitude):
-	
-	
-	#iterate through features
-	for x in range(0,townsLayer.GetFeatureCount()):
-		feature=townsLayer.GetFeature(x)
-		poly=feature.GetGeometryRef()
-		city=feature.GetFieldAsString(1)
-		poly.Transform(townTransformObject)
-
-		WGSPoint =ogr.Geometry(ogr.wkbPoint)
-		WGSPoint.SetPoint(0,longitude,latitude)
-		if poly.Contains(WGSPoint):
-		
-			city = titlecase(city)
-			print "Point is in " + city
-			return city
-   	return ""
-
+APP_ROOT_DIR=os.path.dirname(os.getcwd()) + "/"
 DATABASE_NAME = "boston-globe-articles"
 MAX_NUM_ARTICLES = 1500
 ARTICLES_AT_A_TIME = 500
 
 #CENSUS FILE PATHS
-PATH_TO_CENSUS_TRACTS_DIR="../data/Boston_Census_Tracts_2010"
+PATH_TO_CENSUS_TRACTS_DIR=APP_ROOT_DIR + "data/Boston_Census_Tracts_2010"
 CENSUS_SHAPE_NAME="tl_2010_25025_tract10.shp"
 
 #TOWNS FILE PATHS
-PATH_TO_TOWNS_DIR="../shapefiles/townsShapeFiles"
+PATH_TO_TOWNS_DIR=APP_ROOT_DIR+"data/shapefiles/townsShapeFiles"
 TOWNS_SHAPE_NAME="1349122928_us_ma_e25townsct_2003.shp"
 TOWNS_PRJ_NAME="1349122928_us_ma_e25townsct_2003.prj"
 
-#these lat-longs are filtered because bad data or else from people typing "boston,ma"
 EXCLUDED_LAT1K_LONG1K={
 "42354":"71066",
 "42341":"71063",
@@ -272,10 +223,77 @@ CENSUS_TRACTS_TO_NEIGHBORHOOD = {"010405":"Fenway",
 "010403":"Fenway",
 "000100":"Brighton"}
 
+################################################################################
+# READ CONFIG FILE
+################################################################################
+
+config = ConfigParser.ConfigParser()
+config.read('globe.config')
+
+################################################################################
+# SET UP DB METADATA
+################################################################################
+
+db_metadata = {}
+db_metadata["type"] = "metadata"
+db_metadata["point_in_boston_but_no_census_tract_available"]=0
+db_metadata["number_of_updated_MA_city_names"]=0
+
+################################################################################
+# A COUPLE FUNCTIONS FOR LATER
+################################################################################
+
+def getNeighborhoodFromLatLong(latitude, longitude):
+	
+	#iterate through features
+	for x in range(0,neighborhoodLayer.GetFeatureCount()):
+		feature=neighborhoodLayer.GetFeature(x)
+		poly=feature.GetGeometryRef()
+		tractNumber=feature.GetFieldAsString(2)
+		
+		poly.Transform(neighborhoodTransformObject)
+		
+		WGSPoint =ogr.Geometry(ogr.wkbPoint)
+		WGSPoint.SetPoint(0,longitude,latitude)
+		if poly.Contains(WGSPoint):
+			try:
+				neighborhood = CENSUS_TRACTS_TO_NEIGHBORHOOD[tractNumber]
+			except KeyError:
+				print "censusTract # "+tractNumber + " doesn't exist in the mapping file"
+				db_metadata["point_in_boston_but_no_census_tract_available"]+=1
+				return ""
+			print "Point is in " + neighborhood
+
+			return neighborhood
+   	return ""
+
+def getCityFromLatLong(latitude, longitude):
+	
+	
+	#iterate through features
+	for x in range(0,townsLayer.GetFeatureCount()):
+		feature=townsLayer.GetFeature(x)
+		poly=feature.GetGeometryRef()
+		city=feature.GetFieldAsString(1)
+		poly.Transform(townTransformObject)
+
+		WGSPoint =ogr.Geometry(ogr.wkbPoint)
+		WGSPoint.SetPoint(0,longitude,latitude)
+		if poly.Contains(WGSPoint):
+		
+			city = titlecase(city)
+			print "Point is in " + city
+			return city
+   	return ""
+
+
+################################################################################
+# OK GEEZ WE CAN FINALLY START THE SCRIPT
+################################################################################
 
 
 #Read in Neighborhood metadatafile to memory
-neighborhoodMetaData = csv.reader(open("../data/Boston_Neighborhood.csv", "rU"))
+neighborhoodMetaData = csv.reader(open(APP_ROOT_DIR + "data/Boston_Neighborhood.csv", "rU"))
 neighborhoodMetaData_list = []
 neighborhoodMetaData_list.extend(neighborhoodMetaData)
 neighborhoods ={}
@@ -294,7 +312,7 @@ for row in neighborhoodMetaData_list:
 db_metadata["neighborhoodmetadata"] = neighborhoods
 #print '\n'.join([l.rstrip() for l in  db_metadata["neighborhoodmetadata"].splitlines()]) 
 #Read in City metadatafile to memory
-cityMetaData = csv.reader(open("../data/MATowns.csv", "rU"))
+cityMetaData = csv.reader(open(APP_ROOT_DIR+ "data/MATowns.csv", "rU"))
 cityMetaData_list = []
 cityMetaData_list.extend(cityMetaData)
 cities ={}
@@ -513,27 +531,6 @@ while size<MAX_NUM_ARTICLES:
 				fullTextSplit = fullText.split(None)
 				article["data"]["wordcount"] = len(fullTextSplit)
 				
-
-				#NO LONGER STORING STATS ON THE INDIVIDUAL ROWS, THEY ARE STORED IN METADATA DOCUMENT
-				'''if (len(neighborhood) > 0):
-					metadata = neighborhoods[neighborhood]
-
-					article["data"]['neighborhood_population_2010'] = metadata['neighborhood_population_2010']
-					article["data"]['neighborhood_percent_non_white'] = metadata['neighborhood_percent_non_white']
-					article["data"]['neighborhood_median_household_income'] = metadata['neighborhood_median_household_income']
-					article["data"]['neighborhood_per_capita_income'] = metadata['neighborhood_per_capita_income']
-					article["data"]['neighborhood_percent_unemployed'] = metadata['neighborhood_percent_unemployed']
-					article["data"]['neighborhood_percent_below_poverty_line'] = metadata['neighborhood_percent_below_poverty_line']
-
-				#ADD CITY METADATA
-				if (len(city) > 0):
-					try :
-						metadata = cities[city]
-						article["data"]['city_population_2010'] = metadata['city_population_2010']
-					except KeyError:				
-						print "No meta data for " + city
-					
-				'''
 				db_metadata["first_article_date"]= article["data"]["printpublicationdate"]
 				article["type"] = "article"
 				db.save(article)
