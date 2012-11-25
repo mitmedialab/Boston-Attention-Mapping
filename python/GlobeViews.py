@@ -52,3 +52,25 @@ def getAllGlobeViews():
            
         }, 
     }
+def getNLTKViews():
+    return {
+         "_id": "_design/nltk",
+        "language": "javascript",
+        "views": {
+            "fulltext_by_city_or_neighborhood": {
+                "map": "function(doc) {  if (doc.type=='article' && doc.data.neighborhood != ''){ emit(doc.data.neighborhood, doc.data.fulltext); } else if(doc.type=='article'){ emit(doc.data.city[0], doc.data.fulltext); }}",                
+            },
+            "cities_or_neighborhoods": {
+                "map": "function(doc) { if (doc.type=='article' && doc.data.neighborhood != ''){    emit(doc.data.neighborhood, 1); } else if(doc.type=='article' && doc.data.city !=''){emit(doc.data.city[0], 1);}}",        
+                "reduce": "function(keys, values) { return sum(values); }",        
+            },
+            "place_frequency": {
+                "map": "function(doc) {if(doc.type=='place_frequency'){emit([doc.city_or_neighborhood, doc.date], doc);}}",                
+            },
+        }
+    }
+
+       
+
+
+    

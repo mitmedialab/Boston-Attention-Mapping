@@ -69,7 +69,7 @@ def getCityFromLatLong(latitude, longitude):
    	return ""
 
 DATABASE_NAME = "boston-globe-articles"
-MAX_NUM_ARTICLES = 50000
+MAX_NUM_ARTICLES = 1500
 ARTICLES_AT_A_TIME = 500
 
 #CENSUS FILE PATHS
@@ -386,6 +386,7 @@ db = couch.create(DATABASE_NAME)
 
 # create the views
 db.save(GlobeViews.getAllGlobeViews())
+db.save(GlobeViews.getNLTKViews())
 print "Created the views" 
 
 #Make a number of http requests to download all the data. Too many at one time leads to 500 error

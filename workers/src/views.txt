@@ -1,5 +1,14 @@
+/************************************
 
-//globe/fulltext_by_city
+NOTE - since the DB gets deleted & recreated a lot,
+view creation is being handled by python/GlobeViews.py 
+so if you want to update views then update that file
+for the method GlobeViews.getNLTKViews()
+
+************************************/
+
+
+//nltk/fulltext_by_city
 //map
 function(doc) {
   if(doc.type=="article"){
@@ -8,11 +17,13 @@ function(doc) {
 }
 
 
-//globe/cities
+//nltk/cities
 //map
 function(doc) {
   if(doc.type=="article" && doc.data.city!=""){
     emit(doc.data.city[0], 1);
+  } else if (doc.type=="article" && doc.data.neighborhood!=""){
+    emit(doc.data.neighborhood[0], 1);
   }
 }
 //reduce
