@@ -229,7 +229,7 @@ CENSUS_TRACTS_TO_NEIGHBORHOOD = {"010405":"Fenway",
 ################################################################################
 
 config = ConfigParser.ConfigParser()
-config.read('globe.config')
+config.read(APP_ROOT_DIR + 'python/globe.config')
 
 ################################################################################
 # SET UP DB METADATA
