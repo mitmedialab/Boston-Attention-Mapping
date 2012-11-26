@@ -1,3 +1,7 @@
+################################################################################
+# USES NLTK TO ADD WORD FREQUENCY DATA ABOUT ARTICLES BY CITY OR NEIGHBORHOOD TO COUCHDB
+################################################################################
+
 import couchdb
 import nltk
 from nltk import Text
@@ -7,12 +11,13 @@ import re
 import time
 import string
 import sys
+import couch_connect
 
-class ArticleProcessingJob:
+class WordFreqencyJob:
 
-  def __init__(self, database_name="boston-globe-articles"):
-    self.server = couchdb.Server()
-    self.db = self.server[database_name]   
+  def __init__(self):
+    conn = couch_connect.CouchConnect()
+    self.db = conn.db
     self.tokenizer = nltk.WordPunctTokenizer()#nltk.RegexpTokenizer("[\w]", flags=re.UNICODE)
     self.process_articles()
 
@@ -39,4 +44,4 @@ class ArticleProcessingJob:
                         "words": freq.items()[0:50]}
       self.db.save(place_frequency)
 
-a = ArticleProcessingJob()
+w = WordFreqencyJob()

@@ -12,8 +12,7 @@ import osgeo.gdal as gdal, osgeo.ogr as ogr,osgeo.osr as osr
 import os
 import csv,sys
 from titlecase import titlecase
-import ConfigParser
-import GlobeViews
+import GlobeViews, couch_connect
 
 ################################################################################
 #SET UP CONSTANTS
@@ -21,7 +20,7 @@ import GlobeViews
 
 APP_ROOT_DIR=os.path.dirname(os.path.dirname( os.path.abspath(__file__) ) )+ "/"
 print APP_ROOT_DIR
-DATABASE_NAME = "boston-globe-articles"
+
 MAX_NUM_ARTICLES = 60000
 ARTICLES_AT_A_TIME = 500
 
@@ -224,12 +223,7 @@ CENSUS_TRACTS_TO_NEIGHBORHOOD = {"010405":"Fenway",
 "010403":"Fenway",
 "000100":"Brighton"}
 
-################################################################################
-# READ CONFIG FILE
-################################################################################
 
-config = ConfigParser.ConfigParser()
-config.read(APP_ROOT_DIR + 'python/globe.config')
 
 ################################################################################
 # SET UP DB METADATA
@@ -372,36 +366,17 @@ spatialRef4=osr.SpatialReference()
 spatialRef4.SetWellKnownGeogCS("WGS84")
 townTransformObject=osr.CoordinateTransformation( spatialRef3,spatialRef4)
 
-
-################################################################################
-# CONNECT TO COUCHDB 
-################################################################################
-serverURL = config.get('db','host') + ':' + config.get('db','port')
-print serverURL
-
-if ((config.get('db','host') == 'localhost' or config.get('db','host') == '127.0.0.1') and config.get('db','port') == '5984' and len(config.get('db','user')) == 0 ):
-	couch = couchdb.Server() 
-else:
-	try:	
-		if (len(config.get('db','user')) > 0):
-			couch = couchdb.Server(url=serverURL) 
-			couch.resource.credentials = (config.get('db','user'), config.get('db','password'))
-		else:
-			couch = couchdb.Server(url=serverURL) 
-	except:
-		print "error connecting to the couch server at " + serverURL + ' with credentials user = ' + config.get('db','user')
-		print "exiting now"
-		sys.exit()
-
+#Connect to Couch
+conn = couch_connect.CouchConnect();
 
 #delete DB if it exists
 try:
-	del couch[DATABASE_NAME]
+	conn.deleteDB()
 except couchdb.http.ResourceNotFound:
    	print "Database doesn't exist. We'll go ahead and create it."
 
 # create & select DB
-db = couch.create(DATABASE_NAME)
+db = conn.createDB()
 
 # create the views
 db.save(GlobeViews.getAllGlobeViews())
