@@ -51,7 +51,6 @@ class WordFreqencyJob:
     for city in self.cities:
       self.cities[city]["freqdist"] =  self.tf_icf(city)[0:100]
       self.db.save(self.cities[city])
-    import pdb; pdb.set_trace()
 
   def add_city_word_incidence(self, word):
     if word in self.city_word_incidence:
