@@ -4,3 +4,4 @@ user: mediameter
 password: mcData2Use
 host: http://66.228.45.37
 port: 5984
+db_name: boston-globe-articles
