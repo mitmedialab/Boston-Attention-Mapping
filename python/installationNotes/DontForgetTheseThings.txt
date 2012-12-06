@@ -1,4 +1,4 @@
-For MacOSX
+	For MacOSX
 Download GDAL and all dependencies
 http://www.kyngchaos.com/software/frameworks#gdal_complete
 
@@ -21,3 +21,7 @@ FOR FIXING WEIRD BUG WITH PROJ4 LIBRARY MISSING --> sudo ln -s /usr/lib/libproj.
 For resetting git working dir
 git fetch --all
 git reset --hard origin/master
+
+
+NLTK - You'll have to run nltk.download() from a python terminal to install all the nltk packages
+
