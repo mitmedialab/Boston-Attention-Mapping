@@ -21,7 +21,7 @@ import GlobeViews, couch_connect
 APP_ROOT_DIR=os.path.dirname(os.path.dirname( os.path.abspath(__file__) ) )+ "/"
 print APP_ROOT_DIR
 
-MAX_NUM_ARTICLES = 60000
+MAX_NUM_ARTICLES = 2000
 ARTICLES_AT_A_TIME = 500
 
 #CENSUS FILE PATHS
