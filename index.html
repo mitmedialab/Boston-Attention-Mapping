@@ -717,7 +717,8 @@ bg.png" style="padding-top: 58px;height: 35px;"></p>
                         })
                        .success(function(json) {  
                               var words = json.rows[0].value.freqdist;
-                              var placeWords = '<div style="line-height:'+ words[1][1] +'em">';
+                              var lineHeight = words[1][1] + 1;
+                              var placeWords = '<div style="line-height:'+ lineHeight +'em">';
                               for (i=0; i<words.length; i++) {
 
                                 var word = words[i][0];
