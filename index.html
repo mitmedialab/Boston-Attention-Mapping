@@ -717,13 +717,16 @@ bg.png" style="padding-top: 58px;height: 35px;"></p>
                         })
                        .success(function(json) {  
                               var words = json.rows[0].value.freqdist;
-                              var placeWords = '<div style="line-height:'+ words[0][1] +'em">';
+                              var placeWords = '<div style="line-height:'+ words[1][1] +'em">';
                               for (i=0; i<words.length; i++) {
+
                                 var word = words[i][0];
-                                console.log("word is "+ word)
-                                var fontSize = words[i][1] + 0.5;
-                                console.log("fontSize is "+ fontSize)
-                                placeWords += " <span class='label' style='margin-right:5px;margin-bottom:5px;font-size:"+Math.max(fontSize,0.75)+"em'>"+ word+"</span>";
+                                if (word != name){
+                                  
+                                  var fontSize = words[i][1] + 1;
+                                  
+                                  placeWords += " <span class='label' style='margin-right:5px;margin-bottom:5px;font-size:"+Math.max(fontSize,0.75)+"em'>"+ word+"</span>";
+                                }
                                 
                              }
                              placeWords += "</div>";
