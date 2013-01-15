@@ -108,26 +108,28 @@ class Geoprocessor:
                 return city
         return ""
 
-    def filterAndCleanArticles(self, allArticles, db_metadata):
+    def filterAndCleanArticles(self, allArticles, conn):
+        db = conn.db
         
-        db_metadata["filtered_articles_no_geodata"] = 0
-        db_metadata["filtered_articles_bad_geodata"] =0
-        db_metadata["total_articles_added"] = 0
-        db_metadata["number_of_updated_MA_city_names"] =0
+        cleanedArticles = []
 
         for article in allArticles:
-            if allArticles[0] == article :
-                db_metadata["last_article_date"]=article["data"]["printpublicationdate"]
-                db_metadata["last_article_id"]=article["id"]
+            if conn.documentExists(article["id"]):
+                print "document id " + article['id'] + " already exists - discarding..." 
+                continue
             
+            conn.db_metadata["last_article_date"]=article["data"]["printpublicationdate"]
+            conn.db_metadata["last_article_id"]=article["id"]
+
             #create a document and insert it into the db:
             article["_id"] = article["id"]
             
             #If article has geocoding AND it doesn't have excluded lat longs then include in data set
-            if len(article["data"]["latitude"]) > 0 :
-                latlong1k = "["+str(article["data"]["latitude_1k"][0]) + ", " + str(article["data"]["longitude_1k"][0])+"]"
+            if len( article["data"]["latitude"] ) > 0 :
+                latlong1k = [ article["data"]["latitude_1k"][0], article["data"]["longitude_1k"][0] ]
+
                 if latlong1k in self.excluded_lat1k_long1k:
-                    db_metadata["filtered_articles_bad_geodata"]+=1
+                    conn.db_metadata["filtered_articles_bad_geodata"]+=1
                     print "Filtering the point " + str(article["data"]["latitude"][0]) + ", "+ str(article["data"]["longitude"][0]) 
                     continue
                 else : 
@@ -156,7 +158,7 @@ class Geoprocessor:
      
                     if cityFromLatLong != article["data"]["city"][0] and len(cityFromLatLong) > 0 :                     
                         print "Changing Globe entered city " + article["data"]["city"][0] + " to verified city " + cityFromLatLong
-                        db_metadata["number_of_updated_MA_city_names"]+=1
+                        conn.db_metadata["number_of_updated_MA_city_names"]+=1
                         #save the city data as entered by the Globe
                         article["data"]["city_OLD"]=article["data"]["city"][0]
 
@@ -167,12 +169,13 @@ class Geoprocessor:
                     else :
                         city = ""
                     
-                    db_metadata["first_article_date"]= article["data"]["printpublicationdate"]
+                    
                     article["type"] = "article"
-                    db_metadata["total_articles_added"]+=1
+                    cleanedArticles.append(article)
+                    conn.db_metadata["total_articles_added"]+=1
             else: 
-                db_metadata["filtered_articles_no_geodata"]+=1
+                conn.db_metadata["filtered_articles_no_geodata"]+=1
                 print "Filtering this article because there's no geodata. "
                 continue
                 
-        return [allArticles,db_metadata]
+        return cleanedArticles

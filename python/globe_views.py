@@ -45,8 +45,12 @@ def getAllGlobeViews():
                 "map": "function(doc) {if(doc['data']['neighborhood'] != null && doc['data']['printpublicationdate'] =='20121021' && doc['data']['neighborhood'].length > 0  && doc['data']['printsection'][0] != 'Sports'){  emit(doc['data']['neighborhood'],  { canonicalurl:doc['data']['canonicalurl'][0],headline:doc['data']['headline'][0],    printpagenumber:doc['data']['printpagenumber'][0]  });}}",                
             },
             "metadata": {
-                "map": "function(doc) { if (doc['type']=='metadata'){        emit(doc,1);        }}",                
+                "map": "function(doc) { if (doc['type']=='metadata'){       emit(doc['last_article_date'],doc);           }}",                
             },
+             "last_article_date": {
+                "map": "function(doc) { if (doc['type']=='metadata'){        emit(doc['type'],doc['last_article_date'][0]);        }}",                
+            },
+            
             
 
            
@@ -69,6 +73,25 @@ def getNLTKViews():
             },
         }
     }
+#Only views that haven't already been saved to DB
+def getNewViews():
+    return ""
+    '''return {
+         "_id": "_design/globe",
+        "language": "javascript",
+        "views": {
+            "fulltext_by_city_or_neighborhood": {
+                "map": "function(doc) {  if (doc.type=='article' && doc.data.neighborhood != ''){ emit(doc.data.neighborhood, doc.data.fulltext); } else if(doc.type=='article'){ emit(doc.data.city[0], doc.data.fulltext); }}",                
+            },
+            "cities_or_neighborhoods": {
+                "map": "function(doc) { if (doc.type=='article' && doc.data.neighborhood != ''){    emit(doc.data.neighborhood, 1); } else if(doc.type=='article' && doc.data.city !=''){emit(doc.data.city[0], 1);}}",        
+                "reduce": "function(keys, values) { return sum(values); }",        
+            },
+            "place_frequency": {
+                "map": "function(doc) {if(doc.type=='place_frequency'){emit([doc.city_or_neighborhood, doc.date], doc);}}",                
+            },
+        }
+    }'''
 
        
 

@@ -16,31 +16,29 @@ args = parser.parse_args()
 if(args.delete):
 	print 'You have specified delete so I will delete and re-create the database'
 
-db_metadata = {}
-db_metadata["type"] = "metadata"
-
 #Connect to Couch
 conn = DBManager();
 
+#delete DB if it exists
 if (args.delete) :
-	#delete DB if it exists
 	try:
 		conn.deleteDB()
 		db = conn.createDB()
+		conn.saveAllViews()
 	except couchdb.http.ResourceNotFound:
 	   	print "Database doesn't exist. We'll go ahead and create it."
 	   	db = conn.createDB()
+	   	conn.saveAllViews()
+else:
+	db = conn.db
+	conn.saveNewViews()
 
-latestArticles = boston_globe.fetchLatestArticlesFromAPI(db)
-
-db_metadata["total_articles_available"] = len(latestArticles)
+latestArticles = boston_globe.fetchLatestArticlesFromAPI(conn)
 
 geoprocessor = Geoprocessor()
-articlesAndMetadata = geoprocessor.filterAndCleanArticles(latestArticles, db_metadata)
-cleanArticles = articlesAndMetadata[0]
-db_metadata = articlesAndMetadata[1]
+cleanArticles = geoprocessor.filterAndCleanArticles(latestArticles, conn)
 
-conn.saveAll(cleanArticles, db_metadata)
-conn.saveAllViews()
+conn.saveAll(cleanArticles)
 
-print "Done - Yay"
+
+print "Done - delete your new views now!"
