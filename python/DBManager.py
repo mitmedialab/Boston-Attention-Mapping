@@ -2,7 +2,7 @@
 # CONVENIENCE WRAPPER FOR CONNECTING TO COUCHDB
 ################################################################################
 
-import couchdb,os
+import couchdb,urllib
 import ConfigParser
 import utils, globe_views
 
@@ -63,6 +63,8 @@ class DBManager:
   def saveAllViews(self):
     self.db.save(globe_views.getAllGlobeViews())
     self.db.save(globe_views.getNLTKViews())
+    self.loadMetadata()
+    print 'saved all couch views and reloaded metadata'
 
   #TODO - turn this into a file that then gets deleted after being run once
   def saveNewViews(self):
@@ -88,16 +90,19 @@ class DBManager:
 
   def loadMetadata(self):
     self.db_metadata = ""
-    md = self.db.view('globe/metadata')  
-    for row in md:       
-        self.db_metadata = row['value']
-    if(self.db_metadata ==""):
-      self.db_metadata = {}
-      self.db_metadata["type"] = "metadata"
-      self.db_metadata["filtered_articles_no_geodata"] = 0
-      self.db_metadata["filtered_articles_bad_geodata"] =0
-      self.db_metadata["total_articles_added"] = 0
-      self.db_metadata["number_of_updated_MA_city_names"] =0
+    try:
+      md = self.db.view('globe/metadata')  
+      for row in md:       
+          self.db_metadata = row['value']
+      if(self.db_metadata ==""):
+        self.db_metadata = {}
+        self.db_metadata["type"] = "metadata"
+        self.db_metadata["filtered_articles_no_geodata"] = 0
+        self.db_metadata["filtered_articles_bad_geodata"] =0
+        self.db_metadata["total_articles_added"] = 0
+        self.db_metadata["number_of_updated_MA_city_names"] =0
+    except couchdb.http.ResourceNotFound:
+      print "unable to load metadata"
 
   def documentExists(self, id):
     doc = self.db.get(id)
@@ -106,3 +111,22 @@ class DBManager:
     else:
       return True
 
+  #Throws couchdb.http.ResourceNotFound if that doc doesn't exist
+  #Returns None if doc returns empty rows
+  def documentByURL(self, canonicalURL):
+    viewURL = urllib.quote_plus('\"' + canonicalURL + '\"' )
+    doc = self.db.view('globe/doc_by_canonical_url', key=viewURL)
+    if (doc.rows ==0):
+      return None
+    else:
+      return doc
+
+  #Throws couchdb.http.ResourceNotFound if that doc doesn't exist
+  #Returns None if doc returns empty rows
+  def documentByHeadline(self, headline):
+    viewURL = '?key=' + urllib.quote_plus(headline)
+    doc = self.db.view('globe/doc_by_headine', key=viewURL)
+    if (doc.rows ==0):
+      return None
+    else:
+      return doc

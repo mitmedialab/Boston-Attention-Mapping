@@ -22,8 +22,10 @@ class WordFreqencyJob:
     self.city_word_incidence = {}
     self.cities = {}
     self.tokenizer = nltk.WordPunctTokenizer()#nltk.RegexpTokenizer("[\w]", flags=re.UNICODE)
+    self.lemmatizer = nltk.WordNetLemmatizer()
     self.process_articles()
     self.calculate_results()
+    
 
   # fetch cities which have more than one article
   def fetch_article_keys(self):
@@ -63,13 +65,13 @@ class WordFreqencyJob:
     stopwords = nltk.corpus.stopwords.words('english')
     contains_letter = re.compile('[a-z]')
     for city in self.fetch_article_keys():
-      articles = self.proces_city_articles([ nltk.Text([token.lower() 
+      articles = self.proces_city_articles([ nltk.Text([self.lemmatizer.lemmatize(token.lower()) 
                                                       for token in self.tokenizer.tokenize(a.value[0]) 
                                                       if(len(token) > 1 and 
                                                          token.lower() not in stopwords and
                                                          contains_letter.search(token))]) 
                                             for a in self.db.view("nltk/fulltext_by_city_or_neighborhood", key=city[0]) 
-                                            if len(a.value) > 0 ])
+                                            if a.value != None and len(a.value) > 0 ])
 
       vocab = articles.vocab().items()
       [self.add_city_word_incidence(fd[0]) for fd in vocab]

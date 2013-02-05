@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><?EM-dtdExt /SysConfig/Rules/NEMG.dtx?><?EM-templateName /SysConfig/Boston/Templates/story.xml?><?xml-stylesheet type="text/css" href="/SysConfig/Boston/Styles/main.css"?><?CCI-section Arts?><?CCI-subsection?><?GEM-section liv?><?GEM-desk liv?><?GEM-imagename 11nightwatch.jpg?><?GEM-Recover 0a3eb916-0a2d-11e1-b6ba-bf8a06ba4c16.uuid.xml?><?GEM-RecoverStoryName RecoveredFile.xml?><doc xmlns:xs="http://www.w3.org/2001/XMLSchema" xml:lang="en-us">
+   <story>
+      <headlines id="id_head_GKO1S4HN1.1">
+         <overline>
+            <p><?EM-dummyText [overline]?></p>
+         </overline>
+         <headline>
+            <p>The Bootleggers Prohibition Party</p>
+         </headline>
+         <shortheadline>
+            <p><?EM-dummyText [short headline]?></p>
+         </shortheadline>
+         <subheadline>
+            <p>Boston's club scene, one party at a time</p>
+         </subheadline>
+      </headlines>
+      <summary id="id_summ_GKO1S4HN1.1">
+         <p>After opening in 1993, Bella Luna and its lounge the Milky Way are celebrating 18 years in the Jamaica Plain area. On Friday night, celebrate your right to drink and have a grand ol’ time at the Bootleggers Prohibition Party. “It’s fun when you can dress up - wear the fringe dresses and feathers in your hair, or a suit and hat,’’ said co-owner and general manager Carol Downs</p>
+      </summary>
+      <web-tease id="id_tease_GKO1S4HN1.1">
+         <p>After opening in 1993, Bella Luna and its lounge the Milky Way are celebrating 18 years in the Jamaica Plain area. On Friday night, celebrate your right to drink and have a grand ol’ time at the Bootleggers Prohibition Party. “It’s fun when you can dress up - wear the fringe dresses and feathers in your hair, or a suit and hat,’’ said co-owner and general manager Carol Downs</p>
+      </web-tease>
+      <related-links id="id_rel_links_GKO1S4HN1.1">
+         <related-link><?EM-dummyText [related links]?></related-link>
+      </related-links>
+      <print-headlines id="id_printhead_GKO1S4HN1.1">
+         <print-headline>
+            <p>Night Watch</p>
+         </print-headline>
+         <print-subheadline>
+            <p>Boston's club scene, one party at a time</p>
+         </print-subheadline>
+      </print-headlines>
+      <multimedia-container id="id_media_GKO1S4HN1.1">
+         <photo-container>
+            <photogrp class="main-web-images" id="id_photo_b5299a1a-0a52-11e1-b6ba-bf8a06ba4c16">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="247px" name="image_371w" vspace="1" width="371px"/>
+               <captiongrp>
+                  <credit>
+                     <p>L.A. Beitenman</p>
+                  </credit>
+                  <caption>
+                     <p><?EM-dummyText [Credit goes here]?></p>
+                  </caption>
+                  <alt-tag>
+                     <p><?EM-dummyText [Alt-tag goes here]?></p>
+                  </alt-tag>
+               </captiongrp>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="400px" name="image_1200w" vspace="1" width="600px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo height="320px" name="image_960w" vspace="1" width="480px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="278px" name="image_835w" vspace="1" width="418px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="195px" name="image_585w" vspace="1" width="293px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo height="153px" name="image_460w" vspace="1" width="230px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo height="124px" name="image_371w" vspace="1" width="186px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="80px" name="image_r" vspace="1" width="120px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="150px" name="image_150x150" vspace="1" width="150px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="90px" name="image_90x90" vspace="1" width="90px"/>
+            </photogrp>
+            <photogrp class="alt-web-images">
+               <photo fileref="/Boston/Content/Arts/Images/11nightwatch.jpg?uuid=620a5c82-0bd0-11e1-b255-9412141d56bc" height="60px" name="image_60x60" vspace="1" width="60px"/>
+            </photogrp>
+         </photo-container>
+      </multimedia-container>
+      <text>
+         <byline id="id_byline_GKO1S4HN1.1">
+            <byname>
+               <p>By Anthony Savvides</p>
+            </byname>
+            <bysource>
+               <p>Globe Correspondent</p>
+            </bysource>
+         </byline>
+         <content id="id_text_GKO1S4HN1.1">
+            <p>
+               <b>THE BOOTLEGGERS PROHIBITION PARTY </b>
+            </p>
+            <p>
+               <i>Tonight at 10 at Bella Luna/Milky Way, 284 Amory St., Jamaica Plain. Cover: $8 in advance, $10 at the door. 21+. 617-592-9161, www.milkywayjp.com, <a href="http://www.brownpapertickets.com">www.brownpapertickets.com</a>
+               </i>
+            </p>
+            <p>
+               <b>The deal: </b>After opening in 1993, Bella Luna and its lounge, the Milky Way, are celebrating 18 years in the Jamaica Plain area. On Friday night, celebrate your right to drink and have a grand ol’ time at the Bootleggers Prohibition Party. “It’s fun when you can dress up - wear the fringe dresses and feathers in your hair, or a suit and hat,’’ said co-owner and general manager Carol Downs. “It was a time of great music and dancing. The music and entertainment was all live, and we want that vibe because we view ourselves as a community living room,’’ she added. </p>
+            <p>
+               <b>The music: </b>The Moodswings Orchestra (below), a 17-piece all-female group accompanied by a vocalist, will be on hand to play big-band hits of the era. </p>
+            <p>
+               <b>Three songs you might hear:</b> “April in Paris,’’ “One O’Clock Jump,’’ and “Alexander’s Ragtime Band.’’</p>
+            <p>
+               <b>The drink:</b> Batch 19, a pre-Prohibition style lager, or order a French 75 or a rye sidecar for a traditional taste of the Jazz Age.</p>
+            <p>
+               <b>The tip:</b> “Dress in costume to connect with your inner 1920s speakeasy self,’’ said Downs. And be ready to boogie.</p>
+         </content>
+         <tagline id="id_tag_GKO1S4HN1.1">
+            <p><?EM-dummyText [tag line]?></p>
+         </tagline>
+      </text>
+   </story>
+<dbMetadata><sys><loid>1.0.384823927</loid><uuid>64717ba4-0bd0-11e1-b255-9412141d56bc</uuid><path>/Boston/Content/Arts/Stories/0a3eb916-0a2d-11e1-b6ba-bf8a06ba4c16.uuid.xml</path><name>0a3eb916-0a2d-11e1-b6ba-bf8a06ba4c16.uuid.xml</name><description></description><type>EOM::CompoundStory</type><owner>system</owner><creator>system</creator><timeCreated>1320952546</timeCreated><lastModifier>system</lastModifier><timeModified>1320952559</timeModified><locker></locker><timeLocked>1320952559</timeLocked><statusName>Stories/FromGEM</statusName><statusIdentifier>RGB(136,181,35)</statusIdentifier><size>7553</size><updateCounter>30</updateCounter><props>
+<productInfo>
+<issueDate/>
+<name/>
+<edition/>
+</productInfo>
+<workFolder>/Boston/Content/Arts</workFolder>
+<title>The Bootleggers Prohibition Party </title>
+<summary>THE BOOTLEGGERS PROHIBITION PARTY Tonight at 10 at Bella Luna/Milky Way, 284 Amory St., Jamaica Plain. Cover: $8 in advance, $10 at the door. 21+. 617-592-9161, www.milkywayjp.com,www.brownpapertickets.com The deal:After opening in 1993, Bella Luna and its lounge, the Milky Way, are celebrating 18 years in the Jamaica Plain area. On Friday night, c...</summary>
+<wordCount>474</wordCount>
+<masterUUID>64717ba4-0bd0-11e1-b255-9412141d56bc</masterUUID>
+<CCIupdated/></props><tl><t><id>1</id><tp>WebPub</tp><c>system</c><cd>20111110191500</cd><dt><channel>
+
+							Boston.com
+						</channel><issueDate>20111111</issueDate></dt></t><t><id>4</id><tp>EOM::Status</tp><c>system</c><cd>20111110191500</cd><dt><status comment=""/></dt></t><t><id>5</id><tp>PortalPub</tp><c>system</c><cd>20111110191500</cd><dt><rep>methcms</rep><uuid>aF69TgvQEeGHHk6ZLh-B1A</uuid><first>20111110191552</first><last>20111110191552</last><count>1</count><channel>BostonGlobe.com</channel></dt></t><t><id>6</id><tp>mss</tp><c>system</c><cd>20111110191600</cd><dt><subscription>Methode2Bonzai Subscription</subscription><source>Methode2Bonzai Source</source><sent>20111110191604</sent><count>1</count></dt></t></tl><va><corrs/><folder_size>0</folder_size><corrs/><vid>1</vid><vt>1320952559</vt></va></sys><ObjectMetadata><Editorial><Comment/><Description/><WordCount>474</WordCount><OriginalFilename>11112011_11nightwatch.ART.xml</OriginalFilename><DesignReady/><Bylines><Byline><UserName/><Role/><ByName/><Bysource/><ByPicture/></Byline></Bylines><SuggestedPlayPrint/><SuggestedPlayBostonCom/><SuggestedPlayBostonGlobeCom/><WorkFolder/><SubWorkFolder/><EditorialType>News</EditorialType></Editorial><SEOInformation><Summary>After opening in 1993, Bella Luna and its lounge the Milky Way are celebrating 18 years in the Jamaica Plain area. On Friday night, celebrate your right to drink and have a grand ol’ time at the Bootleggers Prohibition Party. “It’s fun when you can dress up - wear the fringe dresses and feathers in your hair, or a suit and hat,’’ said co-owner and general manager Carol Downs</Summary><Headline>The Bootleggers Prohibition Party</Headline></SEOInformation><Categorization><WireCategories/><Keywords><Keyword/></Keywords><Taxonomies><Taxonomy>AE/Music</Taxonomy></Taxonomies><Categories><Category/></Categories><Organizations><Organization/></Organizations><TeragramCodes/><DistScope/><SubjectClassifications/><EntityClassifications><Companies/><People><Person><PartyName/><PartyType/></Person></People></EntityClassifications><SelectorCode/><Fixture/><ItemContentType/><AP_OnlineCodes><AP_OnlineCode/></AP_OnlineCodes><catcon><des>Nineteen Hundred Twenties</des><mdes>Jazz; Music; Costumes, Theatrical</mdes><nyt_org_all/><nyt_org/><nyt_per/><nyt_geo>Jamaica (West Indies); France; Paris (France)</nyt_geo></catcon></Categorization><Location><Directions/><Latitude>42.3001</Latitude><Longitude>-71.1073</Longitude><Address/><City>Jamaica Plain</City><State>MA</State><Zip/><Country/></Location><OnlineProducts><PublicationStartDate>20111111050000</PublicationStartDate><PublicationEndDate/><RemoveAds/><StubStatus>0</StubStatus><OnlineProduct><ProductName>Boston.com</ProductName><MediaName/><FirstPublicationDate/><LastPublicationDate/><CommentingEnabled/><CommentingEnds/><PluckId/><MinorChange/><WebType>story</WebType><AdPageType/><ContentType/><Headline/><CanonicalUrl/><ShortUrl/><LegacyUrl/><WebStatus/><WebPriority>33</WebPriority><AdPageType/><TrackingHeadline/><TrackingOptVal/><TrackingType/></OnlineProduct><OnlineProduct><ProductName>BostonGlobe.com</ProductName><MediaName/><FirstPublicationDate>20111111050000</FirstPublicationDate><LastPublicationDate>20111111050000</LastPublicationDate><CommentingEnabled>True</CommentingEnabled><CommentingEnds/><PluckId/><MinorChange>True</MinorChange><WebType>story</WebType><AdPageType/><ContentType/><Headline>The Bootleggers Prohibition Party</Headline><CanonicalUrl/><ShortUrl/><LegacyUrl/><SectionPathTest>/arts/music</SectionPathTest><Sections><Section><SectionName title="Arts">Arts</SectionName><SectionPath>/arts</SectionPath><SectionTracking>Arts</SectionTracking><SectionAdTagIndexPage>www.bostonglobe.com/arts/homepage</SectionAdTagIndexPage><SectionAdTagGenericPage>www.bostonglobe.com/arts</SectionAdTagGenericPage></Section></Sections><WebStatus>Approved</WebStatus><WebPriority>33</WebPriority><AdPageType/><TrackingHeadline/><TrackingOptVal/><TrackingType/></OnlineProduct></OnlineProducts><CCI><CCI_ID>GKO1S4HN1.1</CCI_ID><ProductName>Globe</ProductName><PublicationDate>20111111</PublicationDate><Desk>LivingArts</Desk><SubDesk/><Basket>Copy Editor</Basket></CCI><GEM><StoryName>11nightwatch.ART</StoryName><StoryID>11112011_11nightwatch.ART</StoryID><Section>liv</Section><Desk>liv</Desk><ImageName>11nightwatch.jpg</ImageName><ReleaseDate>2011/11/10 13:55:52</ReleaseDate><ReviewRating/><Headline>Night Watch</Headline><Webhead>The Bootleggers Prohibition Party</Webhead><ColumnName/><SecondaryLocations/></GEM><Merlin><MerlinID/><MerlinByline/><Correction/><MerlinProvider/><MerlinReceived/><MerlinSlugLine/><MerlinLegacyDesk/></Merlin><Syndications><NoExport/><Syndication><Distributor/><Syndicated/></Syndication></Syndications><LastPrintOutput><PrintProduct>Globe</PrintProduct><PrintEdition>1</PrintEdition><PrintBook>Book_G</PrintBook><PrintSection>LivingArts</PrintSection><PrintPageNumber>21</PrintPageNumber><PrintPublicationDate>20111111</PrintPublicationDate></LastPrintOutput><Archive><NoArchive/><Archived/><ArchivedBy/></Archive><Copyright><CopyrightDate/><CopyrightHolder/></Copyright><Reference><Priority/><PriorityLegacy/><Name/><Provider>GEM</Provider><DateReceived>20111110141540</DateReceived><SlugLine/><EdMsgInfo/><TransmissionReference/><DynamicUseKey/><DocId/><Format/><Selector/><ManagementID/></Reference><SendTo><Email/></SendTo><Reviews><ReviewTypes/></Reviews></ObjectMetadata></dbMetadata></doc>

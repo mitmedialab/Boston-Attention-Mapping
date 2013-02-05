@@ -1,0 +1,121 @@
+#h1-title,#about{
+       position:absolute;top:-4px;z-index:1;margin-left:0;background:rgba(100,100,100,0.8);padding:10px;
+  }
+  #h1-title{
+      color:#eee;
+      width:535px;
+      display:none;
+  }
+  
+  #about{
+    width: 535px;
+    top: 62px;
+    color: #EEE;
+    display:none;
+  }
+  #about a{
+    color:#fff;
+  }
+  
+  form,#navigation{
+      position:absolute;
+      right: 36px;
+      top:7px;
+      z-index: 1;
+  }
+#navigation{
+  font-size: 1.1em;
+  color: #EEE;
+  width: 250px;
+}
+#navigation a{
+  color:#fff;
+}
+#navigation button{
+  text-align: left;
+  display:none;
+}
+#navigation .dropdown-menu{
+  background-color: rgba(100, 100, 100, 0.9);
+}
+.accordion-heading,.collapse{
+  background-color:rgba(100,100,100,0.8);
+  
+}
+.accordion-heading{
+  font-size: 1.4em;
+  
+}
+.accordion-group{
+  border:0;
+}
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0; }
+#map_canvas { height: 100% }
+button{
+  width:250px;
+  margin-bottom:4px;
+}
+#headlines{
+ position: absolute;
+  width: 230px;
+  background-color: rgba(100, 100, 100, 0.8);
+  border-radius: 4px;
+  top: 228px;
+  right: 35px;
+  color: white;
+  padding: 10px;
+  max-height:500px;
+  
+  
+  -webkit-box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+
+}
+.results h4{
+  text-align:center;
+}
+.stripe{
+  background-color: rgba(255, 255, 255, 0.1);
+  padding-left: 3px;
+}
+#headlines a{
+  color:#fff;
+}
+#headlines p{
+  border-top:1px solid #eee;
+  margin:0;
+  font-size:0.9em;
+}
+#headlines .page1{
+  font-size:1.2em;
+  font-weight:bold;
+}
+.scrolling{
+  overflow-x:hidden;
+  overflow-y:scroll;
+}
+.active{
+  font-weight: bold;
+}
+#loading-screen{
+  z-index: 2;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#loading-screen-description{
+  border: 1px solid black;
+  text-align: center;
+  padding: 20px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background-color: white;
+  -webkit-box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+  width: 40%;
+  position: relative;
+  margin: 5% auto;
+}

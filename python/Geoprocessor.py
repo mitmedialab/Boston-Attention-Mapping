@@ -171,6 +171,9 @@ class Geoprocessor:
                     
                     
                     article["type"] = "article"
+                    #change this line later when full text is actually working
+                    article["data"]["fulltext"] = article["data"]["catherine_dignazio"]
+                    
                     cleanedArticles.append(article)
                     conn.db_metadata["total_articles_added"]+=1
             else: 
