@@ -38,6 +38,16 @@
 #navigation .dropdown-menu{
   background-color: rgba(100, 100, 100, 0.9);
 }
+#per-capita-key{
+   position:absolute;
+    bottom:10px;
+    left:10px;
+    z-index: 1;
+    display:hidden;
+}
+.per-capita-values{
+    padding:5px 20px !important;
+}
 .accordion-heading,.collapse{
   background-color:rgba(100,100,100,0.8);
   

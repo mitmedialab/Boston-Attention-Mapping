@@ -126,7 +126,7 @@ class DBManager:
   def documentByHeadline(self, headline):
     viewURL = '?key=' + urllib.quote_plus(headline)
     doc = self.db.view('globe/doc_by_headine', key=viewURL)
-    if (doc.rows ==0):
+    if (len(doc.rows) ==0):
       return None
     else:
       return doc

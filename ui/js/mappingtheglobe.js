@@ -114,6 +114,7 @@ $(document).ready(function() {
                 }
                 function switchFromPerCapitaToDistribution(){
                   hidePolygons();
+                  $('#per-capita-key').hide();
                   $('#headlines').removeClass("scrolling");
                   $('#headlines').empty();
                    $('button').removeClass('active');
@@ -121,6 +122,7 @@ $(document).ready(function() {
                 function switchFromDistributionToPerCapita(){
                      $('button').removeClass('active');
                      hideMarkers();
+                    
                 }
                  function log10(num){
                     return Math.log(num) / Math.LN10;
@@ -392,6 +394,8 @@ $(document).ready(function() {
                                 }
                                 var diff = maxValue - minValue;
                                 var step = diff/8;
+                                
+
                                 for (i=0; i<json.rows.length; i++) {
                                     var town = json.rows[i].key[0];
                                     var neighborhood = json.rows[i].key[1];
@@ -441,6 +445,7 @@ $(document).ready(function() {
                                     } 
                                     
                                 }
+                                updateMapKey(maxValue,minValue,step);
                             }
                            
                         })
@@ -737,7 +742,20 @@ $(document).ready(function() {
                     .error(function(data) { console.log(data) })
                     .complete(function() { console.log("Loaded Boston Neighborhoods from GEOJSON...") });
                 }
+                function updateMapKey(maxValue,minValue,step){
+                  for (var i=1; i<10;i++){
+                    if (i == 9)
+                        $('#key9').text( " > " + highVal);
+                    else{
+                      var lowVal = (minValue + (step * (i - 1))).toFixed(6);
+                      var highVal = (minValue + (step * i)).toFixed(6);
+                      $('#key' + i).text( lowVal + " - " + highVal );
+                    }
 
+                  }
+                  $('#per-capita-key').show();
+
+                }
             }); //end document ready ?
        
         String.prototype.toProperCase = function () {
