@@ -5,11 +5,17 @@ $(document).ready(function() {
                 } else{
                   window.couchURL = 'couchdb/';
                 }
+                showMetadata();
+
                 window.mapCenter = new google.maps.LatLng(42.358056, -71.063611);
 
                 $("#enter-button").click(function(){
                     $("#loading-screen").fadeOut('slow');
                     $("#h1-title").fadeIn('slow');
+                });
+                $("#about-button").click(function(){
+                    $("#loading-screen").fadeIn('slow');
+                    
                 });
                 $("h1").mouseover(function(){$('#about').show();});
                 $("h1").mouseout(function(){$('#about').hide();});
@@ -88,7 +94,7 @@ $(document).ready(function() {
                
                 
                 drawMap();
-                loadMetadata();
+                loadPlaceMetadata();
                 setFilter("all-stories");
                 setView("distribution");
                 loadTownPolygons();
@@ -114,7 +120,7 @@ $(document).ready(function() {
                 }
                 function switchFromPerCapitaToDistribution(){
                   hidePolygons();
-                  $('#per-capita-key').hide();
+                  $('#per-capita-key').fadeOut();
                   $('#headlines').removeClass("scrolling");
                   $('#headlines').empty();
                    $('button').removeClass('active');
@@ -127,7 +133,7 @@ $(document).ready(function() {
                  function log10(num){
                     return Math.log(num) / Math.LN10;
                  }
-                function loadMetadata(){
+                function loadPlaceMetadata(){
                   window.metadata = {};
                   var result = $.csv.toObjects(getCSV());
 
@@ -269,6 +275,39 @@ $(document).ready(function() {
                       showArticlesPerCapita(couchView);
 
                   }
+                }
+                function showMetadata(){
+                  var url = window.couchURL + 'boston-globe-articles/_design/globe/_view/metadata';
+                  console.log(url);
+                  var jqxhr =  $.getJSON(url, function() {
+                
+                    })
+                     .success(function(json) {
+                       
+                        window.currentResultCount = json.rows.length;
+                        //TODO - double check this is getting most recent count of articles once DB not re-created every night
+                         if (json.rows.length > 0) {
+                              for (i=0; i<json.rows.length; i++) {
+                                  var metadataDate = json.rows[i].key;
+                                  var metadata = json.rows[i].value;
+                                  $('#total_articles_available').text(addCommas(metadata.total_articles_available));
+                                  $('#total_articles_added').text(addCommas(metadata.total_articles_added));
+                                  $('#filtered_articles_no_geodata').text(addCommas(metadata.filtered_articles_no_geodata));
+                                  $('#filtered_articles_bad_geodata').text(addCommas(metadata.filtered_articles_bad_geodata));      
+                              }
+                              
+                              
+                          }
+                          else{
+                              console.log("Couldn't retrieve DB metadata - something's up, man.")
+                          }
+                          
+                      })
+                  .error(function(data) { console.log(data) })
+                  .complete(function() { 
+                    console.log("Loaded metadata")
+                  }); 
+                  
                 }
                 function showArticleDistribution(couchView){
                   var url = window.couchURL + 'boston-globe-articles/_design/globe/_view/' + couchView;
@@ -753,7 +792,7 @@ $(document).ready(function() {
                     }
 
                   }
-                  $('#per-capita-key').show();
+                  $('#per-capita-key').fadeIn();
 
                 }
             }); //end document ready ?

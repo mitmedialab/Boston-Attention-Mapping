@@ -13,6 +13,7 @@ import string
 import sys
 import couch_connect
 
+
 class WordFreqencyJob:
 
   def __init__(self):
@@ -25,7 +26,6 @@ class WordFreqencyJob:
     self.lemmatizer = nltk.WordNetLemmatizer()
     self.process_articles()
     self.calculate_results()
-    
 
   # fetch cities which have more than one article
   def fetch_article_keys(self):
@@ -48,7 +48,9 @@ class WordFreqencyJob:
     return sorted([(tf[0], tf[1]*self.term_icf(tf[0])) for tf in self.cities[city]["freqdist"]], key=lambda term: term[1], reverse=True)
 
   def calculate_results(self):
+
     vocab = nltk.TextCollection(self.articles).vocab().items()
+
     overall_freqdist = [(fd[0], float(fd[1])/float(vocab[0][1])) for fd in vocab]
     for city in self.cities:
       self.cities[city]["freqdist"] =  self.tf_icf(city)[0:100]
@@ -74,6 +76,7 @@ class WordFreqencyJob:
                                             if a.value != None and len(a.value) > 0 ])
 
       vocab = articles.vocab().items()
+
       [self.add_city_word_incidence(fd[0]) for fd in vocab]
       freq = [(fd[0], float(fd[1])/float(vocab[0][1])) for fd in vocab]
 

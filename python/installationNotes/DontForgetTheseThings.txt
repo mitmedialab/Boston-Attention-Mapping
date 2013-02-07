@@ -25,3 +25,5 @@ git reset --hard origin/master
 
 NLTK - You'll have to run nltk.download() from a python terminal to install all the nltk packages
 
+open -a Google\ Chrome --args --disable-web-security
+

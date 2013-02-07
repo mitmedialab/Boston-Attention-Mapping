@@ -21,9 +21,7 @@
          <script src="ui/js/jquery.csv-0.71.min.js"></script>
     </head>
     <body>
-        <h1 id="h1-title"><img id="globe-image" src="ui/images/globe-image.jpeg" width="45px" style="padding-right:10px">Mapping the Globe</i></h1>
-        
-        <h4 id="about">Mapping the Globe uses geocoded data from the Boston Globe API, geographic data from MassGIS and the Boston Redevelopment Authority, and census data from the US census and the American Community Survey. The story data is from the time period between November 2011 to the present. <br/><br/>Please refer questions to <a href="mailto:dignazio@mit.edu">Catherine D'Ignazio</a> and <a href="mailto:ethanz@media.mit.edu">Ethan Zuckerman</a> at <a href="http://civic.mit.edu">the Center for Civic Media at MIT</a>.</h4>
+        <h1 id="h1-title"><a href="http://www.bostonglobe.com" target="_blank"><img id="globe-image" src="ui/images/globe-image.jpeg" width="80px" style="padding-left: 6px;padding-right: 15px;float:left"></a>Mapping the Globe</i><br/><button class="btn btn-mini btn-info" id="about-button" type="button">About this project</button></h1>
         <div id="per-capita-key">
           <table  class="table table-hover table-condensed table-bordered" style="background-color: rgba(255,255,255,0.9);border: 1px solid rgba(100,100,100,0.8);">
             <tbody>
@@ -113,6 +111,14 @@
                     No articles
                   </td>
               </tr>
+              <tr>
+                  <td style="width:20px;background-color:#cccccc;opacity:0.7;">
+                    &nbsp;
+                  </td>
+                  <td id="key-1" class="per-capita-values">
+                    Bad data
+                  </td>
+              </tr>
               
             </tbody>
           </table>
@@ -160,14 +166,40 @@
         <div id="loading-screen">
             <div id="loading-screen-description">
                 <h1>Mapping the Globe</h1>
-                <h3>Nov 2011 - Present</h3>
                 <h4 style="text-align:justify">Mapping the Globe is a set of interactive visualizations and maps that help us understand where the Boston Globe directs its attention. Media attention matters – in quantity and quality. It helps determine what we talk about as a public and how we talk about it. Mapping the Globe tracks where the paper's attention goes and what that attention looks like across different regional geographies in combination with diverse data sets like population, crime and income. <br/><br/>By <a href="mailto:dignazio@mit.edu">Catherine D'Ignazio</a> and <a href="mailto:ethanz@media.mit.edu">Ethan Zuckerman</a> at <a href="http://civic.mit.edu">the Center for Civic Media at MIT</a>.</h4>
-                <p><img src="http://civic.mit.edu/sites/civic.mit.edu/themes/c4cmtheme/logo.png" style="margin-right: 50px;
-height: 100px;"><img src="http://c.o0bg.com/rw/SysConfig/WebPortal/BostonGlobe/Framework/images/logo-
-bg.png" style="padding-top: 58px;height: 35px;"></p>
                 <button type="button" id="enter-button" class="btn btn-danger btn-large active">
                   Enter
                 </button>
+                <table  class="table table-hover table-condensed" style="margin-top:20px;font-size:0.9em">
+                  <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color:#efefef">
+                          <strong>About Our Dataset of Boston Globe Stories</strong>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Story time period</td><td> Nov 2011 - present</td>                        
+                    </tr>
+                     <tr>
+                        <td>Total stories from this time period</td><td id="total_articles_available"></td>                        
+                    </tr>
+                     <tr>
+                        <td>Stories we mapped</td><td id="total_articles_added"></td>                        
+                    </tr>
+                     <tr>
+                        <td>Stories with no geodata</td><td id="filtered_articles_no_geodata"></td>                        
+                    </tr>
+                    <tr>
+                        <td>Stories with bad geodata</td><td id="filtered_articles_bad_geodata"></td>                        
+                    </tr>
+                 
+                  </tbody>
+                </table>
+                <p><img src="http://civic.mit.edu/sites/civic.mit.edu/themes/c4cmtheme/logo.png" style="margin-right: 50px;
+height: 100px;"><img src="http://c.o0bg.com/rw/SysConfig/WebPortal/BostonGlobe/Framework/images/logo-
+bg.png" style="padding-top: 58px;height: 35px;"></p>
+                
             </div>
         </div>
         <div id="headlines" class="results"><h4 style="text-align: center"><img src="ui/images/loading.gif" style="padding-right:5px">Loading...</h4></div>

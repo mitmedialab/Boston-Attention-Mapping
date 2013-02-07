@@ -3,7 +3,7 @@
   }
   #h1-title{
       color:#eee;
-      width:535px;
+      width:500px;
       display:none;
   }
   
@@ -16,7 +16,9 @@
   #about a{
     color:#fff;
   }
-  
+  #about-button{
+    width:120px;
+  }
   form,#navigation{
       position:absolute;
       right: 36px;
