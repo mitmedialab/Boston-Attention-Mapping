@@ -31,7 +31,6 @@ if (args.delete) :
 	   	conn.saveAllViews()
 else:
 	db = conn.db
-	conn.saveNewViews()
 
 latestArticles = boston_globe.fetchLatestArticlesFromAPI(conn)
 
@@ -41,4 +40,4 @@ cleanArticles = geoprocessor.filterAndCleanArticles(latestArticles, conn)
 conn.saveAll(cleanArticles)
 
 
-print "Done - delete your new views now!"
+print "Done adding articles from the API"
