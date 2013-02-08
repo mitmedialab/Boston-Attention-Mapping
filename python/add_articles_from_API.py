@@ -7,20 +7,29 @@ import boston_globe
 from Geoprocessor import Geoprocessor
 from DBManager import DBManager
 import argparse,os,sys
+import utils
+import ConfigParser
+from datetime import date, timedelta
 
-
+geoprocessor = Geoprocessor()
 parser = argparse.ArgumentParser()
+conn = DBManager()
+
+#config file
+APP_ROOT_DIR=utils.getAppRootDir()
+config = ConfigParser.ConfigParser()
+config.read(APP_ROOT_DIR + 'python/globe.config')
+
+#parse command line args
 parser.add_argument("-d","--delete", action="store_true", default=False, help="delete the existing database and download all new data from the API")
 args = parser.parse_args()
 
 if(args.delete):
 	print 'You have specified delete so I will delete and re-create the database'
 
-#Connect to Couch
-conn = DBManager();
 
-#delete DB if it exists
-if (args.delete) :
+#delete DB if it exists & they told us to
+if (args.delete):
 	try:
 		conn.deleteDB()
 		db = conn.createDB()
@@ -32,12 +41,25 @@ if (args.delete) :
 else:
 	db = conn.db
 
-latestArticles = boston_globe.fetchLatestArticlesFromAPI(conn)
+max_num_articles=config.getint('boston_globe','max_num_articles')
+articles_at_a_time=config.getint('boston_globe','articles_at_a_time')
+size = 0
+lastArticleDate=""
+results = db.view('globe/last_article_date')
+for row in results:       
+ 	lastArticleDate = row['value']
 
-geoprocessor = Geoprocessor()
-cleanArticles = geoprocessor.filterAndCleanArticles(latestArticles, conn)
+if (lastArticleDate ==""):
+	lastArticleDate = "20100101"
 
-conn.saveAll(cleanArticles)
+while size<max_num_articles:
+	latestArticles = boston_globe.fetchLatestArticlesFromAPI(conn, size, lastArticleDate)
+	if (len(latestArticles) ==0):
+		break
+	cleanArticles = geoprocessor.filterAndCleanArticles(latestArticles, conn)
+
+	conn.saveAll(cleanArticles)
+	size += articles_at_a_time
 
 
 print "Done adding articles from the API"

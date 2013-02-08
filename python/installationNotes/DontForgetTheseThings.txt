@@ -25,5 +25,12 @@ git reset --hard origin/master
 
 NLTK - You'll have to run nltk.download() from a python terminal to install all the nltk packages
 
+FOR TESTING LOCALLY - open Chrome without web security to eliminate cross-domain error
 open -a Google\ Chrome --args --disable-web-security
 
+BUILD PROCESS
+commit & sync all changes
+do the "resetting git" thing above on the server
+manually edit any changes in the python/globe.config file
+reset/re-download DB & views if necessary
+adjust crontab for any nightly scripts - sudo crontab -e
