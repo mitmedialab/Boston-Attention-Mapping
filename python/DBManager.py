@@ -36,7 +36,10 @@ class DBManager:
     try:
       self.db = self.server[self.config.get('db','db_name')]   
     except:
-      print "error selecting database " + self.config.get('db','db_name') + ". Is your CouchDB server running?"
+      try: 
+        self.createDB()
+      except:
+        print "error creating & selecting database " + self.config.get('db','db_name') + ". Is your CouchDB server running?"
 
     self.loadMetadata()
 
