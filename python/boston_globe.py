@@ -23,7 +23,7 @@ def fetchLatestArticlesFromAPI(conn, startIdx, lastArticleDate):
 
 	allArticles = []
 	
-	req = urllib2.Request(	"http://50.17.92.83/s?key=catherine&bq=printpublicationdate:" + 
+	req = urllib2.Request(	"http://50.17.92.83/s?key=catherine&bq=printpublicationdate:" +
 							lastArticleDate +".."+todayStr+"&return-fields="+
 							api_fields+
 							"&size="+str(articles_at_a_time)+"&"+
@@ -31,7 +31,13 @@ def fetchLatestArticlesFromAPI(conn, startIdx, lastArticleDate):
 							"&rank=printpublicationdate")
 	print req.get_full_url()
 	opener = urllib2.build_opener()
-	f = opener.open(req)
+
+	#try and then basically try again
+	#sometimes server returns 500 error, so just try the same request again to see if that will catch these cases
+	try:
+		f = opener.open(req)
+	except:
+		f = opener.open(req)
 
 	try:
 		data = simplejson.load(f)

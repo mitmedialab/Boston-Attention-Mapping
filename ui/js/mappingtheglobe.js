@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+              
                if (location.href.indexOf("file:///") >= 0){
                   window.couchURL = 'http://127.0.0.1:5984/';
                 } else{
@@ -123,6 +123,7 @@ $(document).ready(function() {
                   $('#per-capita-key').fadeOut();
                   $('#headlines').removeClass("scrolling");
                   $('#headlines').empty();
+                  showLoading();
                    $('button').removeClass('active');
                 }
                 function switchFromDistributionToPerCapita(){
@@ -359,7 +360,10 @@ $(document).ready(function() {
                           }
                           showResultsCount();
                       })
-                  .error(function(data) { console.log(data) })
+                  .error(function(data) { 
+                    $('.results').html('<h4 style="text-align: center">Sorry! Error loading data.</h4>');
+                    console.log(data) 
+                  })
                   .complete(function() { 
                     showMarkers();
                   }); 
@@ -488,7 +492,10 @@ $(document).ready(function() {
                             }
                            
                         })
-                    .error(function(data) { console.log(data) })
+                    .error(function(data) { 
+                      console.log(data) ;
+                      $('.results').html('<h4 style="text-align: center">Sorry! Error loading data.</h4>');
+                    })
                     .complete(function() { 
                       showResultsCount();
                       console.log("Loaded shapes") 
@@ -497,7 +504,7 @@ $(document).ready(function() {
 
                 }
                 function showResultsCount(){
-                  var resultsText = "";
+                  var resultsText = "aa";
                   if (window.currentFilter == "all-stories")
                     resultsText = " total stories retrieved from November 2011 to the present.";
                   else if(window.currentFilter == "page1-stories")
