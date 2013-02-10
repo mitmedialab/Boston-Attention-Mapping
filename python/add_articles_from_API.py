@@ -10,6 +10,7 @@ import argparse,os,sys
 import utils
 import ConfigParser
 from datetime import date, timedelta
+import couchdb
 
 geoprocessor = Geoprocessor()
 parser = argparse.ArgumentParser()
