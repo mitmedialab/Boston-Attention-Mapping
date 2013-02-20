@@ -291,7 +291,7 @@ $(document).ready(function() {
                               for (i=0; i<json.rows.length; i++) {
                                   var metadataDate = json.rows[i].key;
                                   var metadata = json.rows[i].value;
-                                  $('#total_articles_available').text(addCommas(metadata.total_articles_available));
+                                  $('#total_articles_available').text( metadata.total_articles_added + metadata.filtered_articles_no_geodata + metadata.filtered_articles_bad_geodata);
                                   $('#total_articles_added').text(addCommas(metadata.total_articles_added));
                                   $('#filtered_articles_no_geodata').text(addCommas(metadata.filtered_articles_no_geodata));
                                   $('#filtered_articles_bad_geodata').text(addCommas(metadata.filtered_articles_bad_geodata));      
@@ -618,6 +618,11 @@ $(document).ready(function() {
                  
                   var polywindow = new google.maps.InfoWindow();
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
+                        if (window.currentInfoWindow){
+                          window.currentInfoWindow.close();
+                        }
+                        window.currentInfoWindow = polywindow;
+
                         $('#headlines').empty();
                         
                         var name = this.get('townName');
@@ -642,19 +647,23 @@ $(document).ready(function() {
                 
                         })
                        .success(function(json) {
-                              var words = json.rows[0].value.freqdist;
-                              var lineHeight = words[1][1] + 1;
-                              var placeWords = '<div style="line-height:'+ lineHeight +'em">';
-                              for (i=0; i<words.length; i++) {
+                              if (json.rows.length ==0){
+                                placeWords = "<div>No place words available for this town or neighborhood."
+                              } else {
+                                var words = json.rows[0].value.freqdist;
+                                var lineHeight = words[1][1] + 1;
+                                placeWords = '<div style="line-height:'+ lineHeight +'em">';
+                                for (i=0; i<words.length; i++) {
 
-                                var word = words[i][0];
-                                if (word.toLowerCase() != name.toLowerCase()){
+                                  var word = words[i][0];
+                                  if (word.toLowerCase() != name.toLowerCase()){
+                                    
+                                    var fontSize = words[i][1] + 1;
+                                    
+                                    placeWords += " <span class='label' style='margin-right:5px;margin-bottom:5px;font-size:"+Math.max(fontSize,0.75)+"em'>"+ word+"</span>";
+                                  }
                                   
-                                  var fontSize = words[i][1] + 1;
-                                  
-                                  placeWords += " <span class='label' style='margin-right:5px;margin-bottom:5px;font-size:"+Math.max(fontSize,0.75)+"em'>"+ word+"</span>";
-                                }
-                                
+                               }
                              }
                              placeWords += "</div>";
                              polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+name+ "</h3>" + "<br/>"+

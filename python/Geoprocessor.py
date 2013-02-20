@@ -180,5 +180,7 @@ class Geoprocessor:
                 conn.db_metadata["filtered_articles_no_geodata"]+=1
                 print "Filtering this article because there's no geodata. "
                 continue
+
+        
                 
         return cleanedArticles

@@ -9,7 +9,7 @@ import ConfigParser
 from datetime import date
 
 
-def fetchLatestArticlesFromAPI(conn, startIdx, lastArticleDate):
+def fetchLatestArticlesFromAPI(startIdx, lastArticleDate):
 
 	APP_ROOT_DIR=utils.getAppRootDir()
 	config = ConfigParser.ConfigParser()
@@ -45,8 +45,6 @@ def fetchLatestArticlesFromAPI(conn, startIdx, lastArticleDate):
 		print "JSONDecodeError\nEither there was no data found or some other parsy thing happened"
 
 	print str(data["hits"]["found"]) + " articles found"
-
-	conn.db_metadata["total_articles_available"] = data["hits"]["found"]
 	
 	allArticles.extend(data["hits"]["hit"])
 

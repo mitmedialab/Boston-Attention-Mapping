@@ -54,7 +54,7 @@ if (lastArticleDate ==""):
 	lastArticleDate = "20100101"
 
 while size<max_num_articles:
-	latestArticles = boston_globe.fetchLatestArticlesFromAPI(conn, size, lastArticleDate)
+	latestArticles = boston_globe.fetchLatestArticlesFromAPI(size, lastArticleDate)
 	if (len(latestArticles) ==0):
 		break
 	cleanArticles = geoprocessor.filterAndCleanArticles(latestArticles, conn)

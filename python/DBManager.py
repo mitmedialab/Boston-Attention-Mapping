@@ -133,3 +133,13 @@ class DBManager:
       return None
     else:
       return doc
+
+  #Throws couchdb.http.ResourceNotFound if that doc doesn't exist
+  #Returns None if doc returns empty rows
+  def documentByUUID(self, uuid):
+    viewURL = '?key=' + uuid
+    doc = self.db.view('globe/doc_by_uuid', key=viewURL)
+    if (len(doc.rows) ==0):
+      return None
+    else:
+      return doc

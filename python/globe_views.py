@@ -57,6 +57,9 @@ def getAllGlobeViews():
             "doc_by_canonical_url": {
                 "map": "function(doc) {emit(doc['data']['canonicalurl'][0],doc)}",
             },
+            "doc_by_uuid": {
+                "map": "function(doc) {emit(doc['data']['uuid'][0],doc)}",
+            },
             "all_articles_by_printsection": {
                 "map": "function(doc) {emit(doc['data']['printsection'][0],{neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],printbook:doc['data']['printbook'],summary:doc['data']['summary'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate'],canonicalurl:doc['data']['canonicalurl']});}",
             },
