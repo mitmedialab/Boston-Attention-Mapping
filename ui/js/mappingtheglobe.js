@@ -12,9 +12,11 @@ $(document).ready(function() {
                 $("#enter-button").click(function(){
                     $("#loading-screen").fadeOut('slow');
                     $("#h1-title").fadeIn('slow');
+                    return false;
                 });
                 $("#about-button").click(function(){
                     $("#loading-screen").fadeIn('slow');
+                    return false;
                     
                 });
                 $("h1").mouseover(function(){$('#about').show();});
@@ -24,6 +26,7 @@ $(document).ready(function() {
                     if ($(this).attr("id") == null){
                       setFilter($(this).text());
                       setFilterHTML($(this).text());
+
                     }
                     else{
                       setFilter($(this).attr("id"));
@@ -31,6 +34,7 @@ $(document).ready(function() {
                     }
                     showLoading();
                     redrawMap();
+                    return false;
                 });
                 $('#currentView>li>a').click(function(){
                     
@@ -39,12 +43,13 @@ $(document).ready(function() {
                     
                     showLoading();
                     redrawMap();
+                    return false;
                 });
                 
-                $('#zoom-GB').click(function(){window.map.setZoom(11); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text());} );
-                $('#zoom-MA').click(function(){window.map.setZoom(9); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text());});
-                $('#zoom-USA').click(function(){window.map.setZoom(5); window.map.setCenter(new google.maps.LatLng(39.8282, -98.5795)); setZoomHTML($(this).text());});
-                $('#zoom-world').click(function(){window.map.setZoom(3); setZoomHTML($(this).text()); });
+                $('#zoom-GB').click(function(){window.map.setZoom(11); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text()); return false;} );
+                $('#zoom-MA').click(function(){window.map.setZoom(9); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text()); return false;});
+                $('#zoom-USA').click(function(){window.map.setZoom(5); window.map.setCenter(new google.maps.LatLng(39.8282, -98.5795)); setZoomHTML($(this).text()); return false;});
+                $('#zoom-world').click(function(){window.map.setZoom(3); setZoomHTML($(this).text()); return false;});
                 
 
                 window.markers = [];
@@ -210,6 +215,7 @@ $(document).ready(function() {
                     google.maps.event.addListener(marker, 'click', function() {
                       if (article.canonicalurl != null && article.canonicalurl[0] != null && article.canonicalurl[0].length > 0)
                         window.open(article.canonicalurl[0],"_blank")
+                      return false;
                     });
                 }
 
