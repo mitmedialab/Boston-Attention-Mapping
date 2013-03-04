@@ -624,6 +624,9 @@ $(document).ready(function() {
                  
                   var polywindow = new google.maps.InfoWindow();
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        
                         if (window.currentInfoWindow){
                           window.currentInfoWindow.close();
                         }
@@ -648,8 +651,8 @@ $(document).ready(function() {
                         polywindow.setPosition(event.latLng);
 
 
-                      //Load words into popup window
-                      var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?startkey=["'+ name +'"]&endkey=["'+name+'",{}]', function() {
+                        //Load words into popup window
+                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?startkey=["'+ name +'"]&endkey=["'+name+'",{}]', function() {
                 
                         })
                        .success(function(json) {
@@ -696,6 +699,7 @@ $(document).ready(function() {
                         else if (window.currentView == "yesterday")
                             view += "_yesterday"
                         var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/globe/_view/'+view+'?key="'+name+'"', function() {
+
                 
                         })
                        .success(function(json) {  
