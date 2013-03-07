@@ -623,9 +623,8 @@ $(document).ready(function() {
                   townPolygon.set("townName",townName);
                  
                   var polywindow = new google.maps.InfoWindow();
-                  google.maps.event.addListener(townPolygon, 'click', function(event) {
-                        return false;
-                        //event.preventDefault();
+                  google.maps.event.addListener(townPolygon, 'mousedown', function(event) {
+                        
                         if (window.currentInfoWindow){
                           window.currentInfoWindow.close();
                         }
