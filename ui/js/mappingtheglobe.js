@@ -216,8 +216,9 @@ $(document).ready(function() {
                            .success(function(json) {
 
                                if (json.rows.length > 0) {
-                                    marker.title = articleSummary.headline[0];
+
                                     var articleSummary = json.rows[0].value;
+                                    marker.title = articleSummary.headline[0];
                                     articleURL = articleSummary.canonicalurl[0];
                                     var contentString = '<div id="content">';
                                      if (articleSummary.headline[0]){
