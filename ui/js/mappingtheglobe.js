@@ -623,7 +623,8 @@ $(document).ready(function() {
                   townPolygon.set("townName",townName);
                  
                   var polywindow = new google.maps.InfoWindow();
-                  google.maps.event.addListener(townPolygon, 'mousedown', function(event) {
+                  /*
+                  google.maps.event.addListener(townPolygon, 'click', function(event) {
                         
                         if (window.currentInfoWindow){
                           window.currentInfoWindow.close();
@@ -735,7 +736,7 @@ $(document).ready(function() {
                         .complete(function() { console.log("Loaded city & neighborhood headlines");return false; }); 
                       return false;
                           
-                  });
+                  });*/
                   return townPolygon;
 
                 }
