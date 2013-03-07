@@ -202,7 +202,7 @@ $(document).ready(function() {
                     var marker = new google.maps.Marker({
                         position:point,
                         map: window.map,
-                        title: article.headline[0],
+                        title: "Boston Globe story",
                         icon:image
                     });
                     window.markers.push(marker);
@@ -216,6 +216,7 @@ $(document).ready(function() {
                            .success(function(json) {
 
                                if (json.rows.length > 0) {
+                                    marker.title = articleSummary.headline[0];
                                     var articleSummary = json.rows[0].value;
                                     articleURL = articleSummary.canonicalurl[0];
                                     var contentString = '<div id="content">';
