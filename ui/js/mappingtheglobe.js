@@ -347,7 +347,8 @@ $(document).ready(function() {
                                               article.headline[0] 
                                           +'</h3>';
                                       }
-                                      contentString += '<div id="bodyContent">'+'<p>'+ metaDataString + article.summary[0] +'</p>';
+                                     contentString += '<div id="bodyContent">'+'<p>'+ metaDataString  +'</p>';
+                                     /* contentString += '<div id="bodyContent">'+'<p>'+ metaDataString + article.summary[0] +'</p>';*/
                                           '</div>'+
                                           '</div>';
         
@@ -625,7 +626,7 @@ $(document).ready(function() {
                   var polywindow = new google.maps.InfoWindow();
 
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
-                        event.preventDefault();
+                        
                         if (window.currentInfoWindow){
                           window.currentInfoWindow.close();
                         }
