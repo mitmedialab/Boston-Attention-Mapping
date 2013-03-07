@@ -700,40 +700,40 @@ $(document).ready(function() {
                         var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/globe/_view/'+view+'?key="'+name+'"', function() {
 
                 
-                        })
-                       .success(function(json) {  
-                              var printed = 0;
-                             for (i=0; i<json.rows.length; i++) {
-                                var headline = json.rows[i].value;
-
-                                if (headline.headline != null)
-                                {
-                                  printed++;
-                                  var text = headline.headline;
-                                  if (headline.canonicalurl)
-                                    text = '<a target="_blank" href="'+headline.canonicalurl+'">' + text + '</a>';
-                                  if (i%2==0)
-                                  {
-                                    
-                                    if (headline.printpagenumber == "1")
-                                      $('#headlines').append("<p class='stripe page1'>" + text+"</p>");
-                                    else
-                                      $('#headlines').append("<p class='stripe'>" + text +"</p>");
-                                  }
-                                  else{
-                                      if (headline.printpagenumber == "1")
-                                        $('#headlines').append("<p class='page1'>" + text +"</p>"); 
-                                      else 
-                                        $('#headlines').append("<p>" + text +"</p>");
-                                  }
-                                }
-                             }
-                             if (json.rows.length ==0 || printed ==0)
-                                $('#headlines').append("<p>No headlines available. Not all stories have a headline.</p>");
-                             $('#headlines').addClass("scrolling");
                           })
-                      .error(function(data) { console.log(data) })
-                      .complete(function() { console.log("Loaded city & neighborhood headlines") }); 
+                         .success(function(json) {  
+                                var printed = 0;
+                               for (i=0; i<json.rows.length; i++) {
+                                  var headline = json.rows[i].value;
+
+                                  if (headline.headline != null)
+                                  {
+                                    printed++;
+                                    var text = headline.headline;
+                                    if (headline.canonicalurl)
+                                      text = '<a target="_blank" href="'+headline.canonicalurl+'">' + text + '</a>';
+                                    if (i%2==0)
+                                    {
+                                      
+                                      if (headline.printpagenumber == "1")
+                                        $('#headlines').append("<p class='stripe page1'>" + text+"</p>");
+                                      else
+                                        $('#headlines').append("<p class='stripe'>" + text +"</p>");
+                                    }
+                                    else{
+                                        if (headline.printpagenumber == "1")
+                                          $('#headlines').append("<p class='page1'>" + text +"</p>"); 
+                                        else 
+                                          $('#headlines').append("<p>" + text +"</p>");
+                                    }
+                                  }
+                               }
+                               if (json.rows.length ==0 || printed ==0)
+                                  $('#headlines').append("<p>No headlines available. Not all stories have a headline.</p>");
+                               $('#headlines').addClass("scrolling");
+                            })
+                        .error(function(data) { console.log(data) })
+                        .complete(function() { console.log("Loaded city & neighborhood headlines");return false; }); 
                       return false;
                           
                   });
