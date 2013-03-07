@@ -624,8 +624,8 @@ $(document).ready(function() {
                  
                   var polywindow = new google.maps.InfoWindow();
                   google.maps.event.addListener(townPolygon, 'click', function(event) {
-                        
-                        event.preventDefault();
+                        return false;
+                        //event.preventDefault();
                         if (window.currentInfoWindow){
                           window.currentInfoWindow.close();
                         }
