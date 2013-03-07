@@ -6,14 +6,20 @@ def getAllGlobeViews():
         "language": "javascript",
         "views": {
             "all_articles": {
-                "map": "function(doc) {emit(doc['data']['printpagenumber'][0],{neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],printbook:doc['data']['printbook'],summary:doc['data']['summary'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate'],canonicalurl:doc['data']['canonicalurl']});}",
+                "map": "function(doc) { if(doc['data']['state'].length > 0 && doc['data']['state'] =='MA'){emit(doc['data']['printpagenumber'][0],{neighborhood:doc['data']['neighborhood'],printbook:doc['data']['printbook'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate']});}}",
             },
             "all_articles_page_1": {
-                "map": "function(doc) { if(doc['data']['printpagenumber'] == 1){ emit(doc['data']['printpublicationdate'][0], {neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],printbook:doc['data']['printbook'],summary:doc['data']['summary'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate'],canonicalurl:doc['data']['canonicalurl']})};}",
+                "map": "function(doc) { if(doc['data']['printpagenumber'] == 1 && doc['data']['state'].length > 0 && doc['data']['state'] =='MA'){ emit(doc['data']['printpublicationdate'][0], {neighborhood:doc['data']['neighborhood'],printbook:doc['data']['printbook'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate']})};}}",
             },
             "all_articles_by_date": {
-                "map": "function(doc) { emit(doc['data']['printpublicationdate'][0],{neighborhood:doc['data']['neighborhood'],headline:doc['data']['headline'],printbook:doc['data']['printbook'],summary:doc['data']['summary'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate'],canonicalurl:doc['data']['canonicalurl']});}",
+                "map": "function(doc) { if(doc['data']['state'].length > 0 && doc['data']['state'] =='MA'){emit(doc['data']['printpublicationdate'][0],{neighborhood:doc['data']['neighborhood'],printbook:doc['data']['printbook'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate']});}}",
             },
+            "article_summary": {
+                "map": "function(doc) { emit( doc.id, {canonicalurl:doc['data']['canonicalurl'], summary:doc['data']['summary'], headline:doc['data']['headline']})}",
+            },
+            
+
+
             "city_count": {
                 "map": "function(doc) {if(doc['data']['city'] != null && doc['data']['city'].length > 0 && doc['data']['state'].length > 0 && doc['data']['state'] =='MA'){  emit([doc['data']['city'][0], doc['data']['neighborhood']] ,1);}}",
                 "reduce": "function(keys, values) { return sum(values); }",

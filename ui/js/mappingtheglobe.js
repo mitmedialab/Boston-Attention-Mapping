@@ -196,8 +196,8 @@ $(document).ready(function() {
                   window.markerCluster = null;
                 }
 
-                function addMarker(article,infowindow) {
-
+                function addMarker(article,metaDataString) {
+                    var articleURL = "";
                     var point = new google.maps.LatLng(article.latitude[0], article.longitude[0]);
                     var marker = new google.maps.Marker({
                         position:point,
@@ -207,16 +207,51 @@ $(document).ready(function() {
                     });
                     window.markers.push(marker);
                     google.maps.event.addListener(marker, 'mouseover', function() {
-                      infowindow.open(window.map,marker);
+                          
+                          var url = window.couchURL + 'boston-globe-articles/_design/globe/_view/article_summary?key="'+ article.id + '"';
+                          console.log(url);
+                          var jqxhr =  $.getJSON(url, function() {
+                  
+                          })
+                           .success(function(json) {
+
+                               if (json.rows.length > 0) {
+                                    var articleSummary = json.rows[0].value;
+                                    articleURL = articleSummary.canonicalurl[0];
+                                    var contentString = '<div id="content">';
+                                     if (articleSummary.headline[0]){
+                                          contentString+='<h3 id="firstHeading" class="firstHeading">'+
+                                              articleSummary.headline[0] 
+                                          +'</h3>';
+                                      }
+                                     
+                                    contentString += '<div id="bodyContent">'+'<p>'+ metaDataString + articleSummary.summary[0] +'</p></div></div>';
+                                          
+                                    window.currentMarkerInfoWindow = new google.maps.InfoWindow({
+                                        content: $(contentString).html()
+                                    });
+                                    window.currentMarkerInfoWindow.open(window.map,marker);
+                                    
+                                    google.maps.event.addListener(marker, 'click', function() {
+                                        if (articleURL)
+                                          window.open(articleURL,"_blank")
+                                        return false;
+                                    });
+                                }
+                                
+                                
+                            })
+                        .error(function(data) { console.log(data) })
+                        .complete(function() { 
+                          
+                        }); 
+ 
                     });
-                     google.maps.event.addListener(marker, 'mouseout', function() {
-                      infowindow.close();
+                    
+                    google.maps.event.addListener(marker, 'mouseout', function() {
+                      window.currentMarkerInfoWindow.close();
                     });
-                    google.maps.event.addListener(marker, 'click', function() {
-                      if (article.canonicalurl != null && article.canonicalurl[0] != null && article.canonicalurl[0].length > 0)
-                        window.open(article.canonicalurl[0],"_blank")
-                      return false;
-                    });
+                    
                 }
 
                 //setFilter clears out markers on map and hides polygons because data has changed
@@ -341,21 +376,10 @@ $(document).ready(function() {
                                         metaDataString+= 'Page '+article.printpagenumber[0] +'. ';
                                       }
                                       metaDataString +="</b>";
-                                      var contentString = '<div id="content">';
-                                     if (article.headline[0]){
-                                          contentString+='<h3 id="firstHeading" class="firstHeading">'+
-                                              article.headline[0] 
-                                          +'</h3>';
-                                      }
-                                     contentString += '<div id="bodyContent">'+'<p>'+ metaDataString  +'</p>';
-                                     /* contentString += '<div id="bodyContent">'+'<p>'+ metaDataString + article.summary[0] +'</p>';*/
-                                          '</div>'+
-                                          '</div>';
-        
-                                      var infowindow = new google.maps.InfoWindow({
-                                          content: $(contentString).html()
-                                      });
-                                      addMarker(article,infowindow); 
+                                      
+                                      article.id = json.rows[i].id;
+                                      
+                                      addMarker(article,metaDataString); 
                                       
                                   
                               }
