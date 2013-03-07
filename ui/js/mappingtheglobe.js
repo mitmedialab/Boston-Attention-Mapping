@@ -284,6 +284,9 @@ $(document).ready(function() {
                         case "all-stories":
                           couchView = "all_articles";
                           break;
+                        case "all-stories-world":
+                          couchView = "all_articles_world";
+                          break;
                         case "page1-stories":
                           couchView = "all_articles_page_1";
                           break;
@@ -301,6 +304,9 @@ $(document).ready(function() {
                       switch(window.currentFilter)
                       {
                         case "all-stories":
+                          couchView = "city_count?";
+                          break;
+                        case "all-stories-world":
                           couchView = "city_count?";
                           break;
                         case "page1-stories":
@@ -539,6 +545,8 @@ $(document).ready(function() {
                 function showResultsCount(){
                   var resultsText = "aa";
                   if (window.currentFilter == "all-stories")
+                    resultsText = " stories in MA retrieved from November 2011 to the present.";
+                  else if(window.currentFilter == "all-stories-world")
                     resultsText = " total stories retrieved from November 2011 to the present.";
                   else if(window.currentFilter == "page1-stories")
                     resultsText = " front of section stories retrieved from November 2011 to the present.";

@@ -8,6 +8,9 @@ def getAllGlobeViews():
             "all_articles": {
                 "map": "function(doc) { if(doc['data']['state'].length > 0 && doc['data']['state'] =='MA'){emit(doc['data']['printpagenumber'][0],{neighborhood:doc['data']['neighborhood'],printbook:doc['data']['printbook'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate']});}}",
             },
+            "all_articles_world": {
+                "map": "function(doc) { emit(doc['data']['printpagenumber'][0],{neighborhood:doc['data']['neighborhood'],printbook:doc['data']['printbook'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate']});}",
+            },
             "all_articles_page_1": {
                 "map": "function(doc) { if(doc['data']['printpagenumber'] == 1 && doc['data']['state'].length > 0 && doc['data']['state'] =='MA'){ emit(doc['data']['printpublicationdate'][0], {neighborhood:doc['data']['neighborhood'],printbook:doc['data']['printbook'],city:doc['data']['city'],latitude:doc['data']['latitude'],longitude:doc['data']['longitude'],printsection:doc['data']['printsection'],printpagenumber:doc['data']['printpagenumber'],wordcount:doc['data']['wordcount'],printpublicationdate:doc['data']['printpublicationdate']})};}}",
             },
