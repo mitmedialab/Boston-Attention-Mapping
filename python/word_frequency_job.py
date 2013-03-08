@@ -67,7 +67,7 @@ class WordFreqencyJob:
     stopwords = nltk.corpus.stopwords.words('english')
     contains_letter = re.compile('[a-z]')
     for city in self.fetch_article_keys():
-      articles = self.proces_city_articles([ nltk.Text([self.lemmatizer.lemmatize(token.lower()) 
+      articles = self.proces_city_articles([ nltk.Text([token.lower() 
                                                       for token in self.tokenizer.tokenize(a.value[0]) 
                                                       if(len(token) > 1 and 
                                                          token.lower() not in stopwords and
