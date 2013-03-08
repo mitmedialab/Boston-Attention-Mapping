@@ -9,20 +9,20 @@ $(document).ready(function() {
 
                 window.mapCenter = new google.maps.LatLng(42.358056, -71.063611);
 
-                $("#enter-button").click(function(){
+                $("#enter-button").click(function(e){
                     $("#loading-screen").fadeOut('slow');
                     $("#h1-title").fadeIn('slow');
-                    return false;
+                    e.preventDefault();
                 });
-                $("#about-button").click(function(){
+                $("#about-button").click(function(e){
                     $("#loading-screen").fadeIn('slow');
-                    return false;
+                    e.preventDefault();
                     
                 });
                 $("h1").mouseover(function(){$('#about').show();});
                 $("h1").mouseout(function(){$('#about').hide();});
                 
-                $('#currentFilter>li>a').click(function(){
+                $('#currentFilter>li>a').click(function(e){
                     if ($(this).attr("id") == null){
                       setFilter($(this).text());
                       setFilterHTML($(this).text());
@@ -34,22 +34,22 @@ $(document).ready(function() {
                     }
                     showLoading();
                     redrawMap();
-                    return false;
+                    e.preventDefault();
                 });
-                $('#currentView>li>a').click(function(){
+                $('#currentView>li>a').click(function(e){
                     
                     setView($(this).attr("id"));
                     setViewHTML($(this).attr("id"));
                     
                     showLoading();
                     redrawMap();
-                    return false;
+                    e.preventDefault();
                 });
                 
-                $('#zoom-GB').click(function(){window.map.setZoom(11); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text()); return false;} );
-                $('#zoom-MA').click(function(){window.map.setZoom(9); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text()); return false;});
-                $('#zoom-USA').click(function(){window.map.setZoom(5); window.map.setCenter(new google.maps.LatLng(39.8282, -98.5795)); setZoomHTML($(this).text()); return false;});
-                $('#zoom-world').click(function(){window.map.setZoom(3); setZoomHTML($(this).text()); return false;});
+                $('#zoom-GB').click(function(e){window.map.setZoom(11); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text()); e.preventDefault();} );
+                $('#zoom-MA').click(function(e){window.map.setZoom(9); window.map.setCenter(window.mapCenter); setZoomHTML($(this).text()); e.preventDefault();});
+                $('#zoom-USA').click(function(e){window.map.setZoom(5); window.map.setCenter(new google.maps.LatLng(39.8282, -98.5795)); setZoomHTML($(this).text()); e.preventDefault();});
+                $('#zoom-world').click(function(e){window.map.setZoom(3); setZoomHTML($(this).text()); e.preventDefault();});
                 
 
                 window.markers = [];
