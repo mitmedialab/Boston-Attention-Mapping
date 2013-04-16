@@ -107,6 +107,22 @@ $(document).ready(function() {
                 redrawMap();
                 
                 var image = 'ui/images/news_icon_transparent.png';
+                var image_sports = 'ui/images/icon_sports.png';
+                var image_arts = 'ui/images/icon_arts.png';
+                var image_business = 'ui/images/icon_business.png';
+                var image_editorial = 'ui/images/icon_oped.png';
+                var image_metro = 'ui/images/icon_metro.png';
+                var image_livingarts = 'ui/images/icon_livingarts.png';
+                var image_books = 'ui/images/icon_books.png';
+                var image_movies = 'ui/images/icon_movies.png';
+                var image_obits = 'ui/images/icon_obits.png';
+                var image_food = 'ui/images/icon_food.png';
+                var image_letters = 'ui/images/icon_letters.png';
+                var image_schools = 'ui/images/icon_schools.png';
+                var image_travel = 'ui/images/icon_travel.png';
+                var image_ideas = 'ui/images/icon_ideas.png';
+                var image_realestate = 'ui/images/icon_realestate.png';
+
                 function setZoomHTML(text){
                   $('#zoom-button').html("<strong>Zoom:</strong> " + text + ' <span class="caret"></span>' );
                 }
@@ -199,11 +215,68 @@ $(document).ready(function() {
                 function addMarker(article,metaDataString) {
                     var articleURL = "";
                     var point = new google.maps.LatLng(article.latitude[0], article.longitude[0]);
+
+                    var icon = image;
+                    switch(article.printsection[0]){
+                      case "Sports":
+                        icon = image_sports;
+                        break;
+                      case "Metro":
+                        icon = image_metro;
+                        break;
+                      case "Arts":
+                        icon = image_arts;
+                        break;
+                      case "LivingArts":
+                        icon = image_livingarts;
+                        break;
+                      case "Business":
+                        icon = image_business;
+                        break;
+                      case "Editorial":
+                        icon = image_editorial;
+                        break;
+                      case "EditorialOpinion":
+                        icon = image_editorial;
+                        break;
+                      case "Obits":
+                        icon = image_obits;
+                        break;
+                      case "Books":
+                        icon = image_books;
+                        break;
+                      case "Movies":
+                        icon = image_movies;
+                        break;
+                      case "Food":
+                        icon = image_food;
+                        break;
+                      case "Travel":
+                        icon = image_travel;
+                        break;
+                      case "Schools":
+                        icon = image_schools;
+                        break;
+                      case "College":
+                        icon = image_schools;
+                        break;
+                      case "Letters":
+                        icon = image_letters;
+                        break;
+                      case "RealEstate":
+                        icon = image_realestate;
+                        break;
+                      case "Ideas":
+                        icon = image_ideas;
+                        break;
+
+                        
+                    }
                     var marker = new google.maps.Marker({
                         position:point,
                         map: window.map,
                         title: "Boston Globe story",
-                        icon:image
+                        icon:icon
                     });
                     window.markers.push(marker);
                     google.maps.event.addListener(marker, 'mouseover', function() {
@@ -401,7 +474,7 @@ $(document).ready(function() {
                       })
                   .error(function(data) { 
                     $('.results').html('<h4 style="text-align: center">Sorry! Error loading data.</h4>');
-                    console.log(data) 
+                    console.log("Error: " + data) 
                   })
                   .complete(function() { 
                     showMarkers();
@@ -687,7 +760,7 @@ $(document).ready(function() {
 
                         //Load words into popup window
                         var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?startkey=["'+ name +'"]&endkey=["'+name+'",{}]', function() {
-                
+                            console.log(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?startkey=["'+ name +'"]&endkey=["'+name+'",{}]')
                         })
                        .success(function(json) {
                               if (json.rows.length ==0){
