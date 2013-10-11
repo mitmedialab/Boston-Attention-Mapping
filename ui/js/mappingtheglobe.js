@@ -772,7 +772,7 @@ $(document).ready(function() {
                                 for (i=0; i<words.length; i++) {
 
                                   var word = words[i][0];
-                                  if (word == "said")
+                                  if (word == "said" || word =="cq")
                                       continue;
                                   if (word.toLowerCase() != name.toLowerCase()){
                                     
