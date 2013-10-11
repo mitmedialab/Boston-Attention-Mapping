@@ -626,7 +626,7 @@ $(document).ready(function() {
                   else if(window.currentFilter == "yesterday-stories")
                     resultsText = " stories from yesterday.";
                   else
-                    resultsText = " " + window.currentFilter + " stories retrieved from November 2011 to the present.";
+                    resultsText = " " + addCommas(window.currentFilter) + " stories retrieved from November 2011 to the present.";
 
                   $('.results').html('<h4>'+addCommas(window.currentResultCount) + resultsText + "</h4>");
                 }
