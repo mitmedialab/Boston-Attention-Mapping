@@ -23,7 +23,7 @@ def fetchLatestArticlesFromAPI(startIdx, lastArticleDate):
 
 	allArticles = []
 	
-	req = urllib2.Request(	"http://50.17.92.83/s?key=catherine&bq=printpublicationdate:" +
+	req = urllib2.Request(	"http://http://50.19.47.69//s?key=catherine&bq=printpublicationdate:" +
 							lastArticleDate +".."+todayStr+"&return-fields="+
 							api_fields+
 							"&size="+str(articles_at_a_time)+"&"+

@@ -759,8 +759,8 @@ $(document).ready(function() {
 
 
                         //Load words into popup window
-                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?startkey=["'+ name +'"]&endkey=["'+name+'",{}]', function() {
-                            console.log(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?startkey=["'+ name +'"]&endkey=["'+name+'",{}]')
+                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?limit=1&startkey=["'+ name +'"]&endkey=["'+name+'",{}]', function() {
+                            console.log(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?limit=1&startkey=["'+ name +'"]&endkey=["'+name+'",{}]')
                         })
                        .success(function(json) {
                               if (json.rows.length ==0){

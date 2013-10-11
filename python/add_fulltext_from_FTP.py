@@ -27,6 +27,8 @@ matches = 0
 missingUUID = 0
 noMatches = 0
 for infile in listing:
+    if "DS_Store" in infile:
+        continue
     docs +=1
     try:
         xml = etree.parse(docDir + infile)
@@ -49,7 +51,7 @@ for infile in listing:
             else:
                 newFile.write(uuid + "\n")
                 print "wrote " + uuid
-            '''try:
+            try:
                 doc = conn.documentByUUID(uuid)
                 if (doc != None):
                     matches += 1
@@ -57,7 +59,7 @@ for infile in listing:
                     noMatches += 1
             except couchdb.http.ResourceNotFound:
                 noMatches += 1
-            '''
+            
 newFile.close()
 print str(docs) + " total docs"
 print str(errors) + " Parse Errors"
