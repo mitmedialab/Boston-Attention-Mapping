@@ -772,6 +772,8 @@ $(document).ready(function() {
                                 for (i=0; i<words.length; i++) {
 
                                   var word = words[i][0];
+                                  if (word == "said")
+                                      continue;
                                   if (word.toLowerCase() != name.toLowerCase()){
                                     
                                     var fontSize = words[i][1] + 1;
