@@ -26,6 +26,7 @@ class WordFreqencyJob:
     self.lemmatizer = nltk.WordNetLemmatizer()
     self.process_articles()
     self.calculate_results()
+    self.db.view("nltk/place_frequency", limit=1)
 
   # fetch cities which have more than one article
   def fetch_article_keys(self):
