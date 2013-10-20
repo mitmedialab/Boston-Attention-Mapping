@@ -19,7 +19,7 @@ from datetime import datetime
 from nltk.tokenize import RegexpTokenizer
 from nltk import bigrams, trigrams
 import timeit
-import couch_connect
+#import couch_connect
 
 
 class WordFreqencyJob:
@@ -27,8 +27,10 @@ class WordFreqencyJob:
     def __init__(self):
         #self.conn = couchdb.Server('')
         #self.db = self.conn['']
-        conn = couch_connect.CouchConnect()
-        self.db = conn.db
+        #conn = couch_connect.CouchConnect()
+        #self.db = conn.db
+        self.conn = couchdb.Server('http://66.228.45.37:5984')
+        self.db = self.conn['boston-globe-articles']
         self.articles = []
         self.city_word_incidence = {}
         self.cities = {}
