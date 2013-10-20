@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+################################################################################
+# USES NLTK TO ADD WORD FREQUENCY DATA ABOUT ARTICLES BY CITY OR NEIGHBORHOOD TO COUCHDB
+################################################################################
+
 import couchdb
 import nltk
 from nltk import Text
@@ -15,6 +19,7 @@ from datetime import datetime
 from nltk.tokenize import RegexpTokenizer
 from nltk import bigrams, trigrams
 import timeit
+import couch_connect
 
 
 class WordFreqencyJob:
