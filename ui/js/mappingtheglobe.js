@@ -759,7 +759,7 @@ $(document).ready(function() {
 
 
                         //Load words into popup window
-                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?limit=1&descending=true&endkey=["'+ name +'"]&startkey=["'+name+'",{}]', function() {
+                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?limit=1&skip=154&descending=true&endkey=["'+ name +'"]&startkey=["'+name+'",{}]', function() {
                             console.log(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?limit=1&descending=true&endkey=["'+ name +'"]&startkey=["'+name+'",{}]')
                         })
                        .success(function(json) {
