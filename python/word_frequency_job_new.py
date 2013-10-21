@@ -29,7 +29,7 @@ class WordFreqencyJob:
         #self.db = self.conn['']
         #conn = couch_connect.CouchConnect()
         #self.db = conn.db
-        self.conn = couchdb.Server('http://66.228.45.37:5984')
+        self.conn = couchdb.Server('http://127.0.0.1:5984')
         self.db = self.conn['boston-globe-articles']
         self.articles = []
         self.city_word_incidence = {}
@@ -98,7 +98,7 @@ class WordFreqencyJob:
         for singlearray in arrayterms:
             for oneterm in xrange(len(singlearray)):
                 strTermsString = strTermsString + " " + re.sub('cq$', '', re.sub('[-,.?!\t\n\_\%\$ ]+', '', singlearray[oneterm]))
-        #print strTermsString
+        print strTermsString
         return strTermsString
 
     #to track the history of the run
