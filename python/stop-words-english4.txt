@@ -1756,3 +1756,15 @@ $
 ~
 |
 -
+including
+early
+sunday
+monday
+tuesday
+wednesday
+thursday
+friday
+saturday
+based
+held
+hold
