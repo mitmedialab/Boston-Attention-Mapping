@@ -4,3 +4,7 @@
 python/globe.config
 
 *.pyc
+
+python/globe.config.remote
+
+python/globe.config.remote
