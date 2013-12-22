@@ -799,15 +799,20 @@ $(document).ready(function() {
                       .error(function(data) { console.log(data) })
                       .complete(function() { console.log("Loaded place frequencies") }); 
 
-                        var view = "headline_by_city";
+                        var view = "";
+                        var key = 'key="'+name+'"';
                         if (isNeighborhood)
                             view = "headline_by_neighborhood";
                         
                         if (window.currentView =="page1")
-                            view += "_page_1";
+                            view = "headline_by_city_page_1";
                         else if (window.currentView == "yesterday")
-                            view += "_yesterday"
-                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/globe/_view/'+view+'?key="'+name+'"', function() {
+                            view = "headline_by_city_yesterday"
+                        else{
+                            view = "headline_by_city_and_date";
+                            key = 'limit=100&descending=true&endkey=["'+name+'"]&startkey=["'+name+'",{}]'
+                          }
+                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/globe/_view/'+view+'?' + key, function() {
 
                 
                           })
