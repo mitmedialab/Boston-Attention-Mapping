@@ -1,0 +1,3 @@
+{"total_rows":1,"offset":0,"rows":[
+{"id":"2c003d57b20d4cdcab9c12595e11bd58","key":["20140911"],"value":{"_id":"2c003d57b20d4cdcab9c12595e11bd58","_rev":"648-086131e0e9abfcfab0b19da89138b84a","filtered_articles_no_geodata":16654,"last_article_id":"6165405f4aefc31ead0fd71b91a1d55d","number_of_updated_MA_city_names":5219,"total_articles_added":73717,"last_article_date":["20140911"],"type":"metadata","filtered_articles_bad_geodata":46883}}
+]}

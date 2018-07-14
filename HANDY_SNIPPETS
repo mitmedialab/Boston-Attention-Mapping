@@ -1,0 +1,30 @@
+pycurl config stuff
+
+install with easy install!! Otherwise ssl crap
+
+
+7/13/18
+- Fix markerclustererbug
+- write a python script to iterate through city and neighborhood names, download and save each file as JSON to /data/json
+Place words
+
+WORKS
+http://globe.mediameter.org:5984/boston-globe-articles/_design/globe/_view/headline_by_neighborhood_and_date?limit=100&descending=true&endkey=[%22Dorchester%22]&startkey=[%22Dorchester%22,{}]
+
+DOESNT
+http://globe.mediameter.org:5984/boston-globe-articles/_design/globe/_view/headline_by_neighborhood_and_date?limit=100&descending=true&endkey=[%22Boston%22,%20%22Allston%22]&startkey=[%22Boston%22,%20%22Allston%22]
+
+7/12/18
+
+Plan: 
+- archive the CouchDB database √
+- Export and download all JSON files that the inex.html page makes into flat files (may need to write python script for this)
+- change the URL in index.html and mappingtheglobe.js
+- upload migrated stuff to kanarinka.com/mappingtheglobe
+- tell rahul for deleting
+
+
+URL for download JSON
+http://globe.mediameter.org:5984/boston-globe-articles/_design/globe/_view/all_articles_world
+
+

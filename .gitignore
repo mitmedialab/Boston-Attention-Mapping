@@ -8,3 +8,7 @@ python/globe.config
 python/globe.config.remote
 
 python/globe.config.remote
+
+python/mappingtheglobevenv/*
+
+thewholedatabase.json

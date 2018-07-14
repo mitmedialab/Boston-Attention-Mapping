@@ -9,7 +9,7 @@
             
         <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
         
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?jey=AIzaSyBXG5WcJWdi4vGLGSso0zS2qtCep7NoutE&sensor=false"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXG5WcJWdi4vGLGSso0zS2qtCep7NoutE&sensor=false"></script>
         
          <script type="text/javascript" charset="utf-8" src="ui/js/markerclusterer/markerclusterer.js"></script>
          
@@ -134,19 +134,17 @@
               <li><a id="all-stories">All Stories in MA</a></li>
               <li><a id="all-stories-world">All Stories in World</a></li>
               <li><a id="page1-stories">Front of section stories</a></li>
-              <li><a id="yesterday-stories">Yesterday's Stories</a></li>
-              <li class="divider"></li>
-              <li><a>Sports <i class="icon-bullhorn icon-white"></i></a></li><li><a>Metro <i class="icon-flag icon-white"></i></a></li><li><a>Regional</a></li><li><a>Business <i class="icon-briefcase icon-white"></i></a></li><li><a>LivingArts <i class="icon-user icon-white"></i></a></li><li><a>Arts <i class="icon-music icon-white"></i></a></li><li><a>EditorialOpinion <i class="icon-thumbs-up icon-white"></i></a></li><li><a>South</a></li><li><a>West</a></li><li><a>North</a></li><li><a>News</a></li><li><a>Ideas <i class="icon-star icon-white"></i></a></li><li><a>Obits <i class="icon-heart icon-white"></i></a></li><li><a>Food <i class="icon-glass icon-white"></i></a></li><li><a>Books <i class="icon-book icon-white"></i></a></li><li><a>Travel <i class="icon-plane icon-white"></i></a></li><li><a>Editorial <i class="icon-thumbs-up icon-white"></i></a></li><li><a>Letters <i class="icon-envelope icon-white"></i></a></li><li><a>National</a></li><li><a>RealEstate <i class="icon-home icon-white"></i></a></li><li><a>College <i class="icon-pencil icon-white"></i></a></li><li><a>School <i class="icon-pencil icon-white"></i></a></li><li><a>Foreign</a></li><li><a>Movies <i class="icon-film icon-white"></i></a></li><li><a>City</a></li><li><a>Diversity</a></li><li><a>HealthScience</a></li>
+
             </ul>
           </div>
           <div class="btn-group" style="margin-top:20px;margin-left:0">
             <a id="view-button" class="btn btn-danger btn-large dropdown-toggle" data-toggle="dropdown" href="#">
-              <strong>View By:</strong> Distribution
+              <strong>View By:</strong> Per Capita
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" id="currentView">
-              <li><a id="distribution">Individual distribution</a></li>
               <li><a id="per-capita">Per capita with Place Words</a></li>
+              <li><a id="distribution">Individual distribution</a></li>
             </ul>
           </div>
           <div class="btn-group" style="margin-top:20px;margin-left:0">
@@ -167,7 +165,7 @@
         <div id="loading-screen">
             <div id="loading-screen-description">
                 <h1>Mapping the Globe</h1>
-                <h4 style="text-align:justify">Mapping the Globe is a set of interactive visualizations and maps that help us understand where the Boston Globe directs its attention. Media attention matters – in quantity and quality. It helps determine what we talk about as a public and how we talk about it. Mapping the Globe tracks where the paper's attention goes and what that attention looks like across different regional geographies in combination with diverse data sets like population, crime and income. <br/><br/>By <a href="mailto:dignazio@mit.edu">Catherine D'Ignazio</a>, <a href="mailto:a_hashmi@mit.edu">Ali Hashmi</a> and <a href="mailto:ethanz@media.mit.edu">Ethan Zuckerman</a> at <a href="http://civic.mit.edu">the Center for Civic Media at MIT</a>.</h4>
+                <h4 style="text-align:justify">Mapping the Globe is a set of interactive visualizations and maps that help us understand where the Boston Globe directs its attention. Media attention matters – in quantity and quality. It helps determine what we talk about as a public and how we talk about it. Mapping the Globe tracks where the paper's attention goes and what that attention looks like across different regional geographies in combination with diverse data sets like population, crime and income. <br/><br/>By <a href="mailto:dignazio@mit.edu">Catherine D'Ignazio</a> and <a href="mailto:ethanz@media.mit.edu">Ethan Zuckerman</a> with <a href="mailto:a_hashmi@mit.edu">Ali Hashmi</a> at <a href="http://civic.mit.edu">the Center for Civic Media at MIT</a>.</h4>
                 <button type="button" id="enter-button" class="btn btn-danger btn-large active">
                   Enter
                 </button>
@@ -180,7 +178,7 @@
                         
                     </tr>
                     <tr>
-                        <td>Story time period</td><td> Nov 2011 - present</td>                        
+                        <td>Story time period</td><td> Nov 2011 - Jan 2014</td>                        
                     </tr>
                      <tr>
                         <td>Total stories from this time period</td><td id="total_articles_available"></td>                        
@@ -197,7 +195,7 @@
                  
                   </tbody>
                 </table>
-                <p><img src="http://civic.mit.edu/sites/civic.mit.edu/themes/c4cmtheme/logo.png" style="margin-right: 50px;
+                <p><img src="ui/images/civiclogo.png" style="margin-right: 50px;
 height: 100px;"><img src="http://c.o0bg.com/rw/SysConfig/WebPortal/BostonGlobe/Framework/images/logo-
 bg.png" style="padding-top: 58px;height: 35px;"></p>
                 

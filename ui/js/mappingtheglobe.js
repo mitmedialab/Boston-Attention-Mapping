@@ -1,10 +1,8 @@
 $(document).ready(function() {
               
-               if (location.href.indexOf("file:///") >= 0){
-                  window.couchURL = 'http://127.0.0.1:5984/';
-                } else{
-                  window.couchURL = 'couchdb/';
-                }
+               
+                window.jsonLocation = 'data/json/'
+                
                 showMetadata();
 
                 window.mapCenter = new google.maps.LatLng(42.358056, -71.063611);
@@ -101,11 +99,13 @@ $(document).ready(function() {
                 drawMap();
                 loadPlaceMetadata();
                 setFilter("all-stories");
-                setView("distribution");
+                setView("per-capita");
+                
                 loadTownPolygons();
                 loadNeighborhoodPolygons();
-                redrawMap();
+
                 
+
                 var image = 'ui/images/news_icon_transparent.png';
                 var image_sports = 'ui/images/icon_sports.png';
                 var image_arts = 'ui/images/icon_arts.png';
@@ -122,6 +122,9 @@ $(document).ready(function() {
                 var image_travel = 'ui/images/icon_travel.png';
                 var image_ideas = 'ui/images/icon_ideas.png';
                 var image_realestate = 'ui/images/icon_realestate.png';
+
+                
+               
 
                 function setZoomHTML(text){
                   $('#zoom-button').html("<strong>Zoom:</strong> " + text + ' <span class="caret"></span>' );
@@ -279,53 +282,7 @@ $(document).ready(function() {
                         icon:icon
                     });
                     window.markers.push(marker);
-                    google.maps.event.addListener(marker, 'mouseover', function() {
-                          
-                          var url = window.couchURL + 'boston-globe-articles/_design/globe/_view/article_summary?key="'+ article.id + '"';
-                          console.log(url);
-                          var jqxhr =  $.getJSON(url, function() {
-                  
-                          })
-                           .success(function(json) {
-
-                               if (json.rows.length > 0) {
-
-                                    var articleSummary = json.rows[0].value;
-                                    marker.title = articleSummary.headline[0];
-                                    articleURL = articleSummary.canonicalurl[0];
-                                    var contentString = '<div id="content">';
-                                     if (articleSummary.headline[0]){
-                                          contentString+='<h3 id="firstHeading" class="firstHeading">'+
-                                              articleSummary.headline[0] 
-                                          +'</h3>';
-                                      }
-                                     
-                                    contentString += '<div id="bodyContent">'+'<p>'+ metaDataString + articleSummary.summary[0] +'</p></div></div>';
-                                          
-                                    window.currentMarkerInfoWindow = new google.maps.InfoWindow({
-                                        content: $(contentString).html()
-                                    });
-                                    window.currentMarkerInfoWindow.open(window.map,marker);
-                                    
-                                    google.maps.event.addListener(marker, 'click', function() {
-                                        if (articleURL)
-                                          window.open(articleURL,"_blank")
-                                        return false;
-                                    });
-                                }
-                                
-                                
-                            })
-                        .error(function(data) { console.log(data) })
-                        .complete(function() { 
-                          
-                        }); 
- 
-                    });
                     
-                    google.maps.event.addListener(marker, 'mouseout', function() {
-                      window.currentMarkerInfoWindow.close();
-                    });
                     
                 }
 
@@ -355,52 +312,41 @@ $(document).ready(function() {
                       switch(window.currentFilter)
                       {
                         case "all-stories":
-                          couchView = "all_articles";
+                          jsonFilename = "all_articles.json";
                           break;
                         case "all-stories-world":
-                          couchView = "all_articles_world";
+                          jsonFilename = "all_articles_world.json";
                           break;
                         case "page1-stories":
-                          couchView = "all_articles_page_1";
-                          break;
-                        case "yesterday-stories":
-                          var d = new Date();
-                          d.setDate(d.getDate() - 1);
-                          couchView = 'all_articles_by_date?key="' + d.getFullYear() + ((d.getMonth() + 1 < 10) ? "0" : "") + (d.getMonth() + 1)  + ((d.getDate() + 1 < 10) ? "0" : "") + d.getDate() + '"';
+                          jsonFilename = "all_articles_page_1.json";
                           break;
                         default:
-                          couchView = 'all_articles_by_printsection?key="'+window.currentFilter +'"';
+                          jsonFilename = 'all_articles.json';
                       }
-                      showArticleDistribution(couchView);
+                      showArticleDistribution(jsonFilename);
                   }
                   else if (window.currentView == "per-capita"){
                       switch(window.currentFilter)
                       {
                         case "all-stories":
-                          couchView = "city_count?";
+                          jsonFilename = "city_count.json";
                           break;
                         case "all-stories-world":
-                          couchView = "city_count?";
+                          jsonFilename = "city_count.json";
                           break;
                         case "page1-stories":
-                          couchView = "city_count_page_1?";
-                          break;
-                        case "yesterday-stories":
-                          var d2 = new Date();
-                          d2.setDate(d2.getDate() - 1);
-                          var yesterday = d2.getFullYear() + ((d2.getMonth() + 1 < 10) ? "0" : "") + (d2.getMonth() + 1)  + ((d2.getDate() + 1 < 10) ? "0" : "") + d2.getDate();
-                          couchView = 'city_count_yesterday?startkey=["'+yesterday+'","A","A"]&endkey=["'+yesterday+'","Z","Z"]';
+                          jsonFilename = "city_count_page_1.json";
                           break;
                         default:
-                          couchView = 'city_count_printsection?startkey=["'+window.currentFilter+'","A","A"]&endkey=["'+window.currentFilter+'","Z","Z"]';
+                          jsonFilename = 'city_count.json';
                           
                       }
-                      showArticlesPerCapita(couchView);
+                      showArticlesPerCapita(jsonFilename);
 
                   }
                 }
                 function showMetadata(){
-                  var url = window.couchURL + 'boston-globe-articles/_design/globe/_view/metadata';
+                  var url = window.jsonLocation + 'metadata.json';
                   console.log(url);
                   var jqxhr =  $.getJSON(url, function() {
                 
@@ -432,8 +378,8 @@ $(document).ready(function() {
                   }); 
                   
                 }
-                function showArticleDistribution(couchView){
-                  var url = window.couchURL + 'boston-globe-articles/_design/globe/_view/' + couchView;
+                function showArticleDistribution(jsonFilename){
+                  var url = window.jsonLocation + jsonFilename;
                   console.log(url);
                   var jqxhr =  $.getJSON(url, function() {
                 
@@ -481,8 +427,9 @@ $(document).ready(function() {
                   }); 
                   
                 }
-                function showArticlesPerCapita(couchView){
-                    var url = window.couchURL + 'boston-globe-articles/_design/globe/_view/'+couchView+'&group=true';
+                function showArticlesPerCapita(jsonFilename){
+                    var url = window.jsonLocation + jsonFilename;
+                    
                     console.log(url)
                     var jqxhr =  $.getJSON(url, function() {
                   
@@ -510,7 +457,8 @@ $(document).ready(function() {
                                     
                                     if (town != null && town.length > 0 )
                                     {
-                                      
+                                      console.log("town polygons")
+                                      console.log(window.townPolygons) 
                                       //Store # articles for later display
                                       if (town != "Boston" && window.townPolygons[town.toUpperCase()] != null)  
                                       {  window.townPolygons[town.toUpperCase()].articleCount =json.rows[i].value;
@@ -756,11 +704,12 @@ $(document).ready(function() {
                         
                         $('#headlines').append("<h4>"+name + " Headlines" + ((window.currentView == "page1") ? "<br/>Page 1" : "") + ((window.currentView == "yesterday") ? "<br/>Yesterday" : "" )+ "</h4>");
                         polywindow.setPosition(event.latLng);
-
+                        
+                        placeWordsLocation = window.jsonLocation + "placewords/" + (isNeighborhood ? "boston"+name.toLowerCase() : name.toLowerCase())  + ".json"
 
                         //Load words into popup window
-                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?limit=1&skip=154&descending=true&endkey=["'+ name +'"]&startkey=["'+name+'",{}]', function() {
-                            console.log(window.couchURL + 'boston-globe-articles/_design/nltk/_view/place_frequency?limit=1&descending=true&endkey=["'+ name +'"]&startkey=["'+name+'",{}]')
+                        var jqxhr =  $.getJSON(placeWordsLocation, function() {
+                            console.log(placeWordsLocation)
                         })
                        .success(function(json) {
                               if (json.rows.length ==0){
@@ -784,7 +733,7 @@ $(document).ready(function() {
                                }
                              }
                              placeWords += "</div>";
-                             polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+name+ "</h3>" + "<br/>"+
+                             polywindow.setContent('<h3 id="firstHeading" class="firstHeading">'+name+ " - frequent and unique words</h3>" + "<br/>"+
                                                                   
                                                                   //addCommas(articleCount) + " stories" + "<br/>"+
                                                                   //addCommas(population) + " Residents"+"<br/>"+
@@ -799,7 +748,7 @@ $(document).ready(function() {
                       .error(function(data) { console.log(data) })
                       .complete(function() { console.log("Loaded place frequencies") }); 
 
-                        var view = "headline_by_city_and_date";
+                        /*var view = "headline_by_city_and_date";
                         var key = key = 'limit=100&descending=true&endkey=["'+name+'"]&startkey=["'+name+'",{}]';
                         if (isNeighborhood)
                             view = "headline_by_neighborhood_and_date";
@@ -811,9 +760,11 @@ $(document).ready(function() {
                         else if (window.currentView =="page1")
                             view = "headline_by_city_and_date_page_1";
                         else if (window.currentView =="yesterday")
-                            view = "headline_by_city_and_date_yesterday";
-                          
-                        var jqxhr =  $.getJSON(window.couchURL + 'boston-globe-articles/_design/globe/_view/'+view+'?' + key, function() {
+                            view = "headline_by_city_and_date_yesterday";*/
+                        
+                        headlinesLocation = window.jsonLocation + "headlines/" + (isNeighborhood ? "boston"+name.toLowerCase() : name.toLowerCase())  + ".json"
+
+                        var jqxhr =  $.getJSON(headlinesLocation, function() {
 
                 
                           })
@@ -889,7 +840,10 @@ $(document).ready(function() {
                       }
                     })
                     .error(function(data) { console.log(data) })
-                    .complete(function() { console.log("Loaded MA Towns from GEOJSON...") });
+                    .complete(function() { 
+                      redrawMap();
+                      console.log("Loaded MA Towns from GEOJSON..."); 
+                    });
                 }
                 function loadNeighborhoodPolygons(){
                   
@@ -921,7 +875,10 @@ $(document).ready(function() {
                       }
                     })
                     .error(function(data) { console.log(data) })
-                    .complete(function() { console.log("Loaded Boston Neighborhoods from GEOJSON...") });
+                    .complete(function() { 
+                      redrawMap();
+                      console.log("Loaded Boston Neighborhoods from GEOJSON..."); 
+                    });
                 }
                 function updateMapKey(maxValue,minValue,step){
                   for (var i=1; i<10;i++){
